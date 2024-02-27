@@ -162,3 +162,4 @@ cython_debug/
 # animal_of_all_time stuff:
 media/**/*
 !media/**/
+animal.json
