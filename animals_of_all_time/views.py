@@ -19,7 +19,7 @@ class IndexView(View):
             'overrated_animals': overrated_animals,
             'underrated_animals': underrated_animals
         }
-        return render(request, 'animals_of_all_time/index.html', context=context_dict)
+        return render(request, 'animals_of_all_time/core/index.html', context=context_dict)
     
 
 class AnimalView(View):
