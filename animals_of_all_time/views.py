@@ -36,3 +36,12 @@ class ListAnimalsView(View):
         animals = p.get_page(page)
         return render(request, 'animals_of_all_time/animal/list_animals.html', {'animals':animals})
     
+
+class ListProfileView(View):
+    def get(self, request):
+        # set up pagination
+        p = Paginator(UserProfile.objects.all(), 20)
+        page = request.GET.get('page')
+        profiles = p.get_page(page)
+        return render(request, 'animals_of_all_time/profile/list_profiles.html', {'profiles':profiles})
+    
