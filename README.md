@@ -16,7 +16,7 @@ It will take some time, so please be patient.
 
 ## Todo
 ### Models
-- [ ] Test population script Comments, Discussions, Lists
+- [ ] Implement population script for Comments, Discussions, Lists
 ### Forms
 - [ ] Login/Registration
 - [ ] Add animal
@@ -27,3 +27,13 @@ It will take some time, so please be patient.
 - [ ] Upvote / Downvote
 - [ ] Search bar
 - [ ] Sorting animals, users...
+
+## Styling guides
+It would be appropriate but not necessary to follow these style guides to make your code readable and development easier for others.
+- Git Commits: https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
+- Python:      https://peps.python.org/pep-0008/#descriptive-naming-styles
+
+## Acknowledgements
+The project uses https://animalcorner.org/animals/ data for testing purposes only.
+
+Some code was taken from https://getbootstrap.com/docs/5.3/getting-started/introduction/ and modified to meet the needs of the project.
