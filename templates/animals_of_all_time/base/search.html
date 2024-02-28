@@ -1,0 +1,53 @@
+{% extends 'animals_of_all_time/base/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Search
+{% endblock %}
+
+{% block search_text %}value="{{ searched }}"{% endblock %}
+
+{% block body_block %}
+<div class="jumbotron p-4">
+    <center>
+        {% if searched %}
+        <h1 class="jumbotron-heading">Results for '{{ searched }}' {{ category }}</h1>
+        {% else %}
+        <h1 class="jumbotron-heading">No text was entered in the search bar</h1>
+        {% endif %}
+    </center>
+</div>
+
+<br/>
+<div class="container">
+    <div class="row">
+        {% if results %}
+            <div class="list-group">
+                {% for result in results %}
+                <div class="list-group">
+                    {% if category == "Animals" %}
+                        <a href="{% url 'animals-of-all-time:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
+                    {% elif category == "Discussions" %}
+                        <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                    {% elif category == "Lists" %}
+                    <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                    {% elif category == "Profiles" %}
+                        <a href="#" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+            </div>
+        {% else %}
+        <p>No results were found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script_block %}
+<script type="text/javascript"> 
+    $(document).ready(()=>{ 
+        $("[name=category]").val('{{ category }}'); 
+    });     
+</script> 
+{% endblock %}

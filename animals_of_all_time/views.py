@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import View
 
-from animals_of_all_time.models import Animal, UserProfile
+from animals_of_all_time.models import Animal, Discussion, UserList, UserProfile
 
 
 class IndexView(View):
@@ -45,3 +45,23 @@ class ListProfileView(View):
         profiles = p.get_page(page)
         return render(request, 'animals_of_all_time/profile/list_profiles.html', {'profiles':profiles})
     
+
+class SearchView(View):
+    def post(self, request):
+        searched = request.POST['searched']
+        category = request.POST['category']
+        results = []
+        if category == 'Animals':
+            results = Animal.objects.filter(name__contains=searched)
+        elif category == 'Discussions':
+            results = Discussion.objects.filter(title__contains=searched)
+        elif category == 'Lists':
+            results = UserList.objects.filter(title__contains=searched)
+        elif category == 'Profiles':
+            results = UserProfile.objects.filter(user__username__contains=searched)
+        context_dict = {
+            'searched': searched,
+            'category': category,
+            'results': results
+        }
+        return render(request, 'animals_of_all_time/base/search.html', context=context_dict)
