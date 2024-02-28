@@ -1,5 +1,29 @@
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 
-def index(request):
-    return HttpResponse("Rango says hey there partner!")
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.urls import reverse
+from django.views import View
+
+from animals_of_all_time.models import Animal, UserProfile
+
+
+class IndexView(View):
+    def get(self, request):
+        overrated_animals = Animal.objects.order_by('-upvotes')[:5]
+        underrated_animals = Animal.objects.order_by('-downvotes')[:5]
+        context_dict = {
+            'overrated_animals': overrated_animals,
+            'underrated_animals': underrated_animals
+        }
+        return render(request, 'animals_of_all_time/index.html', context=context_dict)
+    
+
+class AnimalView(View):
+    def get(self, request, animal_name_slug):
+        animal = Animal.objects.get(slug=animal_name_slug)
+        return render(request, 'animals_of_all_time/animal/animal.html', context={'animal': animal})
+    

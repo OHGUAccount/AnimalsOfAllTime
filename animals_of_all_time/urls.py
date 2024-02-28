@@ -4,5 +4,6 @@ from animals_of_all_time import views
 app_name = 'animals-of-all-time'
 
 urlpatterns = [
-path('', views.index, name='index'),
+    path('index/', views.IndexView.as_view(), name='index'),
+    path('animals/<slug:animal_name_slug>/', views.AnimalView.as_view(), name='animal'),
 ]

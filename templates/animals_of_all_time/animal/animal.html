@@ -1,0 +1,27 @@
+{% extends 'animals_of_all_time/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ animal.name }}
+{% endblock %}
+
+{% block body_block %}
+<div class="jumbotron p-4">
+    <div class="container">
+        <h1 class="jumbotron-heading">{{ animal.name }}</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <img src="{{ MEDIA_URL }}{{ animal.picture }}" alt="{{ animal.name }}'s image" />
+        <br />
+        <div>
+            <h3><strong>Description</strong></h3>
+            <p>
+                {{ animal.description }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

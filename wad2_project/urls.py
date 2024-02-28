@@ -22,6 +22,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('', views.IndexView.as_view(), name='index'),
     path('animals-of-all-time/', include('animals_of_all_time.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
