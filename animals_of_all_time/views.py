@@ -27,3 +27,12 @@ class AnimalView(View):
         animal = Animal.objects.get(slug=animal_name_slug)
         return render(request, 'animals_of_all_time/animal/animal.html', context={'animal': animal})
     
+
+class ListAnimalsView(View):
+    def get(self, request):
+        # set up pagination
+        p = Paginator(Animal.objects.all(), 20)
+        page = request.GET.get('page')
+        animals = p.get_page(page)
+        return render(request, 'animals_of_all_time/animal/list_animals.html', {'animals':animals})
+    
