@@ -16,7 +16,20 @@ It will take some time, so please be patient.
 
 ## Todo
 ### Models
-- [ ] Implement population script for Comments, Discussions, Lists
+- [x] Animal
+- [x] Discussion
+- [x] Comment
+- [x] Profile
+- [x] User List
+- [x] Population Script
+### Pages
+- [x] Index
+- [ ] Animal
+- [ ] Overrated Animals
+- [ ] Underrated Animals
+- [ ] Profile
+- [ ] List Profiles
+- [ ] User lists
 ### Forms
 - [ ] Login/Registration
 - [ ] Add animal
@@ -25,7 +38,7 @@ It will take some time, so please be patient.
 - [ ] Add comment
 ### Features
 - [ ] Upvote / Downvote
-- [ ] Search bar
+- [x] Search bar
 - [ ] Sorting animals, users...
 
 ## Styling guides
