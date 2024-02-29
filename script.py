@@ -8,28 +8,28 @@ import shutil
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'wad2_project.settings')
+
 import django
 django.setup()
-
 from django.contrib.auth.models import User
 from django.core.management import execute_from_command_line
 from django.utils.text import slugify
 
 from bs4 import BeautifulSoup
 from PIL import Image
-from wildthoughts.models import Animal, UserProfile
+from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 class ImageProfile:
-    # class dedicate to create image profiles with random colours
+    # class dedicated to create image profiles with random colours
     colours = ['blue', 'green', 'red', 'yellow']
 
     @classmethod
-    def create_colour(cls, colour, width = 300, height = 300):
+    def create_colour(cls, colour, width=300, height=300):
         image = Image.new('RGB', (width, height), colour)
         image.save(f'media\\profile_images\\{colour}.png')
 
     @classmethod
-    def create_multi_colours(cls, colours=None, width = 300, height = 300):
+    def create_multi_colours(cls, colours=None, width=300, height=300):
         if not colours:
             colours = cls.colours
         for colour in colours:
@@ -63,18 +63,23 @@ class ImageProfile:
 
 
 class AnimalDownloader:
-    # class dedicate to webscrape https://animalcorner.org/animals/
+    # class dedicated to webscrape https://animalcorner.org/animals/
     @classmethod
     def __find_urls(cls):
-        urls = set()
+        urls = []
         html_file = requests.get('https://animalcorner.org/animals/').text
         soup = BeautifulSoup(html_file, 'lxml')
         a = soup.find_all('a')
         for link in a: 
             href = link.get('href')
             if 'animals' in href:
-                urls.add(href)
+                urls.append(href)
         return urls
+    
+    @classmethod
+    def __reduce_size(cls, urls, count):
+        end = min(len(urls), count) - 1
+        return urls[:end]
 
     @classmethod
     def __get_name(cls, soup):
@@ -84,20 +89,6 @@ class AnimalDownloader:
     def __get_description(cls, soup):
         div = soup.find('div', class_ = 'entry-content')
         return div.find('p').text
-
-    # @classmethod
-    # def __save_image(cls, soup):
-    #     figures = soup.find_all('figure')
-    #     for figure in figures:
-    #         img_tag = figure.find('img')
-    #         if img_tag and img_tag.get('height') == '1024':
-    #             img_url = img_tag.get('data-breeze') 
-    #             with requests.get(img_url, stream=True) as response:
-    #                 filename = os.path.join('media\\animal_images', os.path.basename(img_url))
-    #                 with open(filename, 'wb') as out_file:
-    #                     out_file.write(response.content)
-    #                 filename = os.path.join('animal_images', os.path.basename(img_url))
-    #                 return filename
 
     @classmethod
     def __save_image(cls, soup):
@@ -126,9 +117,10 @@ class AnimalDownloader:
             pass
         
     @classmethod
-    def download(cls):
+    def download(cls, count=50):
         output_dict = {}
         urls = cls.__find_urls()
+        urls = cls.__reduce_size(urls, count)
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [executor.submit(cls.__get_data, url) for url in urls]
 
@@ -143,10 +135,12 @@ class AnimalDownloader:
 
         with open("animal.json", "w") as f:
             json.dump(output_dict, f, indent=2)
+        return output_dict
 
 
 class Database:
-    # class dedicate to populate and migrate database
+    # class dedicated to populate and migrate database
+    animal_dict = None
     adjectives = ['scariest', 'gorgeous', 'fastest', 'slowest']
     animals = None
     users = None
@@ -170,9 +164,10 @@ class Database:
 
     @classmethod
     def load_animal_dict(cls):
-        with open("animal.json", "r") as f:
-            animal_dict = json.load(f)
-        return animal_dict
+        if not cls.animal_dict:
+            with open("animal.json", "r") as f:
+                cls.animal_dict = json.load(f)
+        return cls.animal_dict
 
     @classmethod
     def load_author(cls):
@@ -228,19 +223,35 @@ class Database:
 
     @classmethod
     def random_zip(cls, size=5):
-        users = [cls.random_users() for i in range(size)]
-        animals = [cls.random_animals() for i in range(size)]
+        users = [cls.random_user() for i in range(size)]
+        animals = [cls.random_animal() for i in range(size)]
         return zip(users, animals)
 
-    # @classmethod
-    # def add_discussions(cls):
-    #     for user, animal in cls.random_zip():
-    #         discussion, created = Discussion.objects.get_or_create(
-    #             title=f"Why do you like {animal.name} by {user.username.name}?",
-    #             author=user,
-    #             animal=animal,
-    #             slug=slugify(f"Why do you like {animal.name} by {user.username.name}?")
-    #         )
+    @classmethod
+    def add_discussions(cls):
+        for user, animal in cls.random_zip():
+            discussion, created = Discussion.objects.get_or_create(
+                title=f"Why do you like {animal.name} by {user.user.username}?",
+                author=user,
+                animal=animal,
+                slug=slugify(f"Why do you like {animal.name} by {user.user.username}?")
+            )
+
+    @classmethod
+    def add_user_lists(cls):
+        users = [cls.random_user() for i in range(5)]
+        animals = [cls.random_animal() for i in range(5)]
+        for user in users:
+            adjective = random.choice(cls.adjectives)
+            user_list, created = UserList.objects.get_or_create(
+                title=f'Top {adjective} animals by {user.user.username}',
+                author=user,
+                slug=slugify(f'Top {adjective} animals by {user.user.username}')
+            )
+            for animal in animals:
+              user_list.animals.add(animal)
+
+            user_list.save()
 
     # @classmethod
     # def add_petitions(cls):
@@ -256,25 +267,12 @@ class Database:
     #         )
     #         petition.animals.add(animal)
 
-    # @classmethod
-    # def add_lists(cls):
-    #     users = [cls.random_users() for _ in range(len(cls.adjectives))]
-    #     animals = [cls.random_animals() for _ in range(len(cls.adjectives))]
-    #     for i, user in enumerate(users):
-    #         user_list, created = UserList.objects.get_or_create(
-    #             title=f'Top {cls.adjectives[i]} animals',
-    #             author=user,
-    #             slug=slugify(f'Top {cls.adjectives[i]} animals by {user}')
-    #         )
-    #         for animal in animals:
-    #           user_list.animals.add(animals)
-
     @classmethod
     def populate(cls):
         cls.add_animals()
         cls.add_users()
-        #cls.add_discussions()
-        #cls.add_lists()
+        cls.add_discussions()
+        cls.add_user_lists()
         #cls.add_petitions()
         
     @classmethod
@@ -312,7 +310,8 @@ class Script:
             Database.migrate()
         
         elif action == 'all':
-            AnimalDownloader.download()
+            animal_dict = AnimalDownloader.download()
+            Database.animal_dict = animal_dict
             Database.populate()
             Database.migrate()
 

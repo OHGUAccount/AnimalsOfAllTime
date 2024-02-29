@@ -58,7 +58,7 @@ class Discussion(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         super(Discussion, self).save(*args, **kwargs)
 
 
@@ -92,5 +92,5 @@ class UserList(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         super(UserList, self).save(*args, **kwargs)
