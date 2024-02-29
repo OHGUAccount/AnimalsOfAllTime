@@ -1,0 +1,25 @@
+{% extends 'wildthoughts/base/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ animal.name }}
+{% endblock %}
+
+{% block body_block %}
+<div class="p-4">
+    <h1>{{ animal.name }}</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <img src="{{ MEDIA_URL }}{{ animal.picture }}" alt="{{ animal.name }}'s image" />
+        <br />
+        <div>
+            <h3><strong>Description</strong></h3>
+            <p>
+                {{ animal.description }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'wildthoughts/base/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Animals
+{% endblock %}
+
+{% block body_block %}
+<div class="p-4">
+    <h1>Animals</h1>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% if animals %}
+        <div class="col-12">
+            <div class="list-group">
+                {% for animal in animals %}
+                <div class="card mb-3 w-100">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            {% if animal.picture %}
+                                <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="card-img" alt="Picture of {{ animal.name }}">
+                            {% else %}
+                                <img src="https://lorempixel.com/64/64/people/" width="64" height="64" alt="Placeholder image" />
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                                {% if animal.description %}
+                                    <p class="card-text">{{ animal.description }}</p>
+                                {% endif %}
+                                <p class="card-text">
+                                    <small class="text-muted">Added by {{ animal.author.user.username }} on {{ animal.date }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <p>There are no animals present.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+<nav aria-label="Page navigation animals">
+<ul class="pagination">
+{% if animals.has_previous %}
+    <li class=page-item><a class="page-link" href="?page=1">&laquo First</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ animals.previous_page_number }}">&laquo</a></li>
+{% endif %}
+
+<li class="page-item disabled"><a class="page-link" href="#">Page {{ animals.number }} of {{ animals.paginator.num_pages }}</a></li>
+
+{% if animals.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ animals.next_page_number }}">&raquo</a></li>
+
+    <li class="page-item"><a class="page-link" href="?page={{ animals.paginator.num_pages }}">Last &raquo</a></li>
+{% endif %}
+</ul>
+</nav>
+{% endblock %}
