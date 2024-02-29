@@ -1,4 +1,4 @@
-{% extends 'animals_of_all_time/base/base.html' %}
+{% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title"><a href="{% url 'animals-of-all-time:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
                                 {% if animal.description %}
                                     <p class="card-text">{{ animal.description }}</p>
                                 {% endif %}

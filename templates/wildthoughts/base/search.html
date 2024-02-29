@@ -1,4 +1,4 @@
-{% extends 'animals_of_all_time/base/base.html' %}
+{% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -23,7 +23,7 @@
                 {% for result in results %}
                 <div class="list-group">
                     {% if category == "Animals" %}
-                        <a href="{% url 'animals-of-all-time:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
+                        <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
                     {% elif category == "Discussions" %}
                         <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
                     {% elif category == "Lists" %}

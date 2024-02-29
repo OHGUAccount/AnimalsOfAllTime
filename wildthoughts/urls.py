@@ -1,7 +1,7 @@
 from django.urls import path
-from animals_of_all_time import views
+from wildthoughts import views
 
-app_name = 'animals-of-all-time'
+app_name = 'wildthoughts'
 
 urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),

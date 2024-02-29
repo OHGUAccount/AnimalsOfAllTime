@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import View
 
-from animals_of_all_time.models import Animal, Discussion, UserList, UserProfile
+from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 
 class IndexView(View):
@@ -19,13 +19,13 @@ class IndexView(View):
             'overrated_animals': overrated_animals,
             'underrated_animals': underrated_animals
         }
-        return render(request, 'animals_of_all_time/base/index.html', context=context_dict)
+        return render(request, 'wildthoughts/base/index.html', context=context_dict)
     
 
 class AnimalView(View):
     def get(self, request, animal_name_slug):
         animal = Animal.objects.get(slug=animal_name_slug)
-        return render(request, 'animals_of_all_time/animal/animal.html', context={'animal': animal})
+        return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal})
     
 
 class ListAnimalsView(View):
@@ -34,7 +34,7 @@ class ListAnimalsView(View):
         p = Paginator(Animal.objects.all(), 20)
         page = request.GET.get('page')
         animals = p.get_page(page)
-        return render(request, 'animals_of_all_time/animal/list_animals.html', {'animals':animals})
+        return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals})
     
 
 class ListProfileView(View):
@@ -43,7 +43,7 @@ class ListProfileView(View):
         p = Paginator(UserProfile.objects.all(), 20)
         page = request.GET.get('page')
         profiles = p.get_page(page)
-        return render(request, 'animals_of_all_time/profile/list_profiles.html', {'profiles':profiles})
+        return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
     
 
 class SearchView(View):
@@ -64,4 +64,4 @@ class SearchView(View):
             'category': category,
             'results': results
         }
-        return render(request, 'animals_of_all_time/base/search.html', context=context_dict)
+        return render(request, 'wildthoughts/base/search.html', context=context_dict)

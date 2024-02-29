@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'animals_of_all_time',
+    'wildthoughts',
     'registration'
 ]
 
@@ -130,9 +130,9 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
-LOGIN_URL = 'animals-of-all-time:login'
+LOGIN_URL = 'wildthoughts:login'
 
 REGISTRATION_OPEN = True
 REGISTRATION_AUTO_LOGIN = True
-LOGIN_REDIRECT_URL = 'animals-of-all-time:index'
+LOGIN_REDIRECT_URL = 'wildthoughts:index'
 LOGIN_URL = 'auth_login'

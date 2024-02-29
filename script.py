@@ -17,7 +17,7 @@ from django.utils.text import slugify
 
 from bs4 import BeautifulSoup
 from PIL import Image
-from animals_of_all_time.models import Animal, UserProfile
+from wildthoughts.models import Animal, UserProfile
 
 class ImageProfile:
     # class dedicate to create image profiles with random colours
@@ -156,9 +156,9 @@ class Database:
         if os.path.exists("db.sqlite3"):
             os.remove("db.sqlite3")
 
-        init_path = os.path.join("animals_of_all_time\\migrations", '__init__.py')
-        for item in os.listdir("animals_of_all_time\\migrations"):
-            item_path = os.path.join("animals_of_all_time\\migrations", item)
+        init_path = os.path.join("wildthoughts\\migrations", '__init__.py')
+        for item in os.listdir("wildthoughts\\migrations"):
+            item_path = os.path.join("wildthoughts\\migrations", item)
             if item_path == init_path:
                 continue
             elif os.path.isfile(item_path):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from animals_of_all_time.models import UserProfile, Animal
+from wildthoughts.models import UserProfile, Animal
 
 
 # Register your models here.

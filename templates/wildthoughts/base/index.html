@@ -1,4 +1,4 @@
-{% extends 'animals_of_all_time/base/base.html' %}{% block title_block %}
+{% extends 'wildthoughts/base/base.html' %}{% block title_block %}
     Homepage
 {% endblock %}
 {% load staticfiles %}
@@ -22,7 +22,7 @@
                     {% if overrated_animals %}
                     <ul class="list-group list-group-flush">
                         {% for animal in overrated_animals %}
-                        <li class="list-group-item"><a href="{% url 'animals-of-all-time:animal' animal.slug %}">
+                        <li class="list-group-item"><a href="{% url 'wildthoughts:animal' animal.slug %}">
                             <img src="{{ MEDIA_URL }}{{ animal.picture }}" width=150 height=100 alt="{{ animal.name }}'s image" />
                             {{ animal.name }}</a></li>
                     {% endfor %}
@@ -43,7 +43,7 @@
                     {% if underrated_animals %}
                     <ul class="list-group list-group-flush">
                     {% for animal in underrated_animals %}
-                    <li class="list-group-item"><a href="{% url 'animals-of-all-time:animal' animal.slug %}">
+                    <li class="list-group-item"><a href="{% url 'wildthoughts:animal' animal.slug %}">
                         <img src="{{ MEDIA_URL }}{{ animal.picture }}" width=150 height=100 alt="{{ animal.name }}'s image" />
                         {{ animal.name }}</a></li>
                     {% endfor %}
