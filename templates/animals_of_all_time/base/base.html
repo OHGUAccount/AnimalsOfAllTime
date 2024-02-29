@@ -11,7 +11,7 @@
 <!-- NAVBAR -->
 <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#"><img src="static\images\koala.jpg" alt="Koala" width="30" height="24"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,18 +35,18 @@
                     <a class="nav-link" aria-current="page" href="{% url 'animals-of-all-time:profiles' %}">Profiles</a>
                 </li>
             </ul>
-                <form class="d-flex" role="search" method=POST action="{% url 'animals-of-all-time:search' %}">
-                    {% csrf_token %}
-                    <select class="form-control" name="category">
-                        <option value="Animals" selected>Animals</option>
-                        <option value="Discussions">Discussions</option>
-                        <option value="Lists">Lists</option>
-                        <option value="Profiles">Profiles</option>
-                    </select>
-                    <input class="form-control me-2" type="search" {% block search_text %}placeholder="Search"{% endblock %} aria-label="Search" name="searched">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <form class="d-flex" role="search" method=POST action="{% url 'animals-of-all-time:search' %}">
+                {% csrf_token %}
+                <select class="form-control" name="category">
+                    <option value="Animals" selected>Animals</option>
+                    <option value="Discussions">Discussions</option>
+                    <option value="Lists">Lists</option>
+                    <option value="Profiles">Profiles</option>
+                </select>
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav me-5 mb-2 mb-lg-0">
                 <li class="nav-item">
                 {% if user.is_authenticated %}
                     <a class="nav-link" aria-current="page" href="#">My profile</a>
@@ -68,8 +68,8 @@
     <!-- FOOTER -->
     {% block footer_block %}
     <footer class="py-2 mt-5">
-        <div class="container text-light text-center">
-            <p class="display-5 mb-3 text-black">Animals of All Times</p>
+        <div class="container text-center">
+            <p class="display-6 mb-2 text-black">Animals of All Times</p>
             <small class="text-black-50">&copy; Copyright by Team 9A. All rights reserved.</small>
         </div>
     </footer>

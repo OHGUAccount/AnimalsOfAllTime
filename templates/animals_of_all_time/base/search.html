@@ -5,16 +5,13 @@
     Search
 {% endblock %}
 
-{% block search_text %}value="{{ searched }}"{% endblock %}
-
 {% block body_block %}
-<div class="jumbotron p-4">
-    <center>
-        {% if searched %}
-        <h1 class="jumbotron-heading">Results for '{{ searched }}' {{ category }}</h1>
-        {% else %}
-        <h1 class="jumbotron-heading">No text was entered in the search bar</h1>
-        {% endif %}
+<div class="text-center p-4">
+    {% if searched %}
+    <h1>Results for '{{ searched }}' in {{ category }}</h1>
+    {% else %}
+    <h1>No text was entered in the search bar</h1>
+    {% endif %}
     </center>
 </div>
 
@@ -48,6 +45,7 @@
 <script type="text/javascript"> 
     $(document).ready(()=>{ 
         $("[name=category]").val('{{ category }}'); 
+        $("[name=searched]").val('{{ searched }}'); 
     });     
 </script> 
 {% endblock %}
