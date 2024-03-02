@@ -24,14 +24,14 @@ It will take some time, so please be patient.
 - [x] Population Script
 ### Pages
 - [x] Index
-- [ ] Animal
+- [] Animal
 - [ ] Overrated Animals
 - [ ] Underrated Animals
 - [ ] Profile
 - [ ] List Profiles
 - [ ] User lists
 ### Forms
-- [ ] Login/Registration
+- [x] Login/Registration
 - [ ] Add animal
 - [ ] Add list
 - [ ] Add discussion
