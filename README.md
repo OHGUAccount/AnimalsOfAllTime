@@ -31,7 +31,7 @@ It will take some time, so please be patient.
 - [ ] List Profiles
 - [ ] User lists
 ### Forms
-- [ ] Login/Registration
+- [x] Login/Registration
 - [ ] Add animal
 - [ ] Add list
 - [ ] Add discussion
