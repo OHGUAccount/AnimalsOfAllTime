@@ -68,19 +68,20 @@ class SearchView(View):
         }
         return render(request, 'wildthoughts/base/search.html', context=context_dict)
 
-
-@login_required
-def addAnimalView(request):
-    form = AnimalForm()
+class AddAnimalView(View):
+    def get(self, request):
+        form = AnimalForm()
     
-    if request.method=='POST':
-        form = AnimalForm(request.POST)
+        if request.method=='POST':
+            form = AnimalForm(request.POST)
     
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect('/wildthoughts/')
-        else:
-            print(form.errors)
+            if form.is_valid():
+                form.save(commit=False)
+                animal.author = request.user.userprofile
+                animal.save()
+                return redirect('/wildthoughts/')
+            else:
+                print(form.errors)
     
-    return render(request, 'wildthoughts/add_animal.html', {'form': form})
+        return render(request, 'wildthoughts/animal/add_animal.html', {'form': form})
     
