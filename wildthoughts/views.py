@@ -2,12 +2,13 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from wildthoughts.forms import UserForm, UserProfileForm
+#from wildthoughts.forms import UserForm, UserProfileForm
 
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import View
+from wildthoughts.forms import AnimalForm
 
 from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
@@ -66,3 +67,20 @@ class SearchView(View):
             'results': results
         }
         return render(request, 'wildthoughts/base/search.html', context=context_dict)
+
+
+@login_required
+def addAnimalView(request):
+    form = AnimalForm()
+    
+    if request.method=='POST':
+        form = AnimalForm(request.POST)
+    
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('/wildthoughts/')
+        else:
+            print(form.errors)
+    
+    return render(request, 'wildthoughts/add_animal.html', {'form': form})
+    

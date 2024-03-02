@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Animal</title>
+</head>
+<body>
+    <h1>Add Animal</h1>
+    <form id="animal_form" method="post" action="/wildthoughts/add_animal/">
+        {% csrf_token %}
+		{% for hidden in form.hidden_fields %}
+			{{ hidden }}
+		{% endfor %}
+		{% for field in form.visible_fields %}
+			{{ form.errors }}
+			{{ field.help_text }}
+			{{ field }}
+		{% endfor %}
+		<input type="submit" name="submit" value="Create Animal Page" />
+    </form>
+</body>
+</html>
