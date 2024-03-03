@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from django.shortcuts import redirect, render
+from django.template.defaultfilters import slugify
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import View
+
+from registration.backends.simple.views import RegistrationView
+
 from wildthoughts.forms import AnimalForm
-
-
 from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 
@@ -68,19 +70,36 @@ class SearchView(View):
         }
         return render(request, 'wildthoughts/base/search.html', context=context_dict)
 
-def add_animal(request):
-    form = AnimalForm()
     
-    if request.method=='POST':
+class AddAnimalView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        form = AnimalForm()
+        return render(request, 'wildthoughts/animal/add_animal.html', {'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request):
         form = AnimalForm(request.POST)
-    
+
         if form.is_valid():
-            animal=form.save(commit=False)
-            animal.author = request.user
+            animal = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            animal.author = author
+            animal.slug = slugify(animal.name)
             animal.save()
-            return redirect('wildthoughts/base/index.html')
+            return redirect(reverse('wildthoughts:animal', kwargs={'animal_name_slug': animal.slug}))
         else:
             print(form.errors)
+
+        return render(request, 'wildthoughts/animal/add_animal.html', {'form': form})
+
+
+class NewRegistrationView(RegistrationView):
+    # create an instance of UserProfile when the user registers
+    def register(self, form):
+        new_user = super().register(form)
+        UserProfile.objects.get_or_create(user=new_user)
+        return new_user
     
-    return render(request, 'wildthoughts/animal/add_animal.html', {'form': form})
-    
+    def get_success_url(self, user):
+            return reverse('wildthoughts:index')

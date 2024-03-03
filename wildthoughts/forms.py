@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 from wildthoughts.models import UserProfile,Animal,Discussion,Comment,UserList
 
 class AnimalForm(forms.ModelForm):
@@ -12,6 +13,11 @@ class AnimalForm(forms.ModelForm):
         name = self.cleaned_data.get('name')
         if Animal.objects.filter(name=name).exists():
             raise forms.ValidationError("An animal with this name already exists.")
+        
+        slug = slugify(name)
+        if Animal.objects.filter(slug=slug).exists():
+            raise forms.ValidationError("An animal with this name already exists.")
+        
         return name
 
     # Add help text for name and description fields
