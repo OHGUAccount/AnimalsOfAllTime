@@ -13,50 +13,65 @@
 <br /><br />
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-6">
-                <div class="card-body">
-                    <h2>Top 5 Overrated Animals</h2>
-                    <p class="card-text">
-                    {% if overrated_animals %}
-                    <ul class="list-group list-group-flush">
-                        {% for animal in overrated_animals %}
-                        <li class="list-group-item"><a href="{% url 'wildthoughts:animal' animal.slug %}">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" width=150 height=100 alt="{{ animal.name }}'s image" />
-                            {{ animal.name }}</a></li>
-                    {% endfor %}
-                    </ul>
-                    {% else %}
-                    <strong>There are no animals present.</strong>
-                    {% endif %}
-                    </p>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+        <div class="col">
+            <h2>Top 5 Overrated Animals</h2>
+            {% if overrated_animals %}
+                {% for animal in overrated_animals %}
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-2 text-center">
+                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-up"></i></button>
+                            <h4>{{ animal.upvotes }}</h4>
+                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-down"></i></button>
+                        </div>
+                        <div class="col-4">
+                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded-start m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+                        </div>
+                        <div class="col-6">
+                            <div class="card-body">
+                                <h5 class="card-title text-center"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                {% endfor %}
+            {% else %}
+            <strong>There are no animals present.</strong>
+            {% endif %}
         </div>
 
-        <div class="col-md-6">
-            <div class="card mb-6">
-                <div class="card-body">
-                    <h2>Top 5 Underrated Animals</h2>
-                    <p class="card-text">
-                    {% if underrated_animals %}
-                    <ul class="list-group list-group-flush">
-                    {% for animal in underrated_animals %}
-                    <li class="list-group-item"><a href="{% url 'wildthoughts:animal' animal.slug %}">
-                        <img src="{{ MEDIA_URL }}{{ animal.picture }}" width=150 height=100 alt="{{ animal.name }}'s image" />
-                        {{ animal.name }}</a></li>
-                    {% endfor %}
-                    </ul>
-                    {% else %}
-                    <strong>There are no animals present.</strong>
-                    {% endif %}
-                    </p>
+        <div class="col">
+            <h2>Top 5 Underrated Animals</h2>
+            {% if underrated_animals %}
+                {% for animal in underrated_animals %}
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-2 text-center">
+                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-up"></i></button>
+                            <h4>{{ animal.upvotes }}</h4>
+                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-down"></i></button>
+                        </div>
+                        <div class="col-4">
+                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded-start m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+                        </div>
+                        <div class="col-6">
+                            <div class="card-body">
+                                <h5 class="card-title text-center"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                {% endfor %}
+            {% else %}
+            <strong>There are no animals present.</strong>
+            {% endif %}
         </div>
+        
     </div>
 </div>
+
 {% if user.is_authenticated %}
     <a href="{% url 'wildthoughts:add_animal' %}">Add Animal</a>
 {% endif %}
