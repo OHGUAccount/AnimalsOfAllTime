@@ -25,6 +25,21 @@ class IndexView(View):
         }
         return render(request, 'wildthoughts/base/index.html', context=context_dict)
     
+class OverratedView(View):
+    def get(self, request):
+        overrated_animals = Animal.objects.order_by('-upvotes')
+        context_dict = {
+            'overrated_animals': overrated_animals,
+        }
+        return render(request, 'wildthoughts/animal/overrated.html', context=context_dict)
+    
+class UnderratedView(View):
+    def get(self, request):
+        underrated_animals = Animal.objects.order_by('-downvotes')
+        context_dict = {
+            'underrated_animals': underrated_animals,
+        }
+        return render(request, 'wildthoughts/animal/underrated.html', context=context_dict)
 
 class AnimalView(View):
     def get(self, request, animal_name_slug):
