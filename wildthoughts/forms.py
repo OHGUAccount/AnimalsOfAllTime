@@ -7,6 +7,10 @@ class AnimalForm(forms.ModelForm):
     class Meta:
         model = Animal
         fields = ['name', 'description', 'picture']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'})
+        }
 
     # form validation here
     def clean_name(self):
@@ -23,6 +27,6 @@ class AnimalForm(forms.ModelForm):
     # Add help text for name and description fields
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].help_text = "Please enter the Animal page name!"
-        self.fields['description'].help_text = "Please give a brief description on the Animal."
-        self.fields['picture'].help_text = "Upload a picture of your added animal!"
+        self.fields['name'].help_text = "Please enter the Animal page name:"
+        self.fields['description'].help_text = "Please give a brief description on the Animal:"
+        self.fields['picture'].help_text = "Upload a picture of your added animal:"

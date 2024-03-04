@@ -71,5 +71,8 @@
         
     </div>
 </div>
+{% if user.is_authenticated %}
+    <a href="{% url 'wildthoughts:add_animal' %}">Add Animal</a>
+{% endif %}
 
 {% endblock %}
