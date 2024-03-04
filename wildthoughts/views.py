@@ -103,3 +103,26 @@ class NewRegistrationView(RegistrationView):
     
     def get_success_url(self, user):
             return reverse('wildthoughts:index')
+
+
+class UserListView(View):
+    def get(self, request):
+        # set up pagination
+        p = Paginator(UserList.objects.all(), 20)
+        page = request.GET.get('page')
+        user_lists = p.get_page(page)
+        left = []
+        right = []
+        for i, user_list in enumerate(user_lists):
+            if i % 2 == 0:
+                left.append(user_list)
+            else:
+                right.append(user_list)
+            
+        context_dict = {
+            'user_lists': user_lists,
+            'left':left,
+            'right': right, 
+            }
+        
+        return render(request, 'wildthoughts/user_list/user_list.html', context=context_dict)
