@@ -149,5 +149,17 @@ class UserListView(View):
 class ProfileView(View):
     def get(self, request, username):
         profile = UserProfile.objects.get(user=User.objects.get(username=username))
-        return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile})
+        loguser = None
+        if (request.user.is_authenticated):
+            loguser = request.user
+        
+        return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile, 'loguser':loguser})
+    
+    
+    
+
+
+    
+
+
     

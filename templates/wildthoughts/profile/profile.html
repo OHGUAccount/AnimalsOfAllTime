@@ -13,8 +13,15 @@
         <div>
             <h3><strong>Bio </strong></h3>
             <p>
-                {{ profile.user.bio }}
+                {{ profile.user.description }}
                 {{ profile.user.picture }}
+                {% if profile.user == loguser %}
+                    <form method="post" action="." enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Update" />
+                    </form>
+                {% endif %}
             </p>
         </div>
     </div>

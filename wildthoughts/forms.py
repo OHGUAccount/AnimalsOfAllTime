@@ -19,6 +19,7 @@ class AnimalForm(forms.ModelForm):
             raise forms.ValidationError("An animal with this name already exists.")
         
         return name
+    
 
     # Add help text for name and description fields
     def __init__(self, *args, **kwargs):
@@ -26,3 +27,7 @@ class AnimalForm(forms.ModelForm):
         self.fields['name'].help_text = "Please enter the Animal page name!"
         self.fields['description'].help_text = "Please give a brief description on the Animal."
         self.fields['picture'].help_text = "Upload a picture of your added animal!"
+
+
+
+       
