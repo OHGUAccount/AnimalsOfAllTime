@@ -9,25 +9,25 @@
     <h3>Discuss your thoughts on Wildlife</h3>
 </div>
 
-<center><img src="{% static 'images/rango.jpg' %}" width=500 height=400 alt="Picture of Rango" /></center>
+<center><img class="img-fluid" src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" /></center>
 <br /><br />
 
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="row row-cols-1 row-cols-md-2 g-5">
 
         <div class="col">
-            <h2>Top 5 Overrated Animals</h2>
+            <h2 class="mb-4 text-center">Top 5 Overrated Animals</h2>
             {% if overrated_animals %}
                 {% for animal in overrated_animals %}
-                <div class="card mb-3" style="max-width: 540px;">
+                <div class="card">
                     <div class="row g-0">
                         <div class="col-2 text-center">
-                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-up"></i></button>
+                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
                             <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-down"></i></button>
+                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
                         </div>
                         <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded-start m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
                         </div>
                         <div class="col-6">
                             <div class="card-body">
@@ -43,18 +43,18 @@
         </div>
 
         <div class="col">
-            <h2>Top 5 Underrated Animals</h2>
+            <h2 class="mb-4 text-center">Top 5 Underrated Animals</h2>
             {% if underrated_animals %}
                 {% for animal in underrated_animals %}
-                <div class="card mb-3" style="max-width: 540px;">
+                <div class="card">
                     <div class="row g-0">
                         <div class="col-2 text-center">
-                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-up"></i></button>
+                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
                             <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-down"></i></button>
+                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
                         </div>
                         <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded-start m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
                         </div>
                         <div class="col-6">
                             <div class="card-body">

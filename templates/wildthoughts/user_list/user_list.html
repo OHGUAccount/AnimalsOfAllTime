@@ -1,0 +1,100 @@
+{% extends 'wildthoughts/base/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Lists
+{% endblock %}
+
+{% block body_block %}
+<div class="p-4">
+    <h1>Lists</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% for user_list in left %}
+            {% with animals=user_list.animals.all %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div>
+                        <h5 class="card-title ms-2">{{ user_list.title }}</h5>
+                        <div class="card-subtitle mb-2 text-body-secondary ms-2">
+                            <i class="bi bi-list-ol"></i> {{ animals.count }} animals
+                        </div>
+                    </div>                 
+                </div>                
+                <ul class="list-group">
+                    {% for animal in user_list.animals.all|slice:"3" %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
+                        <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ profile.user.username }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                        {{ animal.name }}</a>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            {% for user_list in right %}
+            {% with animals=user_list.animals.all %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div>
+                        <h5 class="card-title ms-2">{{ user_list.title }}</h5>
+                        <div class="card-subtitle mb-2 text-body-secondary ms-2">
+                            <i class="bi bi-list-ol"></i> {{ animals.count }} animals
+                        </div>
+                    </div>                   
+                </div>      
+                <ul class="list-group">
+                    {% for animal in animals|slice:"3" %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
+                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ profile.user.username }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                            {{ animal.name }}
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+
+
+<nav aria-label="Page navigation lists">
+<ul class="pagination">
+{% if user_lists.has_previous %}
+    <li class=page-item><a class="page-link" href="?page=1">&laquo First</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ user_lists.previous_page_number }}">&laquo</a></li>
+{% endif %}
+
+<li class="page-item disabled"><a class="page-link" href="#">Page {{ user_lists.number }} of {{ user_lists.paginator.num_pages }}</a></li>
+
+{% if animals.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ user_lists.next_page_number }}">&raquo</a></li>
+
+    <li class="page-item"><a class="page-link" href="?page={{ user_lists.paginator.num_pages }}">Last &raquo</a></li>
+{% endif %}
+</ul>
+</nav>
+
+{% block script_block %}
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover-hover"]').each(function() {
+            var imgSrc = $(this).data('img');
+            $(this).popover({
+                html: true,
+                trigger: 'hover',
+                placement: 'bottom',
+                content: function () { return '<img src="' + imgSrc + '"  class="img-fluid"/>'; }
+            });
+        });
+    })
+</script>
+{% endblock %}
