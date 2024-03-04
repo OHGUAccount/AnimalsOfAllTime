@@ -126,3 +126,9 @@ class UserListView(View):
             }
         
         return render(request, 'wildthoughts/user_list/user_list.html', context=context_dict)
+    
+class ProfileView(View):
+    def get(self, request, username):
+        profile = UserProfile.objects.get(user=User.objects.get(username=username))
+        return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile})
+    

@@ -1,0 +1,23 @@
+{% extends 'wildthoughts/base/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+{{profile.user.username}}
+{% endblock %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+        <img src="{{ MEDIA_URL }}{{ profile.picture }}" style="width:128px;height:128px;" alt="{{ profile.user.username }}'s image" />
+        <h2> </h2>
+        <br />
+        <div>
+            <h3><strong>Bio </strong></h3>
+            <p>
+                {{ profile.user.bio }}
+                {{ profile.user.picture }}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
