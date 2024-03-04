@@ -17,8 +17,8 @@ from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 class IndexView(View):
     def get(self, request):
-        overrated_animals = Animal.objects.order_by('-upvotes')[:5]
-        underrated_animals = Animal.objects.order_by('-downvotes')[:5]
+        overrated_animals = Animal.objects.order_by('-downvotes')[:5]
+        underrated_animals = Animal.objects.order_by('-upvotes')[:5]
         context_dict = {
             'overrated_animals': overrated_animals,
             'underrated_animals': underrated_animals
