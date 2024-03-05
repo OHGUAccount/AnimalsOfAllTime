@@ -148,15 +148,7 @@ class ProfileView(View):
             loguser = request.user
         
         return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile, 'loguser':loguser})
-    
-    
-    
 
-
-    
-
-
-    
 
 class AddUserListView(View):
     @method_decorator(login_required)
@@ -181,3 +173,14 @@ class AddUserListView(View):
             print(form.errors)
 
         return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
+    
+    
+class ThemeView(View):
+    def get(self, request):
+        theme = request.GET.get('theme')
+        if theme in ['dark', 'light']:
+            response = HttpResponse("Theme set to: " + theme)
+            response.set_cookie('theme', theme)
+            return response
+        else:
+            return HttpResponse(-1)
