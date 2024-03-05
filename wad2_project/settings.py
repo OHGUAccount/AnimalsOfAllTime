@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wildthoughts',
     'registration',
+    'select2',
 ]
 
 MIDDLEWARE = [

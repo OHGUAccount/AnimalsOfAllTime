@@ -11,7 +11,7 @@ from django.views import View
 
 from registration.backends.simple.views import RegistrationView
 
-from wildthoughts.forms import AnimalForm
+from wildthoughts.forms import AnimalForm, UserListForm
 from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 
@@ -25,6 +25,7 @@ class IndexView(View):
         }
         return render(request, 'wildthoughts/base/index.html', context=context_dict)
     
+
 class OverratedView(View):
     def get(self, request):
         overrated_animals = Animal.objects.order_by('-downvotes')
@@ -35,6 +36,7 @@ class OverratedView(View):
         }
         return render(request, 'wildthoughts/animal/overrated.html', context=context_dict)
     
+
 class UnderratedView(View):
     def get(self, request):
         underrated_animals = Animal.objects.order_by('-upvotes')
@@ -44,6 +46,7 @@ class UnderratedView(View):
             'underrated_animals': underrated_animals,
         }
         return render(request, 'wildthoughts/animal/underrated.html', context=context_dict)
+
 
 class AnimalView(View):
     def get(self, request, animal_name_slug):
@@ -130,24 +133,36 @@ class UserListView(View):
         p = Paginator(UserList.objects.all(), 20)
         page = request.GET.get('page')
         user_lists = p.get_page(page)
-        left = []
-        right = []
-        for i, user_list in enumerate(user_lists):
-            if i % 2 == 0:
-                left.append(user_list)
-            else:
-                right.append(user_list)
-            
-        context_dict = {
-            'user_lists': user_lists,
-            'left':left,
-            'right': right, 
-            }
         
-        return render(request, 'wildthoughts/user_list/user_list.html', context=context_dict)
+        return render(request, 'wildthoughts/user_list/user_list.html', context={'user_lists': user_lists})
+    
     
 class ProfileView(View):
     def get(self, request, username):
         profile = UserProfile.objects.get(user=User.objects.get(username=username))
         return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile})
     
+
+class AddUserListView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        form = UserListForm()
+        animals = Animal.objects.all()
+        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
+    
+    @method_decorator(login_required)
+    def post(self, request):
+        form = UserListForm(request.POST)
+        animals = Animal.objects.all()
+
+        if form.is_valid():
+            user_list = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            user_list.author = author
+            user_list.save()
+            form.save_m2m() 
+            return redirect(reverse('wildthoughts:lists'))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
