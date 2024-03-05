@@ -6,39 +6,44 @@
 {% endblock %}
 
 {% block body_block %}
+{% if searched %}
 <div class="text-center p-4">
-    {% if searched %}
-    <h1>Results for '{{ searched }}' in {{ category }}</h1>
+        <h1>Results for '{{ searched }}' in {{ category }}</h1>
+        <br/>
+        <div class="container-fluid">
+            <div class="row">
+                {% if results %}
+                    <div class="list-group">
+                        {% for result in results %}
+                        <div class="list-group">
+                            {% if category == "Animals" %}
+                                <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
+                            {% elif category == "Discussions" %}
+                                <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                            {% elif category == "Lists" %}
+                            <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                            {% elif category == "Profiles" %}
+                                <a href="#" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                <div class="text-center my-5">
+                <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+                <h4>No results were found.</h4>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     {% else %}
-    <h1>No text was entered in the search bar</h1>
+    <div class="text-center my-5">
+        <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+        <h4>No text was entered in the search bar</h4>
+    </div>
     {% endif %}
-    </center>
 </div>
 
-<br/>
-<div class="container">
-    <div class="row">
-        {% if results %}
-            <div class="list-group">
-                {% for result in results %}
-                <div class="list-group">
-                    {% if category == "Animals" %}
-                        <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
-                    {% elif category == "Discussions" %}
-                        <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                    {% elif category == "Lists" %}
-                    <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                    {% elif category == "Profiles" %}
-                        <a href="#" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-            </div>
-        {% else %}
-        <p>No results were found.</p>
-        {% endif %}
-    </div>
-</div>
 {% endblock %}
 
 {% block script_block %}

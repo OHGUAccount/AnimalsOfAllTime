@@ -14,4 +14,5 @@ urlpatterns = [
     path('profiles/<slug:username>/', views.ProfileView.as_view(), name='profile'),
     path('overrated/', views.OverratedView.as_view(), name='overrated'),
     path('underrrated/', views.UnderratedView.as_view(), name='underrated'),
+    path('add_list/', views.AddUserListView.as_view(), name='add_list'),
 ]

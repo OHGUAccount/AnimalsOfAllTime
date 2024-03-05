@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from wildthoughts.models import UserProfile,Animal,Discussion,Comment,UserList
+from wildthoughts.models import UserProfile, Animal, Discussion, Comment, UserList
+from select2 import forms as select2forms
+
 
 class AnimalForm(forms.ModelForm):
     class Meta:
@@ -31,3 +33,16 @@ class AnimalForm(forms.ModelForm):
         self.fields['name'].help_text = "Please enter the Animal page name:"
         self.fields['description'].help_text = "Please give a brief description on the Animal:"
         self.fields['picture'].help_text = "Upload a picture of your added animal:"
+
+
+class UserListForm(forms.ModelForm):
+    class Meta:
+        model = UserList
+        fields = ['title', 'animals', 'description']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
+                                                          'style': '"width: 100%"'})
+        }

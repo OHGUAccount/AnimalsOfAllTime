@@ -6,9 +6,13 @@
 {% endblock %}
 {% block body_block %}
 <div class="container">
-    <div class="row">
-        <img src="{{ MEDIA_URL }}{{ profile.picture }}" style="width:128px;height:128px;" alt="{{ profile.user.username }}'s image" />
-        <h2> </h2>
+    <div> <center>
+        {% if profile.picture %}
+        <img src="{{ MEDIA_URL }}{{ profile.picture }}"  width="128px" height="128px" alt="{{ profile.user.username }}'s Profile Picture">
+        {% else %}
+        <img src="{% static 'images/defaultprofile.jpg' %}" width="128px" height="128px" alt="No Profile Photo" />
+        {% endif %}
+        <h2>{{ profile.user.username }}</h2>
         <br />
         <div>
             <h3><strong>Bio </strong></h3>
@@ -24,7 +28,10 @@
                 {% endif %}
             </p>
         </div>
-    </div>
+    </div> </center>
 </div>
+
+<!-- Bobby I can't get this working, but whenever you get this bit. Make sure to include this hyperlink please, so people can logout :) -->
+<a href="{% url 'auth_logout' %}">Logout</a>
 
 {% endblock %}
