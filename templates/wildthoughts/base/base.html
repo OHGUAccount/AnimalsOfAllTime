@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html lang="en">
+{% load wildthoughts_tags %}
+
+<html lang="en" data-bs-theme="{% theme %}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,6 +56,12 @@
                     <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{% static 'images/defaultprofile.jpg' %}" width="38" height="38">
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' user.username %}">My Profile</a></li>
+                        <li>
+                            <div class="form-check form-check-reverse form-switch">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode</label>
+                                <input class="form-check-input" id="theme-switch" type="checkbox" value="light" role="switch" id="flexSwitchCheckDefault">
+                            </div>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
                     </ul>
@@ -76,8 +84,8 @@
     {% block footer_block %}
     <footer class="py-2 mt-5">
         <div class="container text-center">
-            <p class="display-6 mb-2 text-black">WildThoughts</p>
-            <small class="text-black-50">&copy; Copyright by Team 9A. All rights reserved.</small>
+            <p class="display-6 mb-2">WildThoughts</p>
+            <small class="text-50">&copy; Copyright by Team 9A. All rights reserved.</small>
         </div>
     </footer>
     {% endblock %}
@@ -85,6 +93,7 @@
 <script src="{% static "js/jquery-3.6.0.min.js" %}" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="{% static "js/vote.js" %}" crossorigin="anonymous"></script>
+<script src="{% static "js/theme.js" %}" crossorigin="anonymous"></script>
 {% block script_block %}{% endblock %}
 </body>
 </html>
