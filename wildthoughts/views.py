@@ -76,8 +76,10 @@ class SearchView(View):
     def post(self, request):
         searched = request.POST['searched']
         category = request.POST['category']
-        results = []
-        if category == 'Animals':
+
+        if not searched:
+            results = None
+        elif category == 'Animals':
             results = Animal.objects.filter(name__contains=searched)
         elif category == 'Discussions':
             results = Discussion.objects.filter(title__contains=searched)
@@ -90,6 +92,7 @@ class SearchView(View):
             'category': category,
             'results': results
         }
+        
         return render(request, 'wildthoughts/base/search.html', context=context_dict)
 
     
