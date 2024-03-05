@@ -98,7 +98,7 @@ class AddAnimalView(View):
 
     @method_decorator(login_required)
     def post(self, request):
-        form = AnimalForm(request.POST)
+        form = AnimalForm(request.POST, request.FILES) 
 
         if form.is_valid():
             animal = form.save(commit=False)
