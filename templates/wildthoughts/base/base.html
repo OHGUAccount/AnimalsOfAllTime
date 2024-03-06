@@ -40,35 +40,59 @@
                     <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:profiles' %}">Profiles</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search" method=POST action="{% url 'wildthoughts:search' %}">
-                {% csrf_token %}
-                <select class="form-control" name="category">
-                    <option value="Animals" selected>Animals</option>
-                    <option value="Discussions">Discussions</option>
-                    <option value="Lists">Lists</option>
-                    <option value="Profiles">Profiles</option>
-                </select>
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-                {% if user.is_authenticated %}
-                    <div class="nav-item dropstart">
-                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{% static 'images/defaultprofile.jpg' %}" width="38" height="38">
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' user.username %}">My Profile</a></li>
-                        <li>
-                            <div class="form-check form-check-reverse form-switch">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode</label>
-                                <input class="form-check-input" id="theme-switch" type="checkbox" value="light" role="switch" id="flexSwitchCheckDefault">
+
+            <div class="mx-5 order-0">
+                <form role="search" method=POST action="{% url 'wildthoughts:search' %}">
+                    {% csrf_token %}
+                    <div class="container">
+                       <div class="row g-0">
+                            <div class="col-4">
+                                <select class="form-control" name="category">
+                                    <option value="Animals" selected>Animals</option>
+                                    <option value="Discussions">Discussions</option>
+                                    <option value="Lists">Lists</option>
+                                    <option value="Profiles">Profiles</option>
+                                </select>
                             </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
-                    </ul>
+                            <div class="col-6">
+                                <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="searched">
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </div>
+                        </div>
                     </div>
+                </form>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="btn-group me-4">
+                {% profile_picture as profile_pic %}
+                {% if profile_pic %}
+                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{{ MEDIA_URL }}{{ profile.pic }}" width="38" height="38">
                 {% else %}
-                    <a class="nav-link" aria-current="page" href="{% url 'auth_login' %}">Login/Register</a>
+                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{% static 'images/defaultprofile.jpg' %}" width="38" height="38">
                 {% endif %}
+                <ul class="dropdown-menu dropdown-menu-lg-end">
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' user.username %}">My Profile</a></li>
+                    <li>
+                        <div class="form-check form-check-reverse form-switch text-center">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode<input class="form-check-input" id="theme-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault"></label>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_animal' %}">Add Animal</a></li>
+                    <li><a class="dropdown-item" href="#">Add Discussion</a></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_list' %}">Add List</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
+                </ul>
+              </div>
+
+            {% else %}
+                <a class="nav-link me-3" aria-current="page" href="{% url 'auth_login' %}">Login/Register</a>
+            {% endif %}
+
         </div>
     </div>
 </nav>
