@@ -29,9 +29,9 @@
                         Animals
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:overrated' %}">Most Overrated</a></li>
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:underrated' %}">Most Underrated</a></li>
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}">Browse</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=overrated">Most Overrated</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=underrated">Most Underrated</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=name">Browse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

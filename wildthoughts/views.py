@@ -15,6 +15,15 @@ from wildthoughts.forms import AnimalForm, UserListForm
 from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
 
+class Sorter:
+    @staticmethod
+    def sort(choice, class_view):
+        if choice not in class_view.options_order:
+            choice = class_view.default_order
+        field = class_view.options_order[choice]['field']
+        return choice, class_view.model.objects.order_by(field)
+
+
 class IndexView(View):
     def get(self, request):
         overrated_animals = Animal.objects.order_by('-downvotes')[:5]
@@ -26,28 +35,6 @@ class IndexView(View):
         return render(request, 'wildthoughts/base/index.html', context=context_dict)
     
 
-class OverratedView(View):
-    def get(self, request):
-        overrated_animals = Animal.objects.order_by('-downvotes')
-        length = overrated_animals.__len__()/2
-        overrated_animals = Animal.objects.order_by('-downvotes')[:length]
-        context_dict = {
-            'overrated_animals': overrated_animals,
-        }
-        return render(request, 'wildthoughts/animal/overrated.html', context=context_dict)
-    
-
-class UnderratedView(View):
-    def get(self, request):
-        underrated_animals = Animal.objects.order_by('-upvotes')
-        length = underrated_animals.__len__()/2
-        underrated_animals = Animal.objects.order_by('-upvotes')[:length]
-        context_dict = {
-            'underrated_animals': underrated_animals,
-        }
-        return render(request, 'wildthoughts/animal/underrated.html', context=context_dict)
-
-
 class AnimalView(View):
     def get(self, request, animal_name_slug):
         animal = Animal.objects.get(slug=animal_name_slug)
@@ -55,12 +42,24 @@ class AnimalView(View):
     
 
 class ListAnimalsView(View):
+    model = Animal
+    default_order = 'name'
+    options_order = {
+        'name': {'field': 'name'}, 
+        'overrated': {'field': '-upvotes'},
+        'underrated': {'field': '-downvotes'},
+        'newest': {'field': '-date'},
+        'oldest': {'field': 'date'},
+    }
+
     def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, query_result = Sorter.sort(sort_by, ListAnimalsView)
         # set up pagination
-        p = Paginator(Animal.objects.all(), 20)
+        p = Paginator(query_result, 20)
         page = request.GET.get('page')
         animals = p.get_page(page)
-        return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals})
+        return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals, 'sort_by':sort_by})
     
 
 class ListProfileView(View):
@@ -131,13 +130,26 @@ class NewRegistrationView(RegistrationView):
 
 
 class UserListView(View):
+    model = UserList
+    default_order = 'title'
+    options_order = {
+        'title': {'field': 'title'}, 
+        'overrated': {'field': '-upvotes'},
+        'underrated': {'field': '-downvotes'},
+        'newest': {'field': '-date'},
+        'oldest': {'field': 'date'},
+    }
+
     def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, query_result = Sorter.sort(sort_by, UserListView)
+
         # set up pagination
-        p = Paginator(UserList.objects.all(), 20)
+        p = Paginator(query_result, 20)
         page = request.GET.get('page')
         user_lists = p.get_page(page)
         
-        return render(request, 'wildthoughts/user_list/user_list.html', context={'user_lists': user_lists})
+        return render(request, 'wildthoughts/user_list/user_list.html', context={'user_lists': user_lists, 'sort_by': sort_by})
     
     
 class ProfileView(View):

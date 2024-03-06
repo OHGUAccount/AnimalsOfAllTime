@@ -32,14 +32,14 @@ It will take some time, so please be patient.
 - [x] User lists
 ### Forms
 - [x] Login/Registration
-- [x] Add animal
-- [x] Add list
-- [ ] Add discussion
-- [ ] Add comment
+- [x] Add Animal
+- [x] Add List
+- [ ] Add Discussion
+- [ ] Add Comment
 ### Features
 - [x] Dark Mode
 - [x] Search
-- [ ] Sorting animals, users...
+- [x] Sorting Animals, Lists
 - [ ] Upvote / Downvote
 ### Testing
 - [ ] Models
