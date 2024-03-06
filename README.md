@@ -29,17 +29,21 @@ It will take some time, so please be patient.
 - [ ] Underrated Animals
 - [ ] Profile
 - [ ] List Profiles
-- [ ] User lists
+- [x] User lists
 ### Forms
 - [x] Login/Registration
-- [ ] Add animal
-- [ ] Add list
+- [x] Add animal
+- [x] Add list
 - [ ] Add discussion
 - [ ] Add comment
 ### Features
-- [ ] Upvote / Downvote
-- [x] Search bar
+- [x] Dark Mode
+- [x] Search
 - [ ] Sorting animals, users...
+- [ ] Upvote / Downvote
+### Testing
+- [ ] Models
+- [ ] Views
 
 ## Styling guides
 It would be appropriate but not necessary to follow these style guides to make your code readable and development easier for others.
