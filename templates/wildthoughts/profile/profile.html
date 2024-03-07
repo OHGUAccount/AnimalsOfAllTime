@@ -90,8 +90,9 @@
             <div class="col-6">
                 <div class="card-body">
                     <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
-                    <h6 class="card-subtitle mb-2 text-muted"> <a href="{{ author.user.username }}">{{ animal.author }}</a></h6>
-                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
+                    </h6>
                 </div>
             </div>
         </div>
