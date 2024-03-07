@@ -4,10 +4,13 @@
     Register
 {% endblock %}
     {% block body_block %}
-    <center> <h1>Register Here</h1> </center> 
+    <center><h1 class="display-4">Register Here</h1></center> 
+
+<div class="d-grid gap-2 col-sm-6 mx-auto">
     <form method="post" action=".">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Register" />
+    <input class="btn btn-primary w-100" type="submit" value="Register" />
     </form>
+</div>
 {% endblock %}

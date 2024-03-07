@@ -5,15 +5,29 @@
 {% endblock %}
 
 {% block body_block %}
-    <center> <h1>Login</h1> </center> 
-    <form method="post" action=".">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Log In" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
-    <p>
-        Not registered?
-        <a href="{% url 'registration_register' %}">Register here!</a>
-    </p>
+
+<br/><br/>
+
+<center><h1 class="display-4">Login</h1></center> 
+
+<br/>
+
+<div class="d-grid gap-2 col-sm-6 mx-auto">
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-primary w-100" type="submit" value="Log In" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+<center>
+<h5 class="mt-4">
+    Not registered?
+    <a href="{% url 'registration_register' %}">Register here!</a>
+</h5>
+</center>
+</div>
+
+<br/><br/><br/><br/>
+
 {% endblock %}
