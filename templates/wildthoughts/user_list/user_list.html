@@ -19,7 +19,7 @@
             </a>
             
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'wildthoughts:lists' %}?sort_by=name">Title</a></li>
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:lists' %}?sort_by=title">Title</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'wildthoughts:lists' %}?sort_by=newest">Newest</a></li>
             <li><a class="dropdown-item" href="{% url 'wildthoughts:lists' %}?sort_by=oldest">Oldest</a></li>
@@ -33,8 +33,13 @@
     <div class="row row-cols-1 row-cols-md-2">
         {% for user_list in user_lists %}
         {% with animals=user_list.animals.all %}
-        <div class="col">
-            <div class="card mb-4">
+        <div class="col d-flex justify-content-start">
+            <div class="d-flex flex-column align-items-center border mb-4">
+                <button type="button" class="upvote" id="upvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-up"></i></button>
+                <h6>{{ user_list.upvotes }}</h6>
+                <button type="button" class="downvote" id="downvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-down"></i></button>
+            </div>
+            <div class="card mb-4 flex-fill">
                 <div class="card-header">
                     <div>
                         <h5 class="card-title ms-2">{{ user_list.title }}</h5>
@@ -44,9 +49,9 @@
                     </div>                 
                 </div>                
                 <ul class="list-group">
-                    {% for animal in user_list.animals.all|slice:"3" %}
+                    {% for animal in animals|slice:"3" %}
                     <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
-                        <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ profile.user.username }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                        <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
                         {{ animal.name }}</a>
                     {% endfor %}
                 </ul>
@@ -81,17 +86,5 @@
 {% endblock %}
 
 {% block script_block %}
-<script type="text/javascript">
-    $(function () {
-        $('[data-toggle="popover-hover"]').each(function() {
-            var imgSrc = $(this).data('img');
-            $(this).popover({
-                html: true,
-                trigger: 'hover',
-                placement: 'bottom',
-                content: function () { return '<img src="' + imgSrc + '"  class="img-fluid"/>'; }
-            });
-        });
-    })
-</script>
+<script src="{% static "js/list.js" %}" crossorigin="anonymous"></script>
 {% endblock %}

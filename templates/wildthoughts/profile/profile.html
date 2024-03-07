@@ -6,32 +6,146 @@
 {% endblock %}
 {% block body_block %}
 <div class="container">
-    <div> <center>
-        {% if profile.picture %}
-        <img src="{{ MEDIA_URL }}{{ profile.picture }}"  width="128px" height="128px" alt="{{ profile.user.username }}'s Profile Picture">
-        {% else %}
-        <img src="{% static 'images/defaultprofile.jpg' %}" width="128px" height="128px" alt="No Profile Photo" />
-        {% endif %}
-        <h2>{{ profile.user.username }}</h2>
-        <br />
-        <div>
-            <h3><strong>Bio </strong></h3>
-            <p>
-                {{ profile.user.description }}
-                {{ profile.user.picture }}
-                {% if profile.user == loguser %}
-                    <form method="post" action="." enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="submit" value="Update" />
-                    </form>
-                {% endif %}
-            </p>
+    <div class="row">
+
+        <div class="col-12 col-md-4">
+            {% if profile.picture %}
+            <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
+            {% else %}
+            <img class="img-fluid rounded-circle" src="{% static 'images/defaultprofile.jpg' %}" width="260px" height="260px" alt="No Profile Photo" />
+            {% endif %}
+            <h2>{{ profile.user.username }}</h2>
+            <br />
+            <div>
+                <h3><strong>Bio</strong></h3>
+                <p>
+                    {{ profile.user.description|default:"No bio provided" }}
+                    {{ profile.user.picture }}
+                    {% if profile.user == loguser %}
+                        <form method="post" action="." enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="d-grid gap-2 col-6">
+                                <button type="button" class="btn btn-outline-secondary" type="submit" value="Update">Update</button>
+                                <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
+                            </div>
+                        </form>
+                    {% endif %}
+                </p>
+            </div>
         </div>
-    </div> </center>
+
+    <div class="col-12 col-md-8">
+        <ul class="nav nav-underline">
+            <li class="nav-item">
+                <a class="nav-link" id="animals" aria-current="page" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=animals&sort_by=newest">Authored Animals</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="discussions" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=discussions&sort_by=newest">Discussions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="comments" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=comments&sort_by=newest">Comments</a>
+                </li>
+        </ul>
+
+        <div class="d-flex flex-row justify-content-end mb-3">
+            <h5 class="me-3">Sort by: </h5>
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ sort_by|title }} 
+                </a>
+                
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                {% if tab == 'animals'%}
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=name">Name</a></li>
+                <li><hr class="dropdown-divider"></li>
+                {% elif tab != 'comments' %}
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=title">Title</a></li>
+                <li><hr class="dropdown-divider"></li>
+                {% endif %}
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=newest">Newest</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=oldest">Oldest</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=overrated">Overrated</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=underrated">Underrated</a></li>
+                </ul>
+            </div>
+        </div>
+
+    {% if tab == 'animals' %}
+    {% for animal in results %}
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-2 text-center">
+                <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
+                <h4>{{ animal.upvotes }}</h4>
+                <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
+            </div>
+            <div class="col-4">
+                <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+            </div>
+            <div class="col-6">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"> <a href="{{ author.user.username }}">{{ animal.author }}</a></h6>
+                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% elif tab == 'lists' %}
+    {% for user_list in results %}
+    {% with animals=user_list.animals.all %}
+    <div class="col d-flex justify-content-start">
+        <div class="d-flex flex-column align-items-center border mb-4">
+            <button type="button" class="upvote" id="upvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-up"></i></button>
+            <h6>{{ user_list.upvotes }}</h6>
+            <button type="button" class="downvote" id="downvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-down"></i></button>
+        </div>
+        <div class="card mb-4 flex-fill">
+            <div class="card-header">
+                <div>
+                    <h5 class="card-title ms-2">{{ user_list.title }}</h5>
+                    <div class="card-subtitle mb-2 text-body-secondary ms-2">
+                        <i class="bi bi-list-ol"></i> {{ animals.count }} animals
+                    </div>
+                </div>                 
+            </div>                
+            <ul class="list-group">
+                {% for animal in animals|slice:"3" %}
+                <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
+                    <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                    {{ animal.name }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+
+    {% elif tab == 'discussions' %}
+    <!-- Insert discussions widget here -->
+
+    {% elif tab == 'comments' %}
+    <!-- Insert comments widget here -->
+
+    {% endif %}
+    
+    </div>
+    </div>
+
 </div>
+{% endblock %}
 
-<!-- Bobby I can't get this working, but whenever you get this bit. Make sure to include this hyperlink please, so people can logout :) -->
-<a href="{% url 'auth_logout' %}">Logout</a>
-
+{% block script_block %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#{{ tab }}').addClass('active');
+});
+</script>
 {% endblock %}

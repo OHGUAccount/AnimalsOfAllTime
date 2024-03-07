@@ -12,16 +12,36 @@ from django.views import View
 from registration.backends.simple.views import RegistrationView
 
 from wildthoughts.forms import AnimalForm, UserListForm
-from wildthoughts.models import Animal, Discussion, UserList, UserProfile
+from wildthoughts.models import Animal, Comment, Discussion, UserList, UserProfile
 
 
 class Sorter:
     @staticmethod
-    def sort(choice, class_view):
-        if choice not in class_view.options_order:
-            choice = class_view.default_order
-        field = class_view.options_order[choice]['field']
-        return choice, class_view.model.objects.order_by(field)
+    def sort(choice, model, profile=None):
+        options_order = {
+            'title':'title', 
+            'name': 'name', 
+            'overrated': '-upvotes',
+            'underrated': '-downvotes',
+            'newest': '-date',
+            'oldest': 'date',
+        } 
+
+        if model is Animal and choice == 'title':
+            choice = 'name'
+        elif model is Comment and choice in ['title', 'name']:
+            choice = 'newest'
+        elif choice not in options_order:
+            choice = 'newest'
+            
+        field = options_order[choice]
+
+        if profile:
+            results = model.objects.filter(author=profile).order_by(field)
+        else:
+            results = model.objects.order_by(field)
+
+        return choice, results
 
 
 class IndexView(View):
@@ -42,21 +62,11 @@ class AnimalView(View):
     
 
 class ListAnimalsView(View):
-    model = Animal
-    default_order = 'name'
-    options_order = {
-        'name': {'field': 'name'}, 
-        'overrated': {'field': '-upvotes'},
-        'underrated': {'field': '-downvotes'},
-        'newest': {'field': '-date'},
-        'oldest': {'field': 'date'},
-    }
-
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, query_result = Sorter.sort(sort_by, ListAnimalsView)
+        sort_by, results = Sorter.sort(sort_by, Animal)
         # set up pagination
-        p = Paginator(query_result, 20)
+        p = Paginator(results, 20)
         page = request.GET.get('page')
         animals = p.get_page(page)
         return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals, 'sort_by':sort_by})
@@ -130,22 +140,12 @@ class NewRegistrationView(RegistrationView):
 
 
 class UserListView(View):
-    model = UserList
-    default_order = 'title'
-    options_order = {
-        'title': {'field': 'title'}, 
-        'overrated': {'field': '-upvotes'},
-        'underrated': {'field': '-downvotes'},
-        'newest': {'field': '-date'},
-        'oldest': {'field': 'date'},
-    }
-
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, query_result = Sorter.sort(sort_by, UserListView)
+        sort_by, results = Sorter.sort(sort_by, UserList)
 
         # set up pagination
-        p = Paginator(query_result, 20)
+        p = Paginator(results, 20)
         page = request.GET.get('page')
         user_lists = p.get_page(page)
         
@@ -153,13 +153,36 @@ class UserListView(View):
     
     
 class ProfileView(View):
+    tab_to_model = {
+        'animals': Animal,
+        'discussions': Discussion,
+        'comments': Comment,
+        'lists': UserList,
+    }
+
     def get(self, request, username):
         profile = UserProfile.objects.get(user=User.objects.get(username=username))
         loguser = None
         if (request.user.is_authenticated):
             loguser = request.user
+
+        tab = request.GET.get('tab')
+        sort_by = request.GET.get('sort_by')
+        if tab not in ProfileView.tab_to_model:
+            tab = 'animals'
         
-        return render(request, 'wildthoughts/profile/profile.html', context={'profile': profile, 'loguser':loguser})
+        model = ProfileView.tab_to_model[tab]
+        sort_by, results = Sorter.sort(sort_by, model, profile)
+        
+        context_dict = {
+        'profile': profile, 
+         'loguser':loguser, 
+         'sort_by':sort_by, 
+         'tab': tab, 
+         'results': results
+         }
+        
+        return render(request, 'wildthoughts/profile/profile.html', context=context_dict)
 
 
 class AddUserListView(View):
