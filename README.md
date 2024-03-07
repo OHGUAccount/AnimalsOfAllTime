@@ -1,4 +1,4 @@
-# AnimalsOfAllTime
+#  WildThoughts
 
 ## Instructions
 1. Activate your virtual environment
@@ -25,9 +25,9 @@ It will take some time, so please be patient.
 ### Pages
 - [x] Index
 - [ ] Animal
-- [ ] Overrated Animals
-- [ ] Underrated Animals
-- [ ] Profile
+- [x] Overrated Animals
+- [x] Underrated Animals
+- [x] Profile
 - [ ] List Profiles
 - [x] User lists
 ### Forms
