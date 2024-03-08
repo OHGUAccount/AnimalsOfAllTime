@@ -65,7 +65,7 @@
 	{% if user.is_authenticated %}
 	<div class="container">
 	<div class="text-center p-4">
-		<a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' animal.slug %}" role="button">Add Discussion!</a>
+		<a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}?selected={{ animal.slug }}" role="button">Add Discussion!</a>
 	</div>
 	</div>
     {% endif %}

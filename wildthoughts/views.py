@@ -17,25 +17,32 @@ from wildthoughts.models import Animal, Comment, Discussion, UserList, UserProfi
 
 """--------------------------------------------------------HELPER CLASSES -------------------------------------------------------------"""
 class Sorter:
-    @staticmethod
-    def sort(choice, model, profile=None):
-        options_order = {
-            'title':'title', 
-            'name': 'name', 
-            'overrated': '-upvotes',
-            'underrated': '-downvotes',
-            'newest': '-date',
-            'oldest': 'date',
-        } 
+    valid_models = {Animal, Comment, Discussion, UserList}
+    options_order = {
+        'title':'title', 
+        'name': 'name', 
+        'overrated': '-upvotes',
+        'underrated': '-downvotes',
+        'newest': '-date',
+        'oldest': 'date',
+    } 
 
-        if model is Animal and choice == 'title':
+    @classmethod
+    def validate(cls, choice, model):
+        if model not in cls.valid_models:
+            raise TypeError(f'Model must be {cls.valid_models}')
+        elif model is Animal and choice == 'title':
             choice = 'name'
         elif model is Comment and choice in ['title', 'name']:
             choice = 'newest'
-        elif choice not in options_order:
+        elif choice not in cls.options_order:
             choice = 'newest'
-            
-        field = options_order[choice]
+        return choice
+
+    @classmethod
+    def sort(cls, choice, model, profile=None):
+        choice = cls.validate(choice, model)
+        field = cls.options_order[choice]
 
         if profile:
             results = model.objects.filter(author=profile).order_by(field)
@@ -44,6 +51,13 @@ class Sorter:
 
         return choice, results    
     
+    @classmethod
+    def sort_user_list_animals(cls, choice, user_list):
+        choice = cls.validate(choice, Animal)
+        field = Sorter.options_order[choice]
+        results = user_list.animals.order_by(field)
+        return choice, results
+    
 
 """------------------------------------------------------- ANIMAL VIEWS ------------------------------------------------------------"""
 class AnimalView(View):
@@ -51,32 +65,7 @@ class AnimalView(View):
         animal = Animal.objects.get(slug=animal_name_slug)
         discussions = Discussion.objects.filter(animal=animal)
         return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal, 'discussions':discussions})
-    
 
-class AddDiscussionView(View):
-    @method_decorator(login_required)
-    def get(self, request, animal_name_slug):
-        form = DiscussionForm()
-        animal = Animal.objects.get(slug=animal_name_slug)
-        return render(request, 'wildthoughts/animal/add_discussion.html', {'form': form, 'animal': animal})
-        
-    @method_decorator(login_required)
-    def post(self, request, animal_name_slug):
-        form = DiscussionForm(request.POST, request.FILES)
-        animal = Animal.objects.get(slug=animal_name_slug)
-
-        if form.is_valid():
-            discussion = form.save(commit=False)
-            author = UserProfile.objects.get(user=request.user)
-            discussion.author = author
-            discussion.slug = slugify(discussion.title)
-            discussion.animal = animal
-            discussion.save()
-            return redirect(reverse('wildthoughts:animal', kwargs={'animal_name_slug': animal.slug}))
-        else:
-            print(form.errors)
-
-        return render(request, 'wildthoughts/animal/add_discussion.html', {'form': form, 'animal': animal})
 
 class AddAnimalView(View):
     @method_decorator(login_required)
@@ -159,7 +148,96 @@ class ThemeView(View):
             return HttpResponse(-1)
             
 
-"""-------------------------------------------------------------- PROFILE VIEWS ------------------------------------------------------"""
+"""------------------------------------------------------- DISCUSSION VIEWS------------------------------------------------------------"""
+class DiscussionView(View):
+    def get(self, request, animal_name_slug):
+        pass
+
+
+class AddDiscussionView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        animal_slug = request.GET.get('selected')
+        animal_id = None
+        if animal_slug:
+            try:
+                animal_id = Animal.objects.get(slug=animal_slug).id
+            except:
+                pass
+
+        form = DiscussionForm()
+        return render(request, 'wildthoughts/discussion/add_discussion.html', {'form': form, 'animal_id': animal_id})
+        
+    @method_decorator(login_required)
+    def post(self, request):
+        form = DiscussionForm(request.POST)
+
+        if form.is_valid():
+            discussion = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            discussion.author = author
+            discussion.slug = slugify(discussion.title)
+            discussion.save()
+            return redirect(reverse('wildthoughts:animal', kwargs={'animal_name_slug': discussion.animal.slug}))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/discussion/add_discussion.html', {'form': form})
+    
+
+"""-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
+# (Renamed to not be confused with python list)
+class UserListView(View):
+    def get(self, request, user_list_slug):
+        user_list = UserList.objects.get(slug=user_list_slug)
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort_user_list_animals(sort_by, user_list)
+        # set up pagination
+        p = Paginator(results, 20)
+        page = request.GET.get('page')
+        animals = p.get_page(page)
+        return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals, 'sort_by':sort_by})
+    
+
+class ListUserListView(View):
+    def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort(sort_by, UserList)
+
+        # set up pagination
+        p = Paginator(results, 20)
+        page = request.GET.get('page')
+        user_lists = p.get_page(page)
+        
+        return render(request, 'wildthoughts/user_list/list_user_lists.html', context={'user_lists': user_lists, 'sort_by': sort_by})
+    
+
+class AddUserListView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        form = UserListForm()
+        animals = Animal.objects.all()
+        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
+    
+    @method_decorator(login_required)
+    def post(self, request):
+        form = UserListForm(request.POST)
+        animals = Animal.objects.all()
+
+        if form.is_valid():
+            user_list = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            user_list.author = author
+            user_list.save()
+            form.save_m2m() 
+            return redirect(reverse('wildthoughts:lists'))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
+    
+
+"""---------------------------------------------------------- PROFILE VIEWS ------------------------------------------------------"""
 class ProfileView(View):
     tab_to_model = {
         'animals': Animal,
@@ -211,44 +289,3 @@ class ListProfileView(View):
         page = request.GET.get('page')
         profiles = p.get_page(page)
         return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
-
-
-"""-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
-# (Renamed to not be confused with python list)
-class UserListView(View):
-    def get(self, request):
-        sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort(sort_by, UserList)
-
-        # set up pagination
-        p = Paginator(results, 20)
-        page = request.GET.get('page')
-        user_lists = p.get_page(page)
-        
-        return render(request, 'wildthoughts/user_list/user_list.html', context={'user_lists': user_lists, 'sort_by': sort_by})
-    
-
-class AddUserListView(View):
-    @method_decorator(login_required)
-    def get(self, request):
-        form = UserListForm()
-        animals = Animal.objects.all()
-        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
-    
-    @method_decorator(login_required)
-    def post(self, request):
-        form = UserListForm(request.POST)
-        animals = Animal.objects.all()
-
-        if form.is_valid():
-            user_list = form.save(commit=False)
-            author = UserProfile.objects.get(user=request.user)
-            user_list.author = author
-            user_list.save()
-            form.save_m2m() 
-            return redirect(reverse('wildthoughts:lists'))
-        else:
-            print(form.errors)
-
-        return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
-    

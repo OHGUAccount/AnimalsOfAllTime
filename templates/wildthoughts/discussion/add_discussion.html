@@ -24,3 +24,13 @@
 </form>
 </div>
 {% endblock %}
+
+{% if animal_id %}
+{% block script_block %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#id_animal option[value={{ animal_id }}]').attr('selected','selected');
+	})
+</script>
+{% endblock %}
+{% endif %}
