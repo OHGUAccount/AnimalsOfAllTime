@@ -37,9 +37,9 @@
                         <div class="col-4">
 						<br>
                             {% if animal.author.picture %}
-                                <img src="{{ MEDIA_URL }}{{ discussion.author.picture }}" class="rounded-circle avatar-sm" width=50 height=50>
+                                <img src="{{ MEDIA_URL }}{{ discussion.author.picture }}" class="rounded-circle avatar-sm" width="80" height="80">
                             {% else %}
-                                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="150" height="100">
+                                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="80" height="80">
                             {% endif %}
                         </div>
                         <div class="col-6">
@@ -60,6 +60,14 @@
 		<strong>There are no discussions yet...</strong>
 		</div>
 		</div>
+    {% endif %}
+	<br>
+	{% if user.is_authenticated %}
+	<div class="container">
+	<div class="text-center p-4">
+		<a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' animal.slug %}" role="button">Add Discussion!</a>
+	</div>
+	</div>
     {% endif %}
 
 

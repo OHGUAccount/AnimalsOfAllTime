@@ -11,7 +11,7 @@ from django.views import View
 
 from registration.backends.simple.views import RegistrationView
 
-from wildthoughts.forms import AnimalForm, UserListForm
+from wildthoughts.forms import AnimalForm, UserListForm, DiscussionForm
 from wildthoughts.models import Animal, Comment, Discussion, UserList, UserProfile
 
 
@@ -52,6 +52,31 @@ class AnimalView(View):
         discussions = Discussion.objects.filter(animal=animal)
         return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal, 'discussions':discussions})
     
+
+class AddDiscussionView(View):
+    @method_decorator(login_required)
+    def get(self, request, animal_name_slug):
+        form = DiscussionForm()
+        animal = Animal.objects.get(slug=animal_name_slug)
+        return render(request, 'wildthoughts/animal/add_discussion.html', {'form': form, 'animal': animal})
+        
+    @method_decorator(login_required)
+    def post(self, request, animal_name_slug):
+        form = DiscussionForm(request.POST, request.FILES)
+        animal = Animal.objects.get(slug=animal_name_slug)
+
+        if form.is_valid():
+            discussion = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            discussion.author = author
+            discussion.slug = slugify(discussion.title)
+            discussion.animal = animal
+            discussion.save()
+            return redirect(reverse('wildthoughts:animal', kwargs={'animal_name_slug': animal.slug}))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/animal/add_discussion.html', {'form': form, 'animal': animal})
 
 class AddAnimalView(View):
     @method_decorator(login_required)

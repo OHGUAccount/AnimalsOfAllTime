@@ -6,6 +6,7 @@ app_name = 'wildthoughts'
 urlpatterns = [
     # animal urls
     path('add_animal/', views.AddAnimalView.as_view(), name='add_animal'),
+    path('animals/<slug:animal_name_slug>/add_discussion/', views.AddDiscussionView.as_view(), name='add_discussion'),
     path('animals/', views.ListAnimalsView.as_view(), name='animals'),
     path('animals/<slug:animal_name_slug>/', views.AnimalView.as_view(), name='animal'),
 
