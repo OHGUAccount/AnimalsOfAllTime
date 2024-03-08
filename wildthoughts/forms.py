@@ -37,9 +37,10 @@ class AnimalForm(forms.ModelForm):
 class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Discussion
-        fields = ['title', 'description']
+        fields = ['title', 'animal', 'description']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'animal': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'})
         }
 
@@ -60,6 +61,7 @@ class DiscussionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['title'].help_text = "Please enter the Discussion title you would like to create:"
+        self.fields['animal'].help_text = "Please select Animal:"
         self.fields['description'].help_text = "Please give a brief description on the Discussion:"
 
 
