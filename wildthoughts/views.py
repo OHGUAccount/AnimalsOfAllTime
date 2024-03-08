@@ -49,7 +49,8 @@ class Sorter:
 class AnimalView(View):
     def get(self, request, animal_name_slug):
         animal = Animal.objects.get(slug=animal_name_slug)
-        return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal})
+        discussions = Discussion.objects.filter(animal=animal)
+        return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal, 'discussions':discussions})
     
 
 class AddAnimalView(View):

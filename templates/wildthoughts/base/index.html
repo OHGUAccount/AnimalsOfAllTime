@@ -58,12 +58,16 @@
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-2 text-center">
-                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-                            <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
+                            <button type="button" class="upvote" id="upvote_{{ discussion.id }}" data-animalid="{{ discussion.id }}"><i class="bi bi-chevron-up"></i></button>
+                            <h4>{{ discussion.upvotes }}</h4>
+                            <button type="button" class="downvote" id="downvote_{{ discussion.id }}" data-animalid="{{ discussion.id }}"><i class="bi bi-chevron-down"></i></button>
                         </div>
                         <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
+                            {% if animal.author.picture %}
+                                <img src="{{ MEDIA_URL }}{{ discussion.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                            {% else %}
+                                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                            {% endif %}
                         </div>
                         <div class="col-6">
                             <div class="card-body">
