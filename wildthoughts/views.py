@@ -150,8 +150,10 @@ class ThemeView(View):
 
 """------------------------------------------------------- DISCUSSION VIEWS------------------------------------------------------------"""
 class DiscussionView(View):
-    def get(self, request, animal_name_slug):
-        pass
+    def get(self, request, discussion_name_slug):
+        discussion = Discussion.objects.get(slug=discussion_name_slug)
+        comments = Comment.objects.filter(discussion=discussion)
+        return render(request, 'wildthoughts/discussion/discussion.html', context={'discussion': discussion, 'comments':comments })
 
 
 class AddDiscussionView(View):
