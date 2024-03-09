@@ -26,7 +26,6 @@ class AnimalForm(forms.ModelForm):
         
         return name
     
-
     # Add help text for name and description fields
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,6 +33,7 @@ class AnimalForm(forms.ModelForm):
         self.fields['description'].help_text = "Please give a brief description on the Animal:"
         self.fields['picture'].help_text = "Upload a picture of your added animal:"
         
+
 class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Discussion
@@ -56,7 +56,6 @@ class DiscussionForm(forms.ModelForm):
         
         return title
     
-
     # Add help text for name and description fields
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
