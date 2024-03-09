@@ -80,22 +80,7 @@ Animals
 
     </div>
 
-    <nav class="d-flex justify-content-end mt-4" aria-label="Page navigation animals">
-        <ul class="pagination">
-        {% if animals.has_previous %}
-            <li class=page-item><a class="page-link" href="?page=1&sort_by={{ sort_by }}">« First</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ animals.previous_page_number }}&sort_by={{ sort_by }}">«</a></li>
-        {% endif %}
-        
-        <li class="page-item disabled"><a class="page-link" href="#">Page {{ animals.number }} of {{ animals.paginator.num_pages }}</a></li>
-        
-        {% if animals.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ animals.next_page_number }}&sort_by={{ sort_by }}">»</a></li>
-        
-            <li class="page-item"><a class="page-link" href="?page={{ animals.paginator.num_pages }}&sort_by={{ sort_by }}">Last »</a></li>
-        {% endif %}
-        </ul>
-    </nav>
+    {% include "wildthoughts/widget/pagination_widget.html" with entity=animals %}
 
 </div>
 
