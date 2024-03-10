@@ -45,20 +45,6 @@ Profiles
 </div>
 
 
-<nav aria-label="Page navigation profiles">
-<ul class="pagination">
-{% if profiles.has_previous %}
-    <li class=page-item><a class="page-link" href="?page=1">&laquo First</a></li>
-    <li class="page-item"><a class="page-link" href="?page={{ animals.previous_page_number }}">&laquo</a></li>
-{% endif %}
+{% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
 
-<li class="page-item disabled"><a class="page-link" href="#">Page {{ profiles.number }} of {{ profiles.paginator.num_pages }}</a></li>
-
-{% if profiles.has_next %}
-    <li class="page-item"><a class="page-link" href="?page={{ profiles.next_page_number }}">&raquo</a></li>
-
-    <li class="page-item"><a class="page-link" href="?page={{ profiles.paginator.num_pages }}">Last &raquo</a></li>
-{% endif %}
-</ul>
-</nav>
 {% endblock %}

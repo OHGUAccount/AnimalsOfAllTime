@@ -13,78 +13,15 @@
 <br /><br />
 
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-2 g-5">
-
+    <div class="row row-cols-1 row-cols-lg-2 g-5">
         <div class="col">
-            <h2 class="mb-4 text-center">Top 5 Overrated Animals</h2>
-            {% if overrated_animals %}
-                {% for animal in overrated_animals %}
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-2 text-center">
-                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-                            <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
-                        </div>
-                        <div class="col-6">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    {% if animal.author.picture %}
-                                    <img src="{{ MEDIA_URL }}{{ animal.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% else %}
-                                    <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% endif %}
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' animal.author %}">{{ animal.author }}</a></h6>
-                                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-            <strong>There are no animals present.</strong>
-            {% endif %}
+            <h2 class="mb-4 text-center">Top 5 Underrated Animals</h2>
+            {% include "wildthoughts/widget/animal_widget.html" with animals=overrated_animals %}
         </div>
 
         <div class="col">
             <h2 class="mb-4 text-center">Top 5 Underrated Animals</h2>
-            {% if underrated_animals %}
-                {% for animal in underrated_animals %}
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-2 text-center">
-                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-                            <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
-                        </div>
-                        <div class="col-6">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    {% if animal.author.picture %}
-                                    <img src="{{ MEDIA_URL }}{{ animal.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% else %}
-                                    <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% endif %}
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' animal.author %}">{{ animal.author }}</a></h6>
-                                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-            <strong>There are no animals present.</strong>
-            {% endif %}
+            {% include "wildthoughts/widget/animal_widget.html" with animals=underrated_animals %}
         </div>
         
     </div>

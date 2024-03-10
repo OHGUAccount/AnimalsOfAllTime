@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+{% if animals %}
+{% for animal in animals %}
+{% if col %}
+<div class="col">
+{% endif %}
+<div class="card ms-2">
+    <div class="d-flex">
+        <div class="d-flex flex-column mx-3 align-items-center">
+            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
+            <h4>{{ animal.upvotes }}</h4>
+            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
+        </div>
+            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded m-3" width=150 height=90 alt="{{ animal.name }}'s image">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    {% if animal.author.picture %}
+                    <img src="{{ MEDIA_URL }}{{ animal.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                    {% else %}
+                    <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                    {% endif %}
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' animal.author %}">{{ animal.author }}</a></h6>
+                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
+                </h6>
+            </div>
+    </div>
+</div>
+{% if col %}
+</div>
+{% endif %}
+{% endfor %}
+{% else %}
+<strong>There are no animals present.</strong>
+{% endif %}
