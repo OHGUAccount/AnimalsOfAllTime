@@ -127,7 +127,8 @@ class SearchView(View):
         searched = request.POST['searched']
         category = request.POST['category']
 
-        if not searched:
+        if not searched.strip():
+            searched = ''
             results = None
         elif category == 'Animals':
             results = Animal.objects.filter(name__contains=searched)
