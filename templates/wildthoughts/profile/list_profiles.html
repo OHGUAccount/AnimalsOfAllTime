@@ -31,8 +31,8 @@ Profiles
     <p>There are no profiles present.</p>
     {% endif %}
 
+    {% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
+    
 </div>
-
-{% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
 
 {% endblock %}
