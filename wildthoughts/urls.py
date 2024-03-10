@@ -18,6 +18,7 @@ urlpatterns = [
 
     # discussion urls
     path('add_discussion/', views.AddDiscussionView.as_view(), name='add_discussion'),
+    path('discussions/', views.ListDiscussionView.as_view(), name = "discussions"),
     path('discussion/', views.DiscussionView.as_view(), name = "discussion"),
 
     # profile urls

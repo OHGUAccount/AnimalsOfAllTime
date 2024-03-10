@@ -19,7 +19,6 @@ class Animal(models.Model):
     When two relationships like author and upvoted_by point to the same model related_name
     must be added to avoid naming conflicts.
     """
-    # ehen two relationships point to the same model like author and  
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='authored_animals')
     name = models.CharField(max_length= 128, unique=True)
     description = models.TextField(blank=True)
