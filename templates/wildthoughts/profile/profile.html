@@ -41,14 +41,14 @@
                 <a class="nav-link" id="animals" aria-current="page" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=animals&sort_by=newest">Authored Animals</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" id="discussions" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=discussions&sort_by=newest">Discussions</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="comments" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=comments&sort_by=newest">Comments</a>
-                </li>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
+            </li>
         </ul>
 
         <div class="d-flex flex-row justify-content-end mb-3">
@@ -82,7 +82,7 @@
     {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results %}
 
     {% elif tab == 'discussions' %}
-    <!-- Insert discussions widget here -->
+    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results %}
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->

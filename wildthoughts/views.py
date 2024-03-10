@@ -58,13 +58,22 @@ class Sorter:
         results = user_list.animals.order_by(field)
         return choice, results
     
+    @classmethod
+    def sort_animal_discussions(cls, choice, animal):
+        choice = cls.validate(choice, Discussion)
+        field = cls.options_order[choice]
+        results = Discussion.objects.filter(animal=animal).order_by(field)
+
+        return choice, results    
+
 
 """------------------------------------------------------- ANIMAL VIEWS ------------------------------------------------------------"""
 class AnimalView(View):
     def get(self, request, animal_name_slug):
         animal = Animal.objects.get(slug=animal_name_slug)
-        discussions = Discussion.objects.filter(animal=animal)
-        return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal, 'discussions':discussions})
+        sort_by = request.GET.get('sort_by')
+        sort_by, discussions = Sorter.sort_animal_discussions(sort_by, animal)
+        return render(request, 'wildthoughts/animal/animal.html', context={'animal': animal, 'discussions':discussions, 'sort_by': sort_by})
 
 
 class AddAnimalView(View):
@@ -185,6 +194,19 @@ class AddDiscussionView(View):
             print(form.errors)
 
         return render(request, 'wildthoughts/discussion/add_discussion.html', {'form': form})
+    
+
+class ListDiscussionView(View):
+    def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort(sort_by, Discussion)
+
+        # set up pagination
+        p = Paginator(results, 20)
+        page = request.GET.get('page')
+        discussions = p.get_page(page)
+        
+        return render(request, 'wildthoughts/discussion/list_discussions.html', context={'discussions': discussions, 'sort_by': sort_by})
     
 
 """-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""

@@ -10,7 +10,7 @@
 <div class="text-center p-4">
         <h1>Results for '{{ searched }}' in {{ category }}</h1>
         <br/>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 {% if results %}
                     <div class="list-group">
@@ -19,11 +19,11 @@
                             {% if category == "Animals" %}
                                 <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
                             {% elif category == "Discussions" %}
-                                <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                                <a href="{% url 'wildthoughts:discussion' result.slug %}" class="list-group-item list-group-item-action">{{ result.title }}</a>
                             {% elif category == "Lists" %}
-                            <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
+                            <a href="{% url 'wildthoughts:list' result.slug %}" class="list-group-item list-group-item-action">{{ result.title }}</a>
                             {% elif category == "Profiles" %}
-                                <a href="#" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
+                                <a href="{% url 'wildthoughts:profile' result.user.username %}" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
                             {% endif %}
                         </div>
                         {% endfor %}

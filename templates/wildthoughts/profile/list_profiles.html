@@ -10,40 +10,28 @@ Profiles
     <h1>Profiles</h1>
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        {% if profiles %}
-        <div class="col-12">
-            <div class="list-group">
-                {% for profile in profiles %}
-                <div class="card mb-3 w-100">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            {% if profile.picture %}
-                                <img src="{{ MEDIA_URL }}{{ profile.picture }}" class="card-img" alt="Picture of {{ profile.user.username }}">
-                            {% else %}
-                                <img src="https://lorempixel.com/64/64/people/" width="64" height="64" alt="Placeholder image" />
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{{profile.user.username}}">{{ profile.user.username }}</a></h5>
-                                {% if profile.description %}
-                                    <p class="card-text">{{ profile.description }}</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+<div class="container">
+    {% if profiles %}
+    {% for profile in profiles %}
+    <div class="card">
+        <div class="d-flex my-3">
+            {% if profile.picture %}
+            <img src="{{ MEDIA_URL }}{{ profile.picture }}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
+            {% else %}
+            <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title ms-4"><a href="{% url 'wildthoughts:profile' profile.user.username %}">{{ profile.user.username }}</a></h4>
             </div>
         </div>
-        {% else %}
-        <p>There are no profiles present.</p>
-        {% endif %}
     </div>
-</div>
+    {% endfor %}
 
+    {% else %}
+    <p>There are no profiles present.</p>
+    {% endif %}
+
+</div>
 
 {% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
 

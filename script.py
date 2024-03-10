@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from wildthoughts.models import Animal, Discussion, UserList, UserProfile
 
+
 class ImageProfile:
     # class dedicated to create image profiles with random colours
     colours = ['blue', 'green', 'red', 'yellow']
@@ -319,6 +320,7 @@ class Script:
     def run(cls):
         action = cls.read_args()
         cls.execute(action)
+
 
 if __name__ == '__main__':
     Script.run()
