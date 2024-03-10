@@ -196,7 +196,7 @@ class UserListView(View):
         p = Paginator(results, 20)
         page = request.GET.get('page')
         animals = p.get_page(page)
-        return render(request, 'wildthoughts/animal/list_animals.html', {'animals':animals, 'sort_by':sort_by})
+        return render(request, 'wildthoughts/user_list/user_list.html', {'user_list':user_list, 'animals':animals, 'sort_by':sort_by})
     
 
 class ListUserListView(View):

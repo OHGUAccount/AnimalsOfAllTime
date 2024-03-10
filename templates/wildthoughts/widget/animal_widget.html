@@ -2,7 +2,10 @@
 
 {% if animals %}
 {% for animal in animals %}
-<div class="card">
+{% if col %}
+<div class="col">
+{% endif %}
+<div class="card ms-2">
     <div class="d-flex">
         <div class="d-flex flex-column mx-3 align-items-center">
             <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
@@ -24,6 +27,9 @@
             </div>
     </div>
 </div>
+{% if col %}
+</div>
+{% endif %}
 {% endfor %}
 {% else %}
 <strong>There are no animals present.</strong>

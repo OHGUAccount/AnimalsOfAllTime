@@ -1,6 +1,6 @@
 <nav class="d-flex justify-content-end mt-4" aria-label="Page navigation">
     <ul class="pagination">
-    {% if animals.has_previous %}
+    {% if entity.has_previous %}
         <li class=page-item><a class="page-link" href="?page=1&sort_by={{ sort_by }}">« First</a></li>
         <li class="page-item"><a class="page-link" href="?page={{ entity.previous_page_number }}&sort_by={{ sort_by }}">«</a></li>
     {% endif %}
