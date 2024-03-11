@@ -11,6 +11,23 @@ Profiles
 </div>
 
 <div class="container">
+    <div class="d-flex flex-row justify-content-end mb-3">
+        <h5 class="me-3">Sort by: </h5>
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ sort_by|title }} 
+            </a>
+            
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=name">Name</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=newest">Newest</a></li>
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=oldest">Oldest</a></li>
+            </ul>
+        </div>
+
+    </div>
+
     {% if profiles %}
     {% for profile in profiles %}
     <div class="card">
@@ -31,8 +48,8 @@ Profiles
     <p>There are no profiles present.</p>
     {% endif %}
 
+    {% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
+    
 </div>
-
-{% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
 
 {% endblock %}

@@ -17,7 +17,7 @@ from django.utils.text import slugify
 
 from bs4 import BeautifulSoup
 from PIL import Image
-from wildthoughts.models import Animal, Discussion, UserList, UserProfile
+from wildthoughts.models import Animal, Discussion, Petition, UserList, UserProfile
 
 
 class ImageProfile:
@@ -205,9 +205,7 @@ class Database:
             )
             animal.description = data['description']
             animal.picture = data['image_path']
-            upvotes = random.randint(1, 100)
-            animal.upvotes = upvotes
-            animal.downvotes = 100 - upvotes
+            animal.votes = random.randint(1, 100)
             animal.save()
 
     @classmethod
@@ -254,19 +252,19 @@ class Database:
 
             user_list.save()
 
-    # @classmethod
-    # def add_petitions(cls):
-    #     for user, animal in cls.random_zip():
-    #         petition, created = Petition.objects.get_or_create(
-    #             title=f'Petition for {animal.name}',
-    #             date=datetime.date.today(),
-    #             author=user,
-    #             picture=None,
-    #             description="Test",
-    #             signatures=random.randint(0, 100),
-    #             slug=slugify(f'Petition for {animal.name}')
-    #         )
-    #         petition.animals.add(animal)
+    @classmethod
+    def add_petitions(cls):
+        for user, animal in cls.random_zip():
+            petition, created = Petition.objects.get_or_create(
+                title=f'Petition for {animal.name} by {user.user.username}',
+                author=user,
+                picture=animal.picture,
+                description="This animal is at the risk of extinction!",
+                goal=200,
+                signatures=random.randint(0, 100),
+                slug=slugify(f'Petition for {animal.name}')
+            )
+            petition.animals.add(animal)
 
     @classmethod
     def populate(cls):
@@ -274,7 +272,7 @@ class Database:
         cls.add_users()
         cls.add_discussions()
         cls.add_user_lists()
-        #cls.add_petitions()
+        cls.add_petitions()
         
     @classmethod
     def migrate(cls):
