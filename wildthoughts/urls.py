@@ -21,6 +21,12 @@ urlpatterns = [
     path('discussions/', views.ListDiscussionView.as_view(), name = "discussions"),
     path('discussion/', views.DiscussionView.as_view(), name = "discussion"),
 
+    # petition urls
+    path('petitions/', views.ListPetitionView.as_view(), name='petitions'),
+    path('sign_petition/', views.SignPetitionView.as_view(), name='sign_petition'),
+    path('petitions/<slug:petition_slug>/', views.PetitionView.as_view(), name='petition'),
+    path('add_petition/', views.AddPetitionForm.as_view(), name='add_petition'),
+
     # profile urls
     path('profiles/', views.ListProfileView.as_view(), name='profiles'),
     path('profiles/<slug:username>/', views.ProfileView.as_view(), name='profile'),

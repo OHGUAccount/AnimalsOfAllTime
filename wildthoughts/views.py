@@ -11,20 +11,22 @@ from django.views import View
 
 from registration.backends.simple.views import RegistrationView
 
-from wildthoughts.forms import AnimalForm, UserListForm, DiscussionForm
-from wildthoughts.models import Animal, Comment, Discussion, UserList, UserProfile
+from wildthoughts.forms import AnimalForm, UserListForm, DiscussionForm, PetitionForm
+from wildthoughts.models import Animal, Comment, Discussion, Petition, UserList, UserProfile
 
 
 """--------------------------------------------------------HELPER CLASSES -------------------------------------------------------------"""
 class Sorter:
-    valid_models = {Animal, Comment, Discussion, UserList}
+    valid_models = {Animal, Comment, Discussion, Petition, UserList, UserProfile}
     options_order = {
         'title':'title', 
         'name': 'name', 
-        'overrated': '-upvotes',
-        'underrated': '-downvotes',
+        'overrated': '-votes',
+        'underrated': 'votes',
         'newest': '-date',
         'oldest': 'date',
+        'most_signed': '-signatures',
+        'least_signed': 'signatures',
     } 
 
     @classmethod
@@ -51,6 +53,20 @@ class Sorter:
 
         return choice, results    
     
+    @classmethod
+    def sort_profiles(cls, choice):
+        if choice not in ['name', 'oldest', 'newest']:
+            choice = 'newest'
+        
+        if choice == 'name':
+            results = UserProfile.objects.order_by('user__username')
+        elif choice == 'newest':
+            results = UserProfile.objects.order_by('-date')
+        elif choice == 'oldest':
+            results = UserProfile.objects.order_by('date')
+
+        return choice, results
+
     @classmethod
     def sort_user_list_animals(cls, choice, user_list):
         choice = cls.validate(choice, Animal)
@@ -113,8 +129,8 @@ class ListAnimalsView(View):
 """------------------------------------------------------------ BASE VIEWS------------------------------------------------------------"""
 class IndexView(View):
     def get(self, request):
-        overrated_animals = Animal.objects.order_by('-downvotes')[:5]
-        underrated_animals = Animal.objects.order_by('-upvotes')[:5]
+        overrated_animals = Animal.objects.order_by('-votes')[:5]
+        underrated_animals = Animal.objects.order_by('votes')[:5]
         context_dict = {
             'overrated_animals': overrated_animals,
             'underrated_animals': underrated_animals
@@ -211,7 +227,6 @@ class ListDiscussionView(View):
     
 
 """-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
-# (Renamed to not be confused with python list)
 class UserListView(View):
     def get(self, request, user_list_slug):
         user_list = UserList.objects.get(slug=user_list_slug)
@@ -261,6 +276,85 @@ class AddUserListView(View):
 
         return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
     
+"""--------------------------------------------------------- PETITION VIEWS------------------------------------------------------------"""
+class PetitionView(View):
+    def get(self, request, petition_slug):
+        petition = Petition.objects.get(slug=petition_slug)
+
+        if petition.goal == 0:
+            progress_width = 0
+        else:
+            progress_width = int(petition.signatures / petition.goal * 100)
+
+        has_signed = False
+        if request.user.is_authenticated:
+            profile = UserProfile.objects.get(user=request.user)
+            if petition.signed_by.filter(id=profile.id).exists():
+                has_signed = True
+
+        context_dict = {
+            'petition': petition,
+            'progress_width': progress_width,
+            'has_signed': has_signed
+        }
+
+        return render(request, 'wildthoughts/petition/petition.html', context=context_dict)
+    
+
+class SignPetitionView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        petition_id = request.GET['petition_id']
+        try:
+            petition = Petition.objects.get(id=int(petition_id))
+            profile = UserProfile.objects.get(user=request.user)
+            if not petition.signed_by.filter(id=profile.id).exists():
+                petition.signatures += 1
+                petition.signed_by.add(profile)
+                petition.save()
+        except:
+            return HttpResponse(-1)
+        
+        return HttpResponse(petition.signatures)
+    
+
+class ListPetitionView(View):
+    def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort(sort_by, Petition)
+
+        # set up pagination
+        p = Paginator(results, 20)
+        page = request.GET.get('page')
+        petitions = p.get_page(page)
+        
+        return render(request, 'wildthoughts/petition/list_petitions.html', context={'petitions': petitions, 'sort_by': sort_by})
+    
+
+class AddPetitionForm(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        form = PetitionForm()
+        animals = Animal.objects.all()
+        return render(request, 'wildthoughts/petition/add_petition.html', {'animals': animals, 'form': form})
+    
+    @method_decorator(login_required)
+    def post(self, request):
+        form = PetitionForm(request.POST)
+        animals = Animal.objects.all()
+
+        if form.is_valid():
+            petition = form.save(commit=False)
+            author = UserProfile.objects.get(user=request.user)
+            petition.author = author
+            petition.save()
+            form.save_m2m() 
+            return redirect(reverse('wildthoughts:petitions'))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/petition/add_petition.html', {'animals': animals, 'form': form})
+    
 
 """---------------------------------------------------------- PROFILE VIEWS ------------------------------------------------------"""
 class ProfileView(View):
@@ -309,8 +403,15 @@ class NewRegistrationView(RegistrationView):
 
 class ListProfileView(View):
     def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort_profiles(sort_by)
+
         # set up pagination
-        p = Paginator(UserProfile.objects.all(), 20)
+        p = Paginator(results, 20)
         page = request.GET.get('page')
         profiles = p.get_page(page)
-        return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
+        context_dict = {
+            'profiles': profiles,
+            'sort_by': sort_by,
+        }
+        return render(request, 'wildthoughts/profile/list_profiles.html', context=context_dict)

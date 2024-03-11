@@ -6,9 +6,9 @@ from django.template.defaultfilters import slugify
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True)
     
-
     def __str__(self):
         return self.user.username
     
@@ -23,16 +23,11 @@ class Animal(models.Model):
     name = models.CharField(max_length= 128, unique=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='animal_images', blank=True)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_animals')
     downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_animals')
     date = models.DateField(auto_now_add=True)
     slug = models.SlugField(unique=True)
-
-    @property
-    def total_votes(self):
-        return self.upvotes - self.downvotes
 
     def __str__(self):
         return self.name
@@ -48,8 +43,7 @@ class Discussion(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_discussions')
     downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_discussions')
     slug = models.SlugField(unique=True)
@@ -67,8 +61,7 @@ class Comment(models.Model):
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
     content = models.TextField()
     date = models.DateField(auto_now_add=True)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_comments')
     downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_comments')
 
@@ -76,14 +69,34 @@ class Comment(models.Model):
         return self.content
     
 
+class Petition(models.Model):
+    title = models.CharField(max_length=128)
+    date = models.DateField(auto_now_add=True)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='authored_petitions')
+    animals = models.ManyToManyField(Animal)
+    picture = models.ImageField(upload_to='petition_images', blank=True)
+    description = models.TextField(blank=True)
+    decision_maker = models.CharField(max_length=128, blank=True)
+    goal = models.IntegerField(default=0)
+    signatures = models.IntegerField(default=0)
+    signed_by = models.ManyToManyField(UserProfile, related_name='signed_petitions')
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Petition, self).save(*args, **kwargs)
+        
+        
 class UserList(models.Model):
     title = models.CharField(max_length=128)
     date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='authored_user_lists')
     animals = models.ManyToManyField(Animal)
     description = models.TextField(blank=True)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_user_lists')
     downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_user_lists')
     slug = models.SlugField(unique=True)
