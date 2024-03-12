@@ -14,10 +14,13 @@
                 </div>
                     <div class="col-md-8 card-body">
                         <h5 class="card-title"><a href="{% url 'wildthoughts:petition' petition.slug %}">{{ petition.title }}</a></h5>
+                        <div class="card-text">
+                            <h6 class="text-muted">By {{ petition.author.user.username }}</h6>
+                            {% if petition.decision_maker %}
+                            <h6 class="text-muted">To {{ petition.decision_maker }}</h6>
+                            {% endif %}
+                        </div>
                         <p class="card-text">{{ petition.description|truncatechars:300 }}</p>
-                        <p class="card-text">
-                            <small class="text-muted">Added by {{ petition.author.user.username }} on {{ petition.date }}</small>
-                        </p>
                     </div>
             </div>
         </div>

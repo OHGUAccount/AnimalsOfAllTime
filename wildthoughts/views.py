@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import redirect, render
 from django.template.defaultfilters import slugify
@@ -313,9 +313,9 @@ class SignPetitionView(View):
                 petition.signed_by.add(profile)
                 petition.save()
         except:
-            return HttpResponse(-1)
+            return JsonResponse({'status': 'error'})
         
-        return HttpResponse(petition.signatures)
+        return JsonResponse({'status': 'success'})
     
 
 class ListPetitionView(View):

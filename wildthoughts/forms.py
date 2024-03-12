@@ -74,11 +74,11 @@ class PetitionForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'decision_maker': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'goal': forms.NumberInput(attrs={'class': 'form-control'}),
+            'goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 10}),
             'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
                                                           'style': '"width: 100%"'})
         }
-        
+
 
 class UserListForm(forms.ModelForm):
     class Meta:
