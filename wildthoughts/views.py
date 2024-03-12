@@ -331,6 +331,9 @@ class ListPetitionView(View):
         sort_by = request.GET.get('sort_by')
         sort_by, results = Sorter.sort(sort_by, Petition)
 
+        if sort_by in ['most_signed', 'least_signed']:
+            sort_by = sort_by.replace('_', ' ')
+
         # set up pagination
         p = Paginator(results, 20)
         page = request.GET.get('page')
