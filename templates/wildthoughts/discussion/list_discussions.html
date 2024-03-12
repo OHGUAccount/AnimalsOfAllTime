@@ -5,10 +5,12 @@ Animals
 {% load staticfiles %}
 
 {% block body_block %}
+<!-- HEADING -->
 <div class="text-center p-4">
     <h1>Discussions</h1>
 </div>
 
+<!-- SORT BY -->
 <div class="container">
     <div class="d-flex flex-row justify-content-end mb-3">
         <h5 class="me-3">Sort by: </h5>
@@ -33,8 +35,10 @@ Animals
         {% endif %}
     </div>
 
+    <!-- DISCUSSIONS -->
     {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions %}
 
+    <!-- PAGINATION -->
     {% include "wildthoughts/widget/pagination_widget.html" with entity=discussions %}
 
 </div>

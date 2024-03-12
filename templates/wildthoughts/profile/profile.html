@@ -8,6 +8,7 @@
 <div class="container">
     <div class="row">
 
+        <!-- PROFILE PICTURE -->
         <div class="col-12 col-md-4">
             {% if profile.picture %}
             <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
@@ -17,6 +18,7 @@
             <h2>{{ profile.user.username }}</h2>
             <br />
             <div>
+                <!-- BIO -->
                 <h3><strong>Bio</strong></h3>
                 <p>
                     {{ profile.user.description|default:"No bio provided" }}
@@ -35,6 +37,7 @@
             </div>
         </div>
 
+    <!-- TAB NAVIGATION -->
     <div class="col-12 col-md-8">
         <ul class="nav nav-underline">
             <li class="nav-item">
@@ -49,8 +52,12 @@
             <li class="nav-item">
                 <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="petitions" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=petitions&sort_by=newest">Petitions</a>
+            </li>
         </ul>
 
+        <!-- SORT BY -->
         <div class="d-flex flex-row justify-content-end mb-3">
             <h5 class="me-3">Sort by: </h5>
             <div class="dropdown">
@@ -75,6 +82,7 @@
             </div>
         </div>
 
+    <!-- RESULTS -->
     {% if tab == 'animals' %}
     {% include "wildthoughts/widget/animal_widget.html" with animals=results %}
 
@@ -86,6 +94,9 @@
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->
+
+    {% elif tab == 'petitions' %}
+    {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}
 
     {% endif %}
     

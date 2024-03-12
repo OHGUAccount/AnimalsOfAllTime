@@ -3,22 +3,28 @@
 {% endblock %}
 {% load staticfiles %}
 
+<!-- HEADING -->
 {% block body_block %}
 <div class="text-center p-4">
     <h1>WildThoughts</h1>
     <h3>Discuss your thoughts on Wildlife</h3>
 </div>
 
-<center><img class="img-fluid" src="{% static 'images/koala.png' %}" alt="Picture of Rango" /></center>
+
+<!-- KOALA PICTURE -->
+<center><img class="img-fluid" src="{% static 'images/koala.png' %}" alt="Picture of Koala" /></center>
 <br /><br />
 
 <div class="container">
     <div class="row row-cols-1 row-cols-lg-2 g-5">
+
+        <!-- OVERRATED ANIMALS -->
         <div class="col">
             <h2 class="mb-4 text-center">Top 5 Overrated Animals</h2>
             {% include "wildthoughts/widget/animal_widget.html" with animals=overrated_animals %}
         </div>
 
+        <!-- UNDERRATED ANIMALS -->
         <div class="col">
             <h2 class="mb-4 text-center">Top 5 Underrated Animals</h2>
             {% include "wildthoughts/widget/animal_widget.html" with animals=underrated_animals %}

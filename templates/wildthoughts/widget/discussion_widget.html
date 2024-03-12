@@ -1,6 +1,5 @@
 {% load staticfiles %}
 
-{% if discussions %}
 {% for discussion in discussions %}
 <div class="card">
     <div class="d-flex">
@@ -28,11 +27,10 @@
         </div>
 </div>
 </div>
-{% endfor %} 
-{% else %}
+{% empty %}
 <div class="container">
-<div class="text-center p-4">
-<strong>There are no discussions yet...</strong>
-</div>
-</div>
-{% endif %}
+    <div class="text-center p-4">
+    <strong>There are no discussions yet...</strong>
+    </div>
+    </div>
+{% endfor %} 

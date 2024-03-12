@@ -363,6 +363,7 @@ class ProfileView(View):
         'discussions': Discussion,
         'comments': Comment,
         'lists': UserList,
+        'petitions': Petition,
     }
 
     def get(self, request, username):
