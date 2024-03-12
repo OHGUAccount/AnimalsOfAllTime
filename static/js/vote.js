@@ -1,4 +1,4 @@
-$(function(){
+$(document).ready(function(){
   // Just declare upvote, upvoted, downvote or downvoted 
   // for the button's class and jquery will style them automatically!
   $(".upvote, .downvote").addClass("btn btn-outline-secondary border-0");

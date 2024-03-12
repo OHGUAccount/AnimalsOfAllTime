@@ -48,6 +48,7 @@
                 </li>
             </ul>
 
+            <!-- SEARCH BAR -->
             <div class="mx-5 order-0">
                 <form role="search" method=POST action="{% url 'wildthoughts:search' %}">
                     {% csrf_token %}
@@ -72,6 +73,7 @@
                 </form>
             </div>
 
+            <!-- PROFILE DROPDOWN -->
             {% if user.is_authenticated %}
             <div class="btn-group me-4">
                 {% profile_picture as profile_pic %}
@@ -91,6 +93,7 @@
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_animal' %}">Add Animal</a></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_discussion' %}">Add Discussion</a></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_list' %}">Add List</a></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_petition' %}">Add Petition</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
                 </ul>

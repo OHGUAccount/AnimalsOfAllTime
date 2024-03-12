@@ -9,10 +9,12 @@
 {{ form.media.css }}
 {% endblock %}
 
+<!-- HEADING -->
 {% block body_block %}
 <div class="p-4 text-center">
     <h1>Add List</h1>
 
+<!-- FORM -->
 <div class="d-grid gap-2 col-sm-6 mx-auto">
 <form method="POST">
     {% csrf_token %}

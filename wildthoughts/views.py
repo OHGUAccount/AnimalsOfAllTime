@@ -1,7 +1,8 @@
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.db.models import Model
+from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import redirect, render
 from django.template.defaultfilters import slugify
@@ -17,8 +18,13 @@ from wildthoughts.models import Animal, Comment, Discussion, Petition, UserList,
 
 """--------------------------------------------------------HELPER CLASSES -------------------------------------------------------------"""
 class Sorter:
-    valid_models = {Animal, Comment, Discussion, Petition, UserList, UserProfile}
-    options_order = {
+    """
+    class dedicated to sort a model by specifying a option
+    the option is then converted to an appropriate field
+    if option is invalid returns model sorted by date
+    """
+    VALID_MODELS = {Animal, Comment, Discussion, Petition, UserList, UserProfile}
+    OPTIONS_ORDER = {
         'title':'title', 
         'name': 'name', 
         'overrated': '-votes',
@@ -30,21 +36,21 @@ class Sorter:
     } 
 
     @classmethod
-    def validate(cls, choice, model):
-        if model not in cls.valid_models:
-            raise TypeError(f'Model must be {cls.valid_models}')
+    def validate(cls, choice: str, model: Model) -> str:
+        if model not in cls.VALID_MODELS:
+            raise TypeError(f'Model must be {cls.VALID_MODELS}')
         elif model is Animal and choice == 'title':
             choice = 'name'
         elif model is Comment and choice in ['title', 'name']:
             choice = 'newest'
-        elif choice not in cls.options_order:
+        elif choice not in cls.OPTIONS_ORDER:
             choice = 'newest'
         return choice
 
     @classmethod
-    def sort(cls, choice, model, profile=None):
+    def sort(cls, choice: str, model: Model, profile: UserProfile = None) -> tuple[str, list[Model]]:
         choice = cls.validate(choice, model)
-        field = cls.options_order[choice]
+        field = cls.OPTIONS_ORDER[choice]
 
         if profile:
             results = model.objects.filter(author=profile).order_by(field)
@@ -54,7 +60,7 @@ class Sorter:
         return choice, results    
     
     @classmethod
-    def sort_profiles(cls, choice):
+    def sort_profiles(cls, choice: str) -> tuple[str, list[Model]]:
         if choice not in ['name', 'oldest', 'newest']:
             choice = 'newest'
         
@@ -68,16 +74,16 @@ class Sorter:
         return choice, results
 
     @classmethod
-    def sort_user_list_animals(cls, choice, user_list):
+    def sort_user_list_animals(cls, choice: str, user_list: UserList) -> tuple[str, list[Model]]:
         choice = cls.validate(choice, Animal)
-        field = Sorter.options_order[choice]
+        field = Sorter.OPTIONS_ORDER[choice]
         results = user_list.animals.order_by(field)
         return choice, results
     
     @classmethod
-    def sort_animal_discussions(cls, choice, animal):
+    def sort_animal_discussions(cls, choice, animal: Animal) -> tuple[str, list[Model]]:
         choice = cls.validate(choice, Discussion)
-        field = cls.options_order[choice]
+        field = cls.OPTIONS_ORDER[choice]
         results = Discussion.objects.filter(animal=animal).order_by(field)
 
         return choice, results    
@@ -281,11 +287,13 @@ class PetitionView(View):
     def get(self, request, petition_slug):
         petition = Petition.objects.get(slug=petition_slug)
 
+        # set the width of progress bar in petition page
         if petition.goal == 0:
             progress_width = 0
         else:
             progress_width = int(petition.signatures / petition.goal * 100)
 
+        # check if user has signed petition
         has_signed = False
         if request.user.is_authenticated:
             profile = UserProfile.objects.get(user=request.user)
@@ -313,15 +321,18 @@ class SignPetitionView(View):
                 petition.signed_by.add(profile)
                 petition.save()
         except:
-            return HttpResponse(-1)
+            return JsonResponse({'status': 'error'})
         
-        return HttpResponse(petition.signatures)
+        return JsonResponse({'status': 'success'})
     
 
 class ListPetitionView(View):
     def get(self, request):
         sort_by = request.GET.get('sort_by')
         sort_by, results = Sorter.sort(sort_by, Petition)
+
+        if sort_by in ['most_signed', 'least_signed']:
+            sort_by = sort_by.replace('_', ' ')
 
         # set up pagination
         p = Paginator(results, 20)
@@ -358,11 +369,12 @@ class AddPetitionForm(View):
 
 """---------------------------------------------------------- PROFILE VIEWS ------------------------------------------------------"""
 class ProfileView(View):
-    tab_to_model = {
+    TAB_TO_MODEL = {
         'animals': Animal,
         'discussions': Discussion,
         'comments': Comment,
         'lists': UserList,
+        'petitions': Petition,
     }
 
     def get(self, request, username):
@@ -373,10 +385,10 @@ class ProfileView(View):
 
         tab = request.GET.get('tab')
         sort_by = request.GET.get('sort_by')
-        if tab not in ProfileView.tab_to_model:
+        if tab not in ProfileView.TAB_TO_MODEL:
             tab = 'animals'
         
-        model = ProfileView.tab_to_model[tab]
+        model = ProfileView.TAB_TO_MODEL[tab]
         sort_by, results = Sorter.sort(sort_by, model, profile)
         
         context_dict = {

@@ -6,11 +6,13 @@
 {% endblock %}
 
 {% block body_block %}
-<div class="p-4">
+<!-- HEADING -->
+<div class="p-4 text-center">
     <h1>Lists</h1>
 </div>
 
 <div class="container">
+    <!-- SORT BY -->
     <div class="d-flex flex-row justify-content-end mb-3">
         <h5 class="me-3">Sort by: </h5>
         <div class="dropdown">
@@ -33,6 +35,7 @@
         {% endif %}
     </div>
 
+    <!-- LISTS -->
     <div class="row row-cols-1 row-cols-lg-2">
         {% include "wildthoughts/widget/user_list_widget.html" with user_lists=user_lists %}
     </div> 

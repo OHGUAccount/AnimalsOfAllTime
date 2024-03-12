@@ -64,19 +64,6 @@ class DiscussionForm(forms.ModelForm):
         self.fields['description'].help_text = "Please give a brief description on the Discussion:"
 
 
-class UserListForm(forms.ModelForm):
-    class Meta:
-        model = UserList
-        fields = ['title', 'animals', 'description']
-
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
-                                                          'style': '"width: 100%"'})
-        }
-
-
 class PetitionForm(forms.ModelForm):
     class Meta:
         model = Petition
@@ -86,6 +73,20 @@ class PetitionForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'decision_maker': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 10}),
+            'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
+                                                          'style': '"width: 100%"'})
+        }
+
+
+class UserListForm(forms.ModelForm):
+    class Meta:
+        model = UserList
+        fields = ['title', 'animals', 'description']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
                                                           'style': '"width: 100%"'})

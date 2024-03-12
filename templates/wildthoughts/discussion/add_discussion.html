@@ -4,10 +4,12 @@
 {% load staticfiles %}
 
 {% block body_block %}
+<!-- HEADING -->
 <div class="text-center p-4">
     <h1>Add Discussion</h1>
     <h3>Add a new discussion here!</h3>
 
+<!-- FORM -->
 <div class="container">
 	<div class="d-grid gap-2 col-sm-6 mx-auto">
 		<form id="discussion_form" method="post" action="{% url 'wildthoughts:add_discussion' %}" enctype="multipart/form-data">
