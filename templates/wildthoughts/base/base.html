@@ -31,16 +31,24 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=overrated">Most Overrated</a></li>
                         <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=underrated">Most Underrated</a></li>
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=name">Browse</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=newest">Browse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:lists' %}">Lists</a></li>
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:discussions' %}">Discussions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:lists' %}">Lists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:petitions' %}">Petitions</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:profiles' %}">Profiles</a>
                 </li>
             </ul>
 
+            <!-- SEARCH BAR -->
             <div class="mx-5 order-0">
                 <form role="search" method=POST action="{% url 'wildthoughts:search' %}">
                     {% csrf_token %}
@@ -65,6 +73,7 @@
                 </form>
             </div>
 
+            <!-- PROFILE DROPDOWN -->
             {% if user.is_authenticated %}
             <div class="btn-group me-4">
                 {% profile_picture as profile_pic %}
@@ -82,8 +91,9 @@
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_animal' %}">Add Animal</a></li>
-                    <li><a class="dropdown-item" href="#">Add Discussion</a></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_discussion' %}">Add Discussion</a></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_list' %}">Add List</a></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_petition' %}">Add Petition</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
                 </ul>

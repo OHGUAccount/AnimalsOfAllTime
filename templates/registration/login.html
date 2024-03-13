@@ -6,13 +6,9 @@
 
 {% block body_block %}
 
-<br/><br/>
+<center><h1 class="display-4 my-5">Login</h1></center> 
 
-<center><h1 class="display-4">Login</h1></center> 
-
-<br/>
-
-<div class="d-grid gap-2 col-sm-6 mx-auto">
+<div class="d-grid gap-2 col-sm-6 mx-auto justify-content-center">
 <form method="post" action=".">
     {% csrf_token %}
     {{ form.as_p }}
@@ -21,13 +17,12 @@
 </form>
 
 <center>
-<h5 class="mt-4">
+<h5 class="my-4">
     Not registered?
     <a href="{% url 'registration_register' %}">Register here!</a>
 </h5>
 </center>
 </div>
 
-<br/><br/><br/><br/>
 
 {% endblock %}

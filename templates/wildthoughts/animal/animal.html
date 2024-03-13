@@ -5,21 +5,49 @@
     {{ animal.name }}
 {% endblock %}
 
+<!--HEADING -->
 {% block body_block %}
 <div class="p-4">
     <center> <h1>{{ animal.name }}</h1> </center>
 </div>
 
+
 <div class="container">
-    <div class="row">
-        <img src="{{ MEDIA_URL }}{{ animal.picture }}" alt="{{ animal.name }}'s image" />
-        <br />
+    <center><img src="{{ MEDIA_URL }}{{ animal.picture }}" width="615" height="410" alt="{{ animal.name }}'s image" /></center>
         <div>
             <h3><strong>Description</strong></h3>
             <p>
                 {{ animal.description }}
             </p>
         </div>
-    </div>
+        <div class="text-center p-4">
+            <h3><strong>Discussions</strong></h3>
+        </div>     
+        <div class="d-flex flex-row justify-content-end mb-3">
+            <h5 class="me-3">Sort by: </h5>
+
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ sort_by|title }} 
+                </a>
+                
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:animal' animal.slug %}?sort_by=title">Title</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:animal' animal.slug %}?sort_by=newest">Newest</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:animal' animal.slug %}?sort_by=oldest">Oldest</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:animal' animal.slug %}?sort_by=overrated">Overrated</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:animal' animal.slug %}?sort_by=underrated">Underrated</a></li>
+                </ul>
+            </div>
+    
+            {% if user.is_authenticated %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}?selected={{ animal.slug }}" role="button">Add Discussion!</a>
+            {% endif %}
+        </div>
+            {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions %}   
 </div>
+
+
 {% endblock %}

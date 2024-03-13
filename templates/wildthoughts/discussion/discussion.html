@@ -1,0 +1,61 @@
+{{% extends 'wildthoughts/base/base.html' %}
+{% block title_block %}
+    {{ discussion.title }}
+{% endblock %}
+{% load staticfiles %}}
+
+{% block body_block %}
+
+<div class="text-center p-4">
+    <h1>{ discussion.title }</h1>
+</div>
+
+<div>
+    {% if comments %}
+        {% for comment in comments %}
+		<div class="card">
+            <div class="row g-0">
+                <div class="col-2 text-center">
+                    <button type="button" class="upvote" id="upvote_{{ comment.id }}" data-animalid="{{ comment.id }}"><i class="bi bi-chevron-up"></i></button>
+                        <h4>{{ comment.upvotes }}</h4>
+                    <button type="button" class="downvote" id="downvote_{{ comment.id }}" data-animalid="{{ comment.id }}"><i class="bi bi-chevron-down"></i></button>
+                        </div>
+                        <div class="col-4">
+						<br>
+                            {% if comment.author.picture %}
+                                <img src="{{ MEDIA_URL }}{{ comment.author.picture }}" class="rounded-circle avatar-sm" width="80" height="80">
+                            {% else %}
+                                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="80" height="80">
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
+                            <div class="card-body">
+                                <h5> {{ comment.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' comment.author %}">{{ comment.author }}</a></h6>
+                                    <p class="card-text text-end"><small class="text-muted">{{ comment.date }}</small></p>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %} 
+	{% else %}
+		<div class="container">
+		<div class="text-center p-4">
+		<strong>There are no comments yet...</strong>
+		</div>
+		</div>
+    {% endif %}
+</div>
+
+<br>
+	{% if user.is_authenticated %}
+	<div class="container">
+	<div class="text-center p-4">
+		<a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}?selected={{ animal.slug }}" role="button">Add A Comment!</a>
+	</div>
+	</div>
+    {% endif %}
+
+{% endblock %}

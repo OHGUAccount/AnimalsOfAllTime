@@ -6,59 +6,50 @@ Profiles
 {% endblock %}
 
 {% block body_block %}
-<div class="p-4">
+<!-- HEADING -->
+<div class="p-4 text-center">
     <h1>Profiles</h1>
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        {% if profiles %}
-        <div class="col-12">
-            <div class="list-group">
-                {% for profile in profiles %}
-                <div class="card mb-3 w-100">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            {% if profile.picture %}
-                                <img src="{{ MEDIA_URL }}{{ profile.picture }}" class="card-img" alt="Picture of {{ profile.user.username }}">
-                            {% else %}
-                                <img src="https://lorempixel.com/64/64/people/" width="64" height="64" alt="Placeholder image" />
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{{profile.user.username}}">{{ profile.user.username }}</a></h5>
-                                {% if profile.description %}
-                                    <p class="card-text">{{ profile.description }}</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+<div class="container">
+    <!-- SORT BY -->
+    <div class="d-flex flex-row justify-content-end mb-3">
+        <h5 class="me-3">Sort by: </h5>
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ sort_by|title }} 
+            </a>
+            
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=name">Name</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=newest">Newest</a></li>
+            <li><a class="dropdown-item" href="{% url 'wildthoughts:profiles' %}?sort_by=oldest">Oldest</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- PROFILES -->
+    {% for profile in profiles %}
+    <div class="card">
+        <div class="d-flex my-3">
+            {% if profile.picture %}
+            <img src="{{ MEDIA_URL }}{{ profile.picture }}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
+            {% else %}
+            <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title ms-4"><a href="{% url 'wildthoughts:profile' profile.user.username %}">{{ profile.user.username }}</a></h4>
             </div>
         </div>
-        {% else %}
-        <p>There are no profiles present.</p>
-        {% endif %}
     </div>
+    {% empty %}
+    <p>There are no profiles present.</p>
+    {% endfor %}
+
+    {% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
+    
 </div>
 
-
-<nav aria-label="Page navigation profiles">
-<ul class="pagination">
-{% if profiles.has_previous %}
-    <li class=page-item><a class="page-link" href="?page=1">&laquo First</a></li>
-    <li class="page-item"><a class="page-link" href="?page={{ animals.previous_page_number }}">&laquo</a></li>
-{% endif %}
-
-<li class="page-item disabled"><a class="page-link" href="#">Page {{ profiles.number }} of {{ profiles.paginator.num_pages }}</a></li>
-
-{% if profiles.has_next %}
-    <li class="page-item"><a class="page-link" href="?page={{ profiles.next_page_number }}">&raquo</a></li>
-
-    <li class="page-item"><a class="page-link" href="?page={{ profiles.paginator.num_pages }}">Last &raquo</a></li>
-{% endif %}
-</ul>
-</nav>
 {% endblock %}

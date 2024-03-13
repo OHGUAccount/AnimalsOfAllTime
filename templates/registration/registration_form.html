@@ -6,7 +6,7 @@
     {% block body_block %}
     <center><h1 class="display-4">Register Here</h1></center> 
 
-<div class="d-grid gap-2 col-sm-6 mx-auto">
+<div class="d-grid gap-2 col-sm-6 mx-auto justify-content-center">
     <form method="post" action=".">
     {% csrf_token %}
     {{ form.as_p }}
