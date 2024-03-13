@@ -17,9 +17,12 @@
         <div class="col-12 col-md-8">
 
             {% if petition.picture %}
-            <img width="560" height="320" src="{{ MEDIA_URL }}{{ petition.picture }}" alt="{{ petition.title }}'s Picture">
+            <div>
+                <img class="img-fluid rounded" width="615" height="410" src="{{ MEDIA_URL }}{{ petition.picture }}" alt="{{ petition.title }}'s Picture">
+            </div>
             {% endif %}
-            <h6 class="text-muted">
+
+            <h6 class="text-muted mt-2">
                 Author
                 {% if user_list.author.picture %}
                 <img src="{{ MEDIA_URL }}{{ petition.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
@@ -28,9 +31,9 @@
                 {% endif %}   
                 <a href="{% url 'wildthoughts:profile' petition.author.user.username %}">{{ petition.author }}</a>
             </h6>
-            <h6 class="text-muted">Started on {{ petition.date }}</h6>
+            <h6 class="text-muted mt-2">Started on {{ petition.date }}</h6>
             {% if petition.decision_maker %}
-            <h6 class="text-muted">Petition to {{ petition.decision_maker }}</h6>
+            <h6 class="text-muted mt-2">Petition to {{ petition.decision_maker }}</h6>
             {% endif %}
 
             {% if petition.description %}
