@@ -158,6 +158,8 @@ class SearchView(View):
             results = Discussion.objects.filter(title__contains=searched)
         elif category == 'Lists':
             results = UserList.objects.filter(title__contains=searched)
+        elif category == 'Petitions':
+            results = Petition.objects.filter(title__contains=searched)
         elif category == 'Profiles':
             results = UserProfile.objects.filter(user__username__contains=searched)
         context_dict = {
@@ -391,6 +393,9 @@ class ProfileView(View):
         model = ProfileView.TAB_TO_MODEL[tab]
         sort_by, results = Sorter.sort(sort_by, model, profile)
         
+        if sort_by in ['most_signed', 'least_signed']:
+            sort_by = sort_by.replace('_', ' ')
+
         context_dict = {
         'profile': profile, 
          'loguser':loguser, 

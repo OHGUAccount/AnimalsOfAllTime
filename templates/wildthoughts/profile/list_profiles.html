@@ -31,23 +31,7 @@ Profiles
     </div>
 
     <!-- PROFILES -->
-    {% for profile in profiles %}
-    <div class="card">
-        <div class="d-flex my-3">
-            {% if profile.picture %}
-            <img src="{{ MEDIA_URL }}{{ profile.picture }}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
-            {% else %}
-            <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle m-3" width=64 height=64 alt="{{ author.user.username }}'s image">
-            {% endif %}
-            <div class="card-body">
-                <h4 class="card-title ms-4"><a href="{% url 'wildthoughts:profile' profile.user.username %}">{{ profile.user.username }}</a></h4>
-                <p class="card-text text-end"><small class="text-muted">{{ profile.date }}</small></p>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <p>There are no profiles present.</p>
-    {% endfor %}
+    {% include "wildthoughts/widget/profile_widget.html" with profiles=profiles %}
 
     {% include "wildthoughts/widget/pagination_widget.html" with entity=profiles %}
     

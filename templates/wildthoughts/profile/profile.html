@@ -75,8 +75,13 @@
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=newest">Newest</a></li>
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=oldest">Oldest</a></li>
                 <li><hr class="dropdown-divider"></li>
+                {% if tab == 'petitions'%}
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=most_signed">Most Signed</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=least_signed">Least Signed</a></li>                
+                {% else %}
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=overrated">Overrated</a></li>
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=underrated">Underrated</a></li>
+                {% endif %}
                 </ul>
             </div>
 
