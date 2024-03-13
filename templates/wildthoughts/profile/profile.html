@@ -19,20 +19,20 @@
             <br />
             <div>
                 <!-- BIO -->
+                {% if profile.description %}
                 <h3><strong>Bio</strong></h3>
+                {% endif %}
+                {% if profile.user == loguser %}
                 <p>
-                    {{ profile.user.description|default:"No bio provided" }}
-                    {{ profile.user.picture }}
-                    {% if profile.user == loguser %}
-                        <form method="post" action="." enctype="multipart/form-data">
+                    <form method="post" action="." enctype="multipart/form-data">
 
-                            <div class="d-grid gap-2 col-6">
-                                <a href="{% url 'wildthoughts:update_profile' profile %}" class="btn btn-outline-secoundary" role="button" >Update</a>
-                                <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
-                            </div>
-                        </form>
-                    {% endif %}
+                        <div class="d-grid gap-2 col-6">
+                            <a href="{% url 'wildthoughts:update_profile' profile %}" class="btn btn-outline-secondary" role="button" >Update</a>
+                            <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
+                        </div>
+                    </form>
                 </p>
+                {% endif %}
             </div>
         </div>
 
@@ -79,6 +79,18 @@
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=underrated">Underrated</a></li>
                 </ul>
             </div>
+
+            {% if profile.user == loguser %}
+            {% if tab == 'animals' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_animal' %}" role="button">Add Animal</a>
+            {% elif tab == 'discussions' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}" role="button">Add Discussion</a>
+            {% elif tab == 'lists' %}
+            <a class="btn btn-success ms-2" href="{% url 'wildthoughts:add_list' %}" role="button">Add List</a>
+            {% elif tab == 'petitions' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_petition' %}" role="button">Add Petition</a>
+            {% endif %}
+            {% endif %}
         </div>
 
     <!-- RESULTS -->

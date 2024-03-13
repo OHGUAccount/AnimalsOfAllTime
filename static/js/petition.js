@@ -17,15 +17,14 @@ $(document).ready(function() {
                     $('#signatures_count').text(count);    
                     $('.progress-bar').text(progressWidth+ '%').css('width', progressWidth + '%');    
                     
-                    var signButton = $('#sign_button');
                     if (goal === count) {
-                        signButton.attr('value', 'Goal Reached!');
-                        signButton.removeClass('btn btn-primary');
-                        signButton.addClass('btn btn-success').
-                        signButton.prop('disabled', true);
+                        $('#sign_button').attr('value', 'Goal Reached!');
+                        $('#sign_button').prop('disabled', true);
+                        $('#sign_button').removeClass('btn btn-primary');
+                        $('#sign_button').addClass('btn btn-success');
                     } else {
-                        signButton.attr('value', 'Signed');
-                        signButton.prop('disabled', true);
+                        $('#sign_button').attr('value', 'Signed');
+                        $('#sign_button').prop('disabled', true);
                     }
             
                 }

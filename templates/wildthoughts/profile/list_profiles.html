@@ -41,6 +41,7 @@ Profiles
             {% endif %}
             <div class="card-body">
                 <h4 class="card-title ms-4"><a href="{% url 'wildthoughts:profile' profile.user.username %}">{{ profile.user.username }}</a></h4>
+                <p class="card-text text-end"><small class="text-muted">{{ profile.date }}</small></p>
             </div>
         </div>
     </div>

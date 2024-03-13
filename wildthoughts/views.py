@@ -351,7 +351,7 @@ class AddPetitionForm(View):
     
     @method_decorator(login_required)
     def post(self, request):
-        form = PetitionForm(request.POST)
+        form = PetitionForm(request.POST, request.FILES)
         animals = Animal.objects.all()
 
         if form.is_valid():
