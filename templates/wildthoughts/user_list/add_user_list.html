@@ -5,6 +5,10 @@
     Lists
 {% endblock %}
 
+{% block head_block %}
+{{ form.media.css }}
+{% endblock %}
+
 <!-- HEADING -->
 {% block body_block %}
 <div class="p-4 text-center">
@@ -23,7 +27,5 @@
 {% endblock %}
 
 {% block script_block %}
-<script type="text/javascript">
-    $('#id_animals').select2();
-</script>
+{{ form.media.js }}
 {% endblock %}
