@@ -415,6 +415,25 @@ class NewRegistrationView(RegistrationView):
 
 class ListProfileView(View):
     def get(self, request):
+        # set up pagination
+        p = Paginator(UserProfile.objects.all(), 20)
+        page = request.GET.get('page')
+        profiles = p.get_page(page)
+        return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
+
+class UpdateProfileView(View):
+    def get(self,request, username):
+        p = Paginator(UserProfile.objects.all(), 20)
+        page = request.GET.get('page')
+        profiles = p.get_page(page)
+
+        return render(request, 'wildthoughts/profile/update_profile.html', {'profiles':profiles})
+
+
+"""-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
+# (Renamed to not be confused with python list)
+class UserListView(View):
+    def get(self, request):
         sort_by = request.GET.get('sort_by')
         sort_by, results = Sorter.sort_profiles(sort_by)
 

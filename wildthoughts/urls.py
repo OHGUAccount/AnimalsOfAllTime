@@ -30,6 +30,8 @@ urlpatterns = [
     # profile urls
     path('profiles/', views.ListProfileView.as_view(), name='profiles'),
     path('profiles/<slug:username>/', views.ProfileView.as_view(), name='profile'),
+    path('profiles/<slug:username>/update', views.UpdateProfileView.as_view(), name='update_profile'),
+
 
     # userlist view
     path('lists/', views.ListUserListView.as_view(), name='lists'),

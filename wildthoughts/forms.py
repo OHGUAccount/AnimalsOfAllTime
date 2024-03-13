@@ -89,3 +89,13 @@ class UserListForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['image', 'bio']
+
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+           
+        }

@@ -24,17 +24,17 @@ It will take some time, so please be patient.
 - [x] Population Script
 ### Pages
 - [x] Index
-- [ ] Animal
+- [x] Animal
 - [x] Overrated Animals
 - [x] Underrated Animals
 - [x] Profile
-- [ ] List Profiles
+- [x] List Profiles
 - [x] User lists
 ### Forms
 - [x] Login/Registration
 - [x] Add Animal
 - [x] Add List
-- [ ] Add Discussion
+- [x] Add Discussion
 - [ ] Add Comment
 ### Features
 - [x] Dark Mode
