@@ -163,3 +163,4 @@ cython_debug/
 media/**/*
 !media/**/
 animal.json
+profile.json
