@@ -23,7 +23,7 @@ class Sorter:
     the option is then converted to an appropriate field
     if option is invalid returns model sorted by date
     """
-    VALID_MODELS = {Animal, Comment, Discussion, Petition, UserList, UserProfile}
+    VALID_MODELS = {Animal, Comment, Discussion, Petition, UserList}
     OPTIONS_ORDER = {
         'title':'title', 
         'name': 'name', 
@@ -415,11 +415,14 @@ class NewRegistrationView(RegistrationView):
 
 class ListProfileView(View):
     def get(self, request):
+        sort_by = request.GET.get('sort_by')
+        sort_by, results = Sorter.sort_profiles(sort_by)
         # set up pagination
-        p = Paginator(UserProfile.objects.all(), 20)
+        p = Paginator(results, 20)
         page = request.GET.get('page')
         profiles = p.get_page(page)
-        return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
+
+        return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles, 'sort_by':sort_by})
 
 class UpdateProfileView(View):
     def get(self,request, username):
@@ -430,19 +433,3 @@ class UpdateProfileView(View):
         return render(request, 'wildthoughts/profile/update_profile.html', {'profiles':profiles})
 
 
-"""-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
-# (Renamed to not be confused with python list)
-class UserListView(View):
-    def get(self, request):
-        sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort_profiles(sort_by)
-
-        # set up pagination
-        p = Paginator(results, 20)
-        page = request.GET.get('page')
-        profiles = p.get_page(page)
-        context_dict = {
-            'profiles': profiles,
-            'sort_by': sort_by,
-        }
-        return render(request, 'wildthoughts/profile/list_profiles.html', context=context_dict)

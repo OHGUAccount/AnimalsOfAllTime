@@ -30,12 +30,13 @@
 </div>
 {% endblock %}
 
-{% if animal_id %}
 {% block script_block %}
 <script type="text/javascript">
+
 	$(document).ready(function() {
-		$('#id_animal option[value={{ animal_id }}]').attr('selected','selected');
-	})
+		$('#id_animal').select2();
+		$('#id_animal').val({{ animal_id }}).trigger('change');
+	});
+
 </script>
 {% endblock %}
-{% endif %}

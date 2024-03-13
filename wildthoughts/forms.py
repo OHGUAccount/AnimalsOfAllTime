@@ -75,8 +75,7 @@ class PetitionForm(forms.ModelForm):
             'decision_maker': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 10}),
-            'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
-                                                          'style': '"width: 100%"'})
+            'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
 
 
@@ -88,16 +87,15 @@ class UserListForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
-                                                          'style': '"width: 100%"'})
+            'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
+
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['image', 'bio']
+        fields = ['picture', 'description']
 
         widgets = {
-            'bio': forms.Textarea(attrs={'class': 'form-control'}),
-           
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
         }
