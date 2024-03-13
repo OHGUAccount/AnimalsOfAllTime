@@ -46,3 +46,13 @@ class UserListForm(forms.ModelForm):
             'animals': select2forms.SelectMultiple(attrs={'data-placeholder': 'Please select Animals',
                                                           'style': '"width: 100%"'})
         }
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['image', 'bio']
+
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+           
+        }

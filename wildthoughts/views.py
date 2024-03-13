@@ -186,6 +186,14 @@ class ListProfileView(View):
         profiles = p.get_page(page)
         return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles})
 
+class UpdateProfileView(View):
+    def get(self,request, username):
+        p = Paginator(UserProfile.objects.all(), 20)
+        page = request.GET.get('page')
+        profiles = p.get_page(page)
+
+        return render(request, 'wildthoughts/profile/update_profile.html', {'profiles':profiles})
+
 
 """-------------------------------------------------------- LIST VIEWS -------------------------------------------------------------"""
 # (Renamed to not be confused with python list)
