@@ -8,44 +8,45 @@
 
 {% block body_block %}
 {% if searched %}
-<div class="text-center p-4">
-        <h1>Results for '{{ searched }}' in {{ category }}</h1>
-        <br/>
-        <div class="container">
-            <div class="row">
-                <!-- display results as a list -->
-                    <div class="list-group">
-                        {% for result in results %}
-                        <div class="list-group">
-                            {% if category == "Animals" %}
-                                <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
-                            {% elif category == "Discussions" %}
-                                <a href="{% url 'wildthoughts:discussion' result.slug %}" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                            {% elif category == "Lists" %}
-                            <a href="{% url 'wildthoughts:list' result.slug %}" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                            {% elif category == "Profiles" %}
-                                <a href="{% url 'wildthoughts:profile' result.user.username %}" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
-                            {% endif %}
-                        </div>
-                        {% empty %}
-                        <!-- display this message if results are None -->
-                        <div class="text-center my-5">
-                            <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
-                            <h4>No results were found.</h4>
-                        </div>
-                        {% endfor %}
-                    </div>
-            </div>
-        </div>
-    {% else %}
-    <!-- display this message if text empty -->
-    <div class="text-center my-5">
-        <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
-        <h4>No text was entered in the search bar</h4>
+    <div class="text-center p-4">
+            <h1>Results for '{{ searched }}' in {{ category }}</h1>
     </div>
-    {% endif %}
-</div>
+            <br/>
+            <div class="container">
+                {% if results %}
+                <!-- display results -->
+                    {% if category == 'Animals' %}
+                    {% include "wildthoughts/widget/animal_widget.html" with animals=results %}
+                
+                    {% elif category == 'Lists' %}
+                    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results %}
+                
+                    {% elif category == 'Discussions' %}
+                    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results %}
+                
+                    {% elif category == 'Petitions' %}
+                    {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}
 
+                    {% elif category == 'Profiles' %}
+                    {% include "wildthoughts/widget/profile_widget.html" with profiles=results %}
+    
+                    {% endif %}
+                    
+                {% else %}
+                    <!-- display this message if results are None -->
+                    <div class="text-center my-5">
+                        <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+                        <h4>No results were found.</h4>
+                    </div>
+                {% endif %}
+            </div>
+{% else %}
+<!-- display this message if text empty -->
+<div class="text-center my-5">
+    <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+    <h4>No text was entered in the search bar</h4>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block script_block %}
