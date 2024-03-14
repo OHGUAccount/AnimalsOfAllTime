@@ -145,9 +145,9 @@ class IndexView(View):
     
 
 class SearchView(View):
-    def post(self, request):
-        searched = request.POST['searched']
-        category = request.POST['category']
+    def get(self, request):
+        searched = request.GET.get('searched')
+        category = request.GET.get('category')
 
         if not searched.strip():
             searched = ''

@@ -51,8 +51,7 @@
 
             <!-- SEARCH BAR -->
             <div class="mx-5 order-0">
-                <form role="search" method=POST action="{% url 'wildthoughts:search' %}">
-                    {% csrf_token %}
+                <form role="search" method="GET" action="{% url 'wildthoughts:search' %}">
                     <div class="container">
                        <div class="row g-0">
                             <div class="col-4">
