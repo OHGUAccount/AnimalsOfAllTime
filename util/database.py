@@ -155,8 +155,10 @@ class Database:
         cls.add_discussions()
         cls.add_user_lists()
         cls.add_petitions()
+        print("Populated the database!")
         
     @classmethod
     def migrate(cls) -> None:
         execute_from_command_line(['manage.py', 'makemigrations'])
         execute_from_command_line(['manage.py', 'migrate'])
+        print("Migrated the database!")

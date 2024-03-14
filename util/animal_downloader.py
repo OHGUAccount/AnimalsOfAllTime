@@ -40,6 +40,8 @@ class AnimalDownloader:
         note that it won't exactly download the specified number of animals 
         since validation is done at execution
         """
+        if len(urls) == 0:
+            raise Exception('Download failed. Are you connected to the internet?')
         end = min(len(urls), count)
         return urls[:end]
 
@@ -97,6 +99,8 @@ class AnimalDownloader:
 
         with open("animal.json", "w") as f:
             json.dump(output_dict, f, indent=2)
+        
+        print(f"{len(output_dict)} animals downloaded!")
         return output_dict
 
     @classmethod

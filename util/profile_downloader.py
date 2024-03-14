@@ -13,6 +13,8 @@ class ProfileDownloader:
         if response.status_code == 200:
             data = response.json()
             return data
+        else:
+            raise Exception("Download failed. Are you connected to the internet?")
 
     @classmethod
     def __save_image(cls, entry) -> str:
@@ -57,6 +59,8 @@ class ProfileDownloader:
 
         with open("profile.json", "w") as f:
             json.dump(output_dict, f, indent=2)
+        
+        print(f"{len(output_dict)} profiles downloaded!")
         return output_dict
 
     @classmethod
