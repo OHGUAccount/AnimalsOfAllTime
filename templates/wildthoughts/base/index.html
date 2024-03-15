@@ -2,6 +2,7 @@
     Home
 {% endblock %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 <!-- HEADING -->
 {% block body_block %}
@@ -17,17 +18,18 @@
 
 <div class="container">
     <div class="row row-cols-1 row-cols-lg-2 g-5">
+        {% profile as user_profile %}
 
         <!-- OVERRATED ANIMALS -->
         <div class="col">
             <h2 class="mb-4 text-center">Top 5 Overrated Animals</h2>
-            {% include "wildthoughts/widget/animal_widget.html" with animals=overrated_animals %}
+            {% include "wildthoughts/widget/animal_widget.html" with animals=overrated_animals profile=user_profile %}
         </div>
 
         <!-- UNDERRATED ANIMALS -->
         <div class="col">
             <h2 class="mb-4 text-center">Top 5 Underrated Animals</h2>
-            {% include "wildthoughts/widget/animal_widget.html" with animals=underrated_animals %}
+            {% include "wildthoughts/widget/animal_widget.html" with animals=underrated_animals profile=user_profile %}
         </div>
         
     </div>

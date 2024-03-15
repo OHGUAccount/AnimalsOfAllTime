@@ -3,6 +3,7 @@
 Animals
 {% endblock %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block body_block %}
 <!-- HEADING -->
@@ -36,7 +37,8 @@ Animals
     </div>
 
     <!-- DISCUSSIONS -->
-    {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions %}
+    {% profile as user_profile %}
+    {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions profile=user_profile %}
 
     <!-- PAGINATION -->
     {% include "wildthoughts/widget/pagination_widget.html" with entity=discussions %}

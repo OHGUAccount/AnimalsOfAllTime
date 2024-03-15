@@ -1,12 +1,11 @@
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% for discussion in discussions %}
 <div class="card">
     <div class="d-flex">
     <div class="d-flex flex-column mx-3 align-items-center">
-        <button type="button" class="vote" id="upvote_discussion_{{ discussion.id }}" data-status="upvote" data-category="discussions" data-id="{{ discussion.id }}"><i class="bi bi-chevron-up"></i></button>
-        <h4 id="count_discussion_{{ discussion.id }}">{{ discussion.votes }}</h4>
-        <button type="button" class="vote" id="downvote_discussion_{{ discussion.id }}" data-status="downvote" data-category="discussions" data-id="{{ discussion.id }}"><i class="bi bi-chevron-down"></i></button>
+        {% render_vote 'discussions' discussion profile %}
     </div>
 
         <div class="card-body">

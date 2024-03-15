@@ -73,7 +73,6 @@ function updateCount(voteButton, newCount){
 
 
 $(document).ready(function(){
-  $(".vote").addClass("btn btn-outline-secondary border-0");
 
   $(document).on('click', '.vote', function(){
     var voteButton = this;

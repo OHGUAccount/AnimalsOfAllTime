@@ -4,6 +4,8 @@
 {% block title_block %}
     Lists
 {% endblock %}
+{% load wildthoughts_tags %}
+{% profile as user_profile %}
 
 {% block body_block %}
 <!-- HEADING -->
@@ -37,7 +39,8 @@
 
     <!-- LISTS -->
     <div class="row row-cols-1 row-cols-lg-2">
-        {% include "wildthoughts/widget/user_list_widget.html" with user_lists=user_lists %}
+        {% profile as user_profile %}
+        {% include "wildthoughts/widget/user_list_widget.html" with user_lists=user_lists profile=user_profile %}
     </div> 
 
     {% include "wildthoughts/widget/pagination_widget.html" with entity=user_lists %}

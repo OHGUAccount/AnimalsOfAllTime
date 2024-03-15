@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% for animal in animals %}
 {% if col %}
@@ -10,9 +11,7 @@
     <div class="d-flex">
 
         <div class="d-flex flex-column mx-3 align-items-center">
-            <button type="button" class="vote" id="upvote_animal_{{ animal.id }}" data-status="upvote" data-category="animals" data-id="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-            <h4 id="count_animal_{{ animal.id }}">{{ animal.votes }}</h4>
-            <button type="button" class="vote" id="downvote_animal_{{ animal.id }}" data-status="downvote" data-category="animals" data-id="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
+            {% render_vote 'animals' animal profile %}
         </div>
 
             <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded m-3" width=150 height=90 alt="{{ animal.name }}'s image">
