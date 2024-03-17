@@ -85,11 +85,13 @@ $(document).ready(function(){
           'status': $(this).attr('data-status')
       },
       success: function(response) {
-          console.log("working");
           if(response.status === 'success') {
             updateButton(voteButton); 
             updateCount(voteButton, response.count); 
           }
+          else if (response.status === 'login') {
+            window.location.href = response.login_url;
+        }
       },
     })
   });  

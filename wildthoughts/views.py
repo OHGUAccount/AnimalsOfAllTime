@@ -242,8 +242,11 @@ class VoteView(View):
                 return JsonResponse({'status': 'success', 'count': instance.votes})
             except Exception as e:
                 print(e)
-        return JsonResponse({'status': 'error'})
-    
+                return JsonResponse({'status': 'error'})    
+        else:
+            login_url = reverse('auth_login')
+            return JsonResponse({'status': 'login', 'login_url': login_url})    
+        
 
 """------------------------------------------------------- DISCUSSION VIEWS------------------------------------------------------------"""
 class DiscussionView(View):
@@ -375,7 +378,6 @@ class PetitionView(View):
     
 
 class SignPetitionView(View):
-    @method_decorator(login_required)
     def get(self, request):
         petition_id = request.GET['petition_id']
         if request.user.is_authenticated:
@@ -389,7 +391,10 @@ class SignPetitionView(View):
                     return JsonResponse({'status': 'success'})
             except Exception as e:
                 print(e)
-        return JsonResponse({'status': 'error'})
+                return JsonResponse({'status': 'error'})
+        else:
+            login_url = reverse('auth_login')
+            return JsonResponse({'status': 'login', 'login_url': login_url})         
     
 
 class ListPetitionView(View):
