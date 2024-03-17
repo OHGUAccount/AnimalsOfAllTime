@@ -14,6 +14,7 @@
 
         <!-- PROFILE PICTURE -->
         <div class="col-12 col-md-4">
+            <center>
             {% if profile.picture %}
             <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
             {% else %}
@@ -39,6 +40,7 @@
                 </p>
                 {% endif %}
             </div>
+            </center>
         </div>
 
     <!-- TAB NAVIGATION -->
