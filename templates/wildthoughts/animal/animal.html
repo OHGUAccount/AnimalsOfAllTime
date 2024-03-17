@@ -1,5 +1,6 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block title_block %}
     {{ animal.name }}
@@ -7,13 +8,22 @@
 
 <!--HEADING -->
 {% block body_block %}
+{% profile as user_profile %}
+
+
 <div class="p-4">
     <center> <h1>{{ animal.name }}</h1> </center>
 </div>
 
 
 <div class="container">
-    <center><img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ animal.picture }}" width="615" height="410" alt="{{ animal.name }}'s image" /></center>
+    <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column align-items-center border">
+                {% render_vote 'animals' animal user_profile %}
+            </div>
+            <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ animal.picture }}" width="615" height="410" alt="{{ animal.name }}'s image" />
+    </div>
+
         <div>
             <h3><strong>Description</strong></h3>
             <p>
@@ -46,7 +56,7 @@
             <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}?selected={{ animal.slug }}" role="button">Add Discussion!</a>
             {% endif %}
         </div>
-            {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions %}   
+            {% include "wildthoughts/widget/discussion_widget.html" with discussions=discussions profile=user_profile %}   
 </div>
 
 

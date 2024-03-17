@@ -1,10 +1,14 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block title_block %}
 {{profile.user.username}}
 {% endblock %}
 {% block body_block %}
+
+{% profile as user_profile %}
+
 <div class="container">
     <div class="row">
 
@@ -100,19 +104,19 @@
 
     <!-- RESULTS -->
     {% if tab == 'animals' %}
-    {% include "wildthoughts/widget/animal_widget.html" with animals=results %}
+    {% include "wildthoughts/widget/animal_widget.html" with animals=results profile=user_profile %}
 
     {% elif tab == 'lists' %}
-    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results %}
+    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results profile=user_profile %}
 
     {% elif tab == 'discussions' %}
-    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results %}
+    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results profile=user_profile %}
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->
 
     {% elif tab == 'petitions' %}
-    {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}
+    {% include "wildthoughts/widget/petition_widget.html" with petitions=results profile=user_profile %}
 
     {% endif %}
     

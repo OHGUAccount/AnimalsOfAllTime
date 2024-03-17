@@ -3,20 +3,30 @@
 {% endblock %}
 {% load staticfiles %}
 
+{% load wildthoughts_tags %}
+
 {% block body_block %}
+{% profile as user_profile %}
+
 <!-- HEADING -->
-<div class="text-center p-4">
-    <h1>{{ user_list.title }}</h1>
-    <h3>
-        by
-        {% if user_list.author.picture %}
-        <img src="{{ MEDIA_URL }}{{ user_list.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
-        {% else %}
-        <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
-        {% endif %}
-        <a href="{% url 'wildthoughts:profile' user_list.author %}">{{ user_list.author }}</a>
-    </h3>
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column align-items-center">
+        {% render_vote 'lists' user_list user_profile %}
+    </div>
+    <div class="text-center p-4">
+        <h1>{{ user_list.title }}</h1>
+        <h3>
+            by
+            {% if user_list.author.picture %}
+            <img src="{{ MEDIA_URL }}{{ user_list.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+            {% else %}
+            <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+            {% endif %}
+            <a href="{% url 'wildthoughts:profile' user_list.author %}">{{ user_list.author }}</a>
+        </h3>
+    </div>
 </div>
+
 
 <div class="container">
     <!-- SORT BY -->
@@ -40,7 +50,7 @@
     </div>
 
     <div class="row row-cols-1 row-cols-lg-2 g-5">
-        {% include "wildthoughts/widget/animal_widget.html" with animals=animals col='true' %}
+        {% include "wildthoughts/widget/animal_widget.html" with animals=animals col='true' profile=user_profile %}
     </div>
 
     {% include "wildthoughts/widget/pagination_widget.html" with entity=animals %}
