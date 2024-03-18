@@ -99,6 +99,8 @@ class Database:
                 animal=animal,
                 slug=slugify(f"Why do you like {animal.name} by {user.user.username}?")
             )
+            discussion.votes = random.randint(1, 100)
+            discussion.save()
 
     @classmethod
     def add_user_lists(cls) -> None:
@@ -114,6 +116,7 @@ class Database:
             for animal in animals:
               user_list.animals.add(animal)
 
+            user_list.votes = random.randint(1, 100)
             user_list.save()
 
     @classmethod
