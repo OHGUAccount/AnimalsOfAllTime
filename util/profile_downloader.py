@@ -2,10 +2,12 @@ import concurrent.futures
 import json
 import os
 import requests
-import shutil
 
 
 class ProfileDownloader:
+    FILES = ["profile.json"]
+    FOLDERS = ["media\\profile_images"]
+
     @classmethod
     def __get_json(cls, count):
         url = f'https://randomuser.me/api/?inc=email,login,picture&results={count}'
@@ -63,15 +65,4 @@ class ProfileDownloader:
         print(f"{len(output_dict)} profiles downloaded!")
         return output_dict
 
-    @classmethod
-    def clear(cls) -> None:
-        if os.path.exists("profile.json"):
-            os.remove("profile.json")
-
-        for item in os.listdir("media\\profile_images"):
-            item_path = os.path.join("media\\profile_images", item)
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-            else:
-                shutil.rmtree(item_path)
         

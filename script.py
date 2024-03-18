@@ -10,6 +10,7 @@ django.setup()
 
 from util.animal_downloader import AnimalDownloader
 from util.database import Database
+from util.file_manager import FileManager
 from util.profile_downloader import ProfileDownloader
 
 
@@ -51,12 +52,10 @@ class Script:
             AnimalDownloader.download(count)
 
         elif action == 'cleardatabase':
-            Database.clear()
+            FileManager.clear(Database)
 
         elif action == 'clear':
-            Database.clear()
-            ProfileDownloader.clear()
-            AnimalDownloader.clear()
+            FileManager.clear_all() 
 
         elif action == 'populate':
             Database.populate()
@@ -69,9 +68,7 @@ class Script:
             Database.migrate()
         
         elif action == 'all':
-            Database.clear()
-            ProfileDownloader.clear()
-            AnimalDownloader.clear()
+            FileManager.clear_all()
 
             animal_dict = AnimalDownloader.download(count)
             profile_dict = ProfileDownloader.download(count)
@@ -85,6 +82,7 @@ class Script:
     def run(cls):
         action, count = cls.read_args()
         try:
+            FileManager.validate_working_directory()
             cls.execute(action, count)
         except:
             traceback.print_exc()

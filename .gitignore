@@ -162,6 +162,7 @@ cython_debug/
 # wildthoughts stuff:
 media/**/*
 !media/**/
+wildthoughts/migrations
 animal.json
 profile.json
 traceback.txt

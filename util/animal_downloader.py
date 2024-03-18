@@ -2,7 +2,6 @@ import concurrent.futures
 import json
 import os
 import requests
-import shutil
 
 from bs4 import BeautifulSoup
 
@@ -18,6 +17,9 @@ class AnimalDownloader:
     John Watson Rooney: https://youtu.be/aA6-ezS5dyY?si=SB2rH5OACNMdiSlX
     stackoverflow: https://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
     """
+    FILES = ["animal.json"]
+    FOLDERS = ["media\\animal_images"]
+
     @classmethod
     def __find_urls(cls) -> list[str]:
         """
@@ -102,15 +104,3 @@ class AnimalDownloader:
         
         print(f"{len(output_dict)} animals downloaded!")
         return output_dict
-
-    @classmethod
-    def clear(cls) -> None:
-        if os.path.exists("animal.json"):
-            os.remove("animal.json")
-
-        for item in os.listdir("media\\animal_images"):
-            item_path = os.path.join("media\\animal_images", item)
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-            else:
-                shutil.rmtree(item_path)
