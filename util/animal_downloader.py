@@ -10,7 +10,6 @@ class AnimalDownloader:
     """
     class dedicated to webscrape https://animalcorner.org/animals/
     using BeautifulSoup and dividing the workload between threads
-    only download method should be used
 
     Resources used:
     freeCodeCamp.org: https://youtu.be/XVv6mJpFOb0?si=cY__8rXOFzQ5jdzv
