@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.forms import ValidationError
 from django.template.defaultfilters import slugify
     
 
@@ -86,6 +87,12 @@ class Petition(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
+        if self.signatures < 0:
+            raise ValidationError("Signatures cannot be negative")
+        if self.goal < 0:
+            raise ValidationError("Goal cannot be negative")
+        if self.signatures > self.goal:
+            raise ValidationError("Signatures cannot be greater than goal")
         self.slug = slugify(self.title)
         super(Petition, self).save(*args, **kwargs)
         
