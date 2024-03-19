@@ -19,31 +19,37 @@ It will take some time, so please be patient.
 - [x] Animal
 - [x] Discussion
 - [x] Comment
+- [x] Petitions
 - [x] Profile
 - [x] User List
 - [x] Population Script
 ### Pages
 - [x] Index
 - [x] Animal
-- [x] Overrated Animals
-- [x] Underrated Animals
+- [x] Discussion
+- [x] Petition
 - [x] Profile
+- [x] UserList
+- [x] List Animals
+- [x] List Discussion
+- [x] List Petitions
 - [x] List Profiles
-- [x] User lists
+- [x] List UserLists
 ### Forms
 - [x] Login/Registration
 - [x] Add Animal
-- [x] Add List
-- [x] Add Discussion
 - [ ] Add Comment
+- [x] Add Discussion
+- [x] Add Petition
+- [x] Add List
 ### Features
 - [x] Dark Mode
 - [x] Search
 - [x] Sorting Animals, Lists
-- [ ] Upvote / Downvote
+- [x] Upvote / Downvote
 ### Testing
-- [ ] Models
-- [ ] Views
+- [x] Models
+- [x] Views
 
 ## Styling guides
 It would be appropriate but not necessary to follow these style guides to make your code readable and development easier for others.

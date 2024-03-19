@@ -83,12 +83,78 @@ class PetitionMethodTests(TestCase):
                          
 
 # Views
-# class IndexViewTests(TestCase):
-#     def test_index_view_with_no_animals(self):
-#         """
-#         If no categories exist, the appropriate message should be displayed.
-#         """
-#         response = self.client.get(reverse('wildthoughts:index'))
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, 'There are no animals present.')
-#         self.assertQuerysetEqual(response.context['animals'], [])
+class IndexViewTests(TestCase):
+    def test_view_with_no_animals(self):
+        response = self.client.get(reverse('wildthoughts:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no animals yet...')
+        self.assertQuerysetEqual(response.context['animals'], [])
+
+
+class AnimalViewTests(TestCase):
+    def setUp(self):
+        user = User.objects.create(username='testuser')
+        profile = UserProfile.objects.create(user=user)
+        self.animal, created = Animal.objects.get_or_create(
+            name='Lion',
+            author=profile,
+            description="The king of the jungle!",
+        )
+
+    def test_index_view_with_no_discussions(self):
+        response = self.client.get(reverse('wildthoughts:animal', kwargs={'animal_name_slug': self.animal.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no discussions yet...')
+        self.assertQuerysetEqual(response.context['discussions'], [])
+
+
+class ListAnimalsViewTests(TestCase):
+    def test_view_with_no_animals(self):
+        response = self.client.get(reverse('wildthoughts:animals'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no animals yet...')
+        self.assertQuerysetEqual(response.context['animals'], [])
+
+
+class DiscussionViewTests(TestCase):
+    pass
+
+
+class ListDiscussionsViewTests(TestCase):
+    def test_view_with_no_discussions(self):
+        response = self.client.get(reverse('wildthoughts:discussions'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no discussions yet...')
+        self.assertQuerysetEqual(response.context['discussions'], [])
+
+
+class PetitionViewTests(TestCase):
+    pass
+
+
+class ListPetitionsViewTests(TestCase):
+    def test_view_with_no_petitions(self):
+        response = self.client.get(reverse('wildthoughts:petitions'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no petitions yet...')
+        self.assertQuerysetEqual(response.context['petitions'], [])
+
+
+class ProfileViewTests(TestCase):
+    def setUp(self):
+        user = User.objects.create(username='testuser')
+        self.profile = UserProfile.objects.create(user=user)
+
+    def test_view_with_no_animals(self):
+        response = self.client.get(reverse('wildthoughts:profile', kwargs={'username': self.profile.user.username}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no animals yet...')
+        self.assertQuerysetEqual(response.context['animals'], [])
+
+
+class ListProfileViewTests(TestCase):
+    def test_view_with_no_profiles(self):
+        response = self.client.get(reverse('wildthoughts:profiles'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no profiles yet...')
+        self.assertQuerysetEqual(response.context['profiles'], [])
