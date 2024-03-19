@@ -180,7 +180,73 @@ class ThemeView(View):
             return response
         else:
             return HttpResponse(-1)
+        
+
+class VoteView(View):
+    def update_upvote(self, profile, instance):
+        if not instance.upvoted_by.filter(id=profile.id).exists():
+            instance.upvoted_by.add(profile)
+            instance.votes += 1
+
+        if instance.downvoted_by.filter(id=profile.id).exists():
+            instance.votes += 1
+            instance.downvoted_by.remove(profile)
             
+        instance.save()
+
+    def update_downvote(self, profile, instance):
+        if instance.upvoted_by.filter(id=profile.id).exists():
+            instance.upvoted_by.remove(profile)
+            instance.votes -= 1
+
+        if not instance.downvoted_by.filter(id=profile.id).exists():
+            instance.votes -= 1
+            instance.downvoted_by.add(profile)
+
+        instance.save()
+
+    def update_upvoted(self, profile, instance):
+        if instance.upvoted_by.filter(id=profile.id).exists():
+            instance.upvoted_by.remove(profile)
+            instance.votes -= 1
+
+        instance.save()
+
+    def update_downvoted(self, profile, instance):
+        if instance.downvoted_by.filter(id=profile.id).exists():
+            instance.downvoted_by.remove(profile)
+            instance.votes += 1
+
+        instance.save()
+
+    def update_vote(self, profile, instance, status):            
+        if status == 'upvote':
+            return self.update_upvote(profile, instance)
+        elif status == 'downvote':
+            return self.update_downvote(profile, instance)
+        elif status == 'upvoted':
+            return self.update_upvoted(profile, instance)
+        elif status == 'downvoted':
+            return self.update_downvoted(profile, instance)
+
+    def get(self, request):
+        category = request.GET.get('category')
+        id = request.GET.get('id')
+        status = request.GET.get('status')
+        if request.user.is_authenticated:
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                model = ProfileView.TAB_TO_MODEL[category]
+                instance = model.objects.get(id=int(id))
+                self.update_vote(profile, instance, status)
+                return JsonResponse({'status': 'success', 'count': instance.votes})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'status': 'error'})    
+        else:
+            login_url = reverse('auth_login')
+            return JsonResponse({'status': 'login', 'login_url': login_url})    
+        
 
 """------------------------------------------------------- DISCUSSION VIEWS------------------------------------------------------------"""
 class DiscussionView(View):
@@ -312,20 +378,23 @@ class PetitionView(View):
     
 
 class SignPetitionView(View):
-    @method_decorator(login_required)
     def get(self, request):
         petition_id = request.GET['petition_id']
-        try:
-            petition = Petition.objects.get(id=int(petition_id))
-            profile = UserProfile.objects.get(user=request.user)
-            if not petition.signed_by.filter(id=profile.id).exists():
-                petition.signatures += 1
-                petition.signed_by.add(profile)
-                petition.save()
-        except:
-            return JsonResponse({'status': 'error'})
-        
-        return JsonResponse({'status': 'success'})
+        if request.user.is_authenticated:
+            try:
+                petition = Petition.objects.get(id=int(petition_id))
+                profile = UserProfile.objects.get(user=request.user)
+                if not petition.signed_by.filter(id=profile.id).exists():
+                    petition.signatures += 1
+                    petition.signed_by.add(profile)
+                    petition.save()
+                    return JsonResponse({'status': 'success'})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'status': 'error'})
+        else:
+            login_url = reverse('auth_login')
+            return JsonResponse({'status': 'login', 'login_url': login_url})         
     
 
 class ListPetitionView(View):

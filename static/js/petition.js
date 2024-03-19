@@ -27,6 +27,9 @@ $(document).ready(function() {
                         $('#sign_button').prop('disabled', true);
                     }
             
+                } 
+                else if (response.status === 'login') {
+                    window.location.href = response.login_url;
                 }
             },
         })

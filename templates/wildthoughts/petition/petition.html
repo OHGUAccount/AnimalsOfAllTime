@@ -24,7 +24,7 @@
 
             <h6 class="text-muted mt-2">
                 Author
-                {% if user_list.author.picture %}
+                {% if petition.author.picture %}
                 <img src="{{ MEDIA_URL }}{{ petition.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
                 {% else %}
                 <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">

@@ -1,15 +1,20 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block title_block %}
 {{profile.user.username}}
 {% endblock %}
 {% block body_block %}
+
+{% profile as user_profile %}
+
 <div class="container">
     <div class="row">
 
         <!-- PROFILE PICTURE -->
         <div class="col-12 col-md-4">
+            <center>
             {% if profile.picture %}
             <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
             {% else %}
@@ -28,12 +33,14 @@
 
                         <div class="d-grid gap-2 col-6">
                             <a href="{% url 'wildthoughts:update_profile' profile %}" class="btn btn-outline-secondary" role="button" >Update</a>
+                            <a href="{% url 'auth_password_change' %}" class="btn btn-outline-secondary" role="button" >Change Password</a>
                             <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
                         </div>
                     </form>
                 </p>
                 {% endif %}
             </div>
+            </center>
         </div>
 
     <!-- TAB NAVIGATION -->
@@ -100,19 +107,19 @@
 
     <!-- RESULTS -->
     {% if tab == 'animals' %}
-    {% include "wildthoughts/widget/animal_widget.html" with animals=results %}
+    {% include "wildthoughts/widget/animal_widget.html" with animals=results profile=user_profile %}
 
     {% elif tab == 'lists' %}
-    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results %}
+    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results profile=user_profile %}
 
     {% elif tab == 'discussions' %}
-    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results %}
+    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results profile=user_profile %}
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->
 
     {% elif tab == 'petitions' %}
-    {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}
+    {% include "wildthoughts/widget/petition_widget.html" with petitions=results profile=user_profile %}
 
     {% endif %}
     

@@ -1,5 +1,6 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 <!-- HEADING -->
 {% block title_block %}
@@ -15,14 +16,15 @@
             <div class="container">
                 {% if results %}
                 <!-- display results -->
+                    {% profile as user_profile %}
                     {% if category == 'Animals' %}
-                    {% include "wildthoughts/widget/animal_widget.html" with animals=results %}
+                    {% include "wildthoughts/widget/animal_widget.html" with animals=results profile=user_profile %}
                 
                     {% elif category == 'Lists' %}
-                    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results %}
+                    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results profile=user_profile %}
                 
                     {% elif category == 'Discussions' %}
-                    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results %}
+                    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results profile=user_profile %}
                 
                     {% elif category == 'Petitions' %}
                     {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}

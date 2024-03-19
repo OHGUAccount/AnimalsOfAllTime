@@ -1,7 +1,5 @@
 import json
-import os
 import random
-import shutil
 
 from django.contrib.auth.models import User
 from django.core.management import execute_from_command_line
@@ -12,29 +10,14 @@ from wildthoughts.models import Animal, Discussion, Petition, UserList, UserProf
 
 class Database:
     # class dedicated to populate and migrate database
+    FILES = ["db.sqlite3"]
+    FOLDERS = ["wildthoughts\\migrations"]
+    
     animal_dict: dict = None
     profile_dict: dict = None
     adjectives = ['scariest', 'gorgeous', 'fastest', 'slowest']
     animals: list[Animal] = None
     users: list[UserProfile] = None
-
-    @classmethod
-    def clear(cls) -> None:
-        # remove db.sqlite3 and files in migrations
-        if os.path.exists("db.sqlite3"):
-            os.remove("db.sqlite3")
-
-        init_path = os.path.join("wildthoughts\\migrations", '__init__.py')
-        for item in os.listdir("wildthoughts\\migrations"):
-            item_path = os.path.join("wildthoughts\\migrations", item)
-            if item_path == init_path:
-                continue
-            elif os.path.isfile(item_path):
-                os.remove(item_path)
-            else:
-                shutil.rmtree(item_path)
-
-        cls.migrate()
 
     @classmethod
     def load_profile_dict(cls) -> dict:
@@ -116,6 +99,8 @@ class Database:
                 animal=animal,
                 slug=slugify(f"Why do you like {animal.name} by {user.user.username}?")
             )
+            discussion.votes = random.randint(1, 100)
+            discussion.save()
 
     @classmethod
     def add_user_lists(cls) -> None:
@@ -131,6 +116,7 @@ class Database:
             for animal in animals:
               user_list.animals.add(animal)
 
+            user_list.votes = random.randint(1, 100)
             user_list.save()
 
     @classmethod

@@ -13,7 +13,8 @@ urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
     path('search/', views.SearchView.as_view(), name='search'),
     path('theme/', views.ThemeView.as_view(), name='theme'),
-
+    path('vote/', views.VoteView.as_view(), name='vote'),
+    
     # comments urls
 
     # discussion urls

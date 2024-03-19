@@ -2,7 +2,9 @@
 {% block title_block %}
 Animals
 {% endblock %}
+
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block body_block %}
 <div class="text-center p-4">
@@ -42,7 +44,8 @@ Animals
     </div>
 
     <div class="row row-cols-1 row-cols-lg-2 g-5">
-        {% include "wildthoughts/widget/animal_widget.html" with animals=animals col='true' %}
+        {% profile as user_profile %}
+        {% include "wildthoughts/widget/animal_widget.html" with animals=animals col='true' profile=user_profile %}
     </div>
 
     {% include "wildthoughts/widget/pagination_widget.html" with entity=animals %}

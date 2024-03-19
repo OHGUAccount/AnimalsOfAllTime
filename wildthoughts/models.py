@@ -25,7 +25,7 @@ class Animal(models.Model):
     picture = models.ImageField(upload_to='animal_images', blank=True)
     votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_animals')
-    downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_animals')
+    downvoted_by = models.ManyToManyField(UserProfile, related_name='downvoted_animals')
     date = models.DateField(auto_now_add=True)
     slug = models.SlugField(unique=True)
 
@@ -45,7 +45,7 @@ class Discussion(models.Model):
     description = models.TextField(blank=True)
     votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_discussions')
-    downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_discussions')
+    downvoted_by = models.ManyToManyField(UserProfile, related_name='downvoted_discussions')
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -63,7 +63,7 @@ class Comment(models.Model):
     date = models.DateField(auto_now_add=True)
     votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_comments')
-    downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_comments')
+    downvoted_by = models.ManyToManyField(UserProfile, related_name='downvoted_comments')
 
     def __str__(self):
         return self.content
@@ -98,7 +98,7 @@ class UserList(models.Model):
     description = models.TextField(blank=True)
     votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_user_lists')
-    downvotes_by = models.ManyToManyField(UserProfile, related_name='downvoted_user_lists')
+    downvoted_by = models.ManyToManyField(UserProfile, related_name='downvoted_user_lists')
     slug = models.SlugField(unique=True)
 
     def __str__(self):
