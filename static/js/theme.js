@@ -9,9 +9,15 @@ $(document).ready(function() {
     $('#theme-switch').change(function() {
         if ($(this).is(":checked")) {
             var newTheme = 'dark';  
+            $('#id_animal,#id_animals').select2({
+                theme: "bootstrap5-dark"
+            });
         }
         else {
             var newTheme = 'light';
+            $('#id_animal,#id_animals').select2({
+                theme: "bootstrap5"
+            });
         }
 
         $.get('/wildthoughts/theme/',

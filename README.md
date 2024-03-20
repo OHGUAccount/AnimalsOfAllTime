@@ -73,4 +73,5 @@ This project has been made possible with the help of numerous resources:
 - The website's design drew inspiration from Change.org, Github, and Reddit.
 - StackOverFlow's [Bootstrap popover image as content](https://stackoverflow.com/questions/13604144/bootstrap-popover-image-as-content).
 - Bootstrap 5 [documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/).
+- mortezafs [select2-bootstrap5-theme](https://github.com/mortezafs/select2-bootstrap5-theme).
 - ByteGrad's [Bootstrap 5 footer tutorial](https://www.youtube.com/watch?v=4UT2r2MAJKY).

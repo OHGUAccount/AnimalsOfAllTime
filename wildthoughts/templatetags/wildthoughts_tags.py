@@ -16,6 +16,15 @@ def theme(context):
     return theme
 
 @register.simple_tag(takes_context=True)
+def select2_theme(context):
+    request = context['request']
+    theme = request.COOKIES.get('theme', 'light')
+    if theme == 'light':
+        return ''
+    else:
+        return '-dark'
+
+@register.simple_tag(takes_context=True)
 def profile_picture(context):
     """
     retrieve the user picture

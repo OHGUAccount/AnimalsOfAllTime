@@ -69,7 +69,7 @@ class Database:
             )
             animal.description = data['description']
             animal.picture = data['image_path']
-            animal.votes = random.randint(1, 100)
+            animal.votes = random.randint(0, 50)
             animal.save()
 
     @classmethod
@@ -99,7 +99,7 @@ class Database:
                 animal=animal,
                 slug=slugify(f"Why do you like {animal.name} by {user.user.username}?")
             )
-            discussion.votes = random.randint(1, 100)
+            discussion.votes = random.randint(0, 50)
             discussion.save()
 
     @classmethod
@@ -116,7 +116,7 @@ class Database:
             for animal in animals:
               user_list.animals.add(animal)
 
-            user_list.votes = random.randint(1, 100)
+            user_list.votes = random.randint(0, 50)
             user_list.save()
 
     @classmethod
@@ -130,7 +130,7 @@ class Database:
                 slug=slugify(f'Petition for {animal.name} by {user.user.username}')
             )
             petition.goal = 100
-            petition.signatures = random.randint(0, 100)
+            petition.signatures = random.randint(0, 50)
             petition.animals.add(animal)
             petition.save()
 

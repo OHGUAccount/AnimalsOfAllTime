@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from wildthoughts.models import Animal, Discussion, Comment, Petition, UserList, UserProfile
-from select2 import forms as select2forms
 
 
 class AnimalForm(forms.ModelForm):
