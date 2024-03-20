@@ -30,6 +30,9 @@
             </h6>
             <h5 class="card-title"><a href="{% url 'wildthoughts:discussion' discussion.slug %}">{{ discussion.title }}</a></h5>
             <p class="card-text">{{ discussion.description }}</p>
+            {% if discussion.picture %}
+            <img src="{{ MEDIA_URL }}{{ discussion.picture }}" class="img-fluid rounded" width="615" height="410" alt="{{ discussion.title }}'s image" >
+            {% endif %}
         </div>
     
     </div>

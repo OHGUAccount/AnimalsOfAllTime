@@ -74,21 +74,20 @@ class Database:
 
     @classmethod
     def random_animal(cls) -> Animal:
-        if cls.animals is None:
-            cls.animals = Animal.objects.all()
-        return cls.animals.order_by('?').first()
+        if not cls.animals:
+            cls.animals = list(Animal.objects.all().order_by('?'))
+        return cls.animals.pop()
 
     @classmethod
     def random_user(cls) -> UserProfile:
-        if cls.users is None:
-            cls.users = UserProfile.objects.all()
-        return cls.users.order_by('?').first()
+        if not cls.users:
+            cls.users = list(UserProfile.objects.all().order_by('?'))
+        return cls.users.pop()
 
     @classmethod
     def random_zip(cls, size=5) -> tuple[tuple[UserProfile, Animal]]:
-        users = [cls.random_user() for i in range(size)]
-        animals = [cls.random_animal() for i in range(size)]
-        return zip(users, animals)
+        output_zip = [(cls.random_user(), cls.random_animal()) for i in range(size)]
+        return output_zip
 
     @classmethod
     def add_discussions(cls) -> None:

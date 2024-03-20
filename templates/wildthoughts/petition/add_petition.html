@@ -14,9 +14,21 @@
 <div class="d-grid gap-2 col-sm-6 mx-auto">
 <form method="POST" action="{% url 'wildthoughts:add_petition' %}" enctype="multipart/form-data">
     {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Petition" />
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+	{% for field in form.visible_fields %}
+		{{ form.errors }}
+		{{ field.help_text }}
+		{% if field.name == 'picture' %}
+            {{ field }}
+        {% else %}
+        {{ field }}
+        {% endif %}
+	{% endfor %}
 </div>
+<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Petition" />
+
 </div>
 </form>
 

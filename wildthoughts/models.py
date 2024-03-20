@@ -44,6 +44,7 @@ class Discussion(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True)
+    picture = models.ImageField(upload_to='discussion_images', blank=True)
     votes = models.IntegerField(default=0)
     upvoted_by = models.ManyToManyField(UserProfile, related_name='upvoted_discussions')
     downvoted_by = models.ManyToManyField(UserProfile, related_name='downvoted_discussions')

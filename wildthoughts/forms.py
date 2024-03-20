@@ -44,7 +44,7 @@ class CommentForm(forms.ModelForm):
 class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Discussion
-        fields = ['title', 'animal', 'description']
+        fields = ['title', 'animal', 'description', 'picture']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'animal': forms.Select(attrs={'class': 'form-control'}),
@@ -75,8 +75,6 @@ class PetitionForm(forms.ModelForm):
     class Meta:
         model = Petition
         fields = ['title', 'decision_maker', 'goal', 'animals', 'description', 'picture']
-        
-
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'decision_maker': forms.TextInput(attrs={'class': 'form-control'}),
@@ -84,18 +82,56 @@ class PetitionForm(forms.ModelForm):
             'goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 10}),
             'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
+            # form validation here
+    def clean_name(self):
+        title = self.cleaned_data.get('title')
+        if Petition.objects.filter(title=title).exists():
+            raise forms.ValidationError("A petition with this title already exists.")
+        
+        slug = slugify(title)
+        if Petition.objects.filter(slug=slug).exists():
+            raise forms.ValidationError("A petition with this title already exists.")
+        
+        return title
+    
+    # Add help text for name and description fields
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].help_text = "Please enter the petition title you would like to create:"
+        self.fields['decision_maker'].help_text = "Please enter the name of a person or organisation able to help you implement the change you seek"
+        self.fields['goal'].help_text = "Please enter the number of signatures to aim for"
+        self.fields['animals'].help_text = "Please enters animals involved:"
+        self.fields['description'].help_text = "Please give a brief description on the Petition:"
 
 
 class UserListForm(forms.ModelForm):
     class Meta:
         model = UserList
         fields = ['title', 'animals', 'description']
-
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
+        
+    # form validation here
+    def clean_name(self):
+        title = self.cleaned_data.get('title')
+        if UserList.objects.filter(title=title).exists():
+            raise forms.ValidationError("A list with this title already exists.")
+        
+        slug = slugify(title)
+        if UserList.objects.filter(slug=slug).exists():
+            raise forms.ValidationError("A list with this title already exists.")
+        
+        return title
+    
+    # Add help text for name and description fields
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].help_text = "Please enter the list title you would like to create:"
+        self.fields['animals'].help_text = "Please enters animals:"
+        self.fields['description'].help_text = "Please give a brief description on the List:"
 
 
 class EditProfileForm(forms.ModelForm):
