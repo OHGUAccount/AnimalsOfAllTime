@@ -17,7 +17,7 @@ from util.profile_downloader import ProfileDownloader
 class Script:
     # class dedicated to read cli args and run methods
     @classmethod
-    def read_args(cls):
+    def read_args(cls) -> tuple[str, int]:
         actions = {
             'download': 'Download animals and profiles',
             'cleardatabase': 'Clear the database and the files in migrations',
@@ -46,7 +46,7 @@ class Script:
         return sys.argv[1], count
 
     @classmethod
-    def execute(cls, action, count):
+    def execute(cls, action: str, count: int) -> None:
         if action == 'download':
             ProfileDownloader.download(count)
             AnimalDownloader.download(count)
@@ -79,7 +79,7 @@ class Script:
             Database.migrate()
 
     @classmethod
-    def run(cls):
+    def run(cls) -> None:
         action, count = cls.read_args()
         try:
             FileManager.validate_working_directory()

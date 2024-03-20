@@ -1,11 +1,13 @@
 from django import template
 from ..models import UserProfile
 
+
 register = template.Library()
 
 UPVOTE_CLASS = "btn btn-outline-danger border-0";
 DOWNVOTE_CLASS = "btn btn-outline-primary border-0";
 NORMAL_CLASS = "btn btn-outline-secondary border-0";
+
 
 @register.simple_tag(takes_context=True)
 def theme(context):
@@ -15,10 +17,17 @@ def theme(context):
 
 @register.simple_tag(takes_context=True)
 def profile_picture(context):
+    """
+    retrieve the user picture
+    used in the dropdown profile in base/base.html
+    """
     request = context['request']
-    profile = UserProfile.objects.get(user=request.user)
-    if profile.picture:
-        return profile.picture
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+        if profile.picture:
+            return profile.picture
+    except:
+        pass
     return None
 
 @register.simple_tag(takes_context=True)

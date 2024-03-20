@@ -12,9 +12,9 @@ class AnimalDownloader:
     using BeautifulSoup and dividing the workload between threads
 
     Resources used:
-    freeCodeCamp.org: https://youtu.be/XVv6mJpFOb0?si=cY__8rXOFzQ5jdzv
-    John Watson Rooney: https://youtu.be/aA6-ezS5dyY?si=SB2rH5OACNMdiSlX
-    stackoverflow: https://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
+    freeCodeCamp.org, Web Scraping tutorial: https://youtu.be/XVv6mJpFOb0?si=cY__8rXOFzQ5jdzv
+    John Watson Rooney, Parallel Webscraping tutorial: https://youtu.be/aA6-ezS5dyY?si=SB2rH5OACNMdiSlX
+    stackoverflow, save image with request: https://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
     """
     FILES = ["animal.json"]
     FOLDERS = ["media\\animal_images"]
@@ -61,8 +61,8 @@ class AnimalDownloader:
         img_tag = div.find('img')
         img_url = img_tag.get('data-breeze')
         with requests.get(img_url, stream=True) as response:
-            filename = os.path.join('media\\animal_images', os.path.basename(img_url))
-            with open(filename, 'wb') as out_file:
+            full_path = os.path.join('media\\animal_images', os.path.basename(img_url))
+            with open(full_path, 'wb') as out_file:
                 out_file.write(response.content)
             img_path = os.path.join('animal_images', os.path.basename(img_url))
             return img_path
@@ -77,7 +77,8 @@ class AnimalDownloader:
             if name and description:
                 image_path = cls.__save_image(soup)
                 if image_path:
-                    return name, description, image_path
+                    result = (name, description, image_path)
+                    return result
         except:
             pass
         

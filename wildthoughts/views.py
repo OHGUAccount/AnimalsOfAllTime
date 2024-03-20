@@ -48,11 +48,13 @@ class Sorter:
         return choice
 
     @classmethod
-    def sort(cls, choice: str, model: Model, profile: UserProfile = None) -> tuple[str, list[Model]]:
+    def sort_model(cls, choice: str, model: Model, profile: UserProfile = None) -> tuple[str, list[Model]]:
+    
         choice = cls.validate(choice, model)
         field = cls.OPTIONS_ORDER[choice]
 
         if profile:
+            # filter by a profile instance if specified
             results = model.objects.filter(author=profile).order_by(field)
         else:
             results = model.objects.order_by(field)
@@ -130,10 +132,16 @@ class AddAnimalView(View):
     
 
 class ListAnimalsView(View):
+    """
+    return Animals model sorted by parameter sort_by
+    and set up pagination
+
+    Resources used:
+     Codemy.com, Pagination: https://youtu.be/N-PB-HMFmdo?si=JFQX6OpyVV6fLJqR
+    """
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort(sort_by, Animal)
-        # set up pagination
+        sort_by, results = Sorter.sort_model(sort_by, Animal)
         p = Paginator(results, 20)
         page = request.GET.get('page')
         animals = p.get_page(page)
@@ -141,6 +149,7 @@ class ListAnimalsView(View):
     
 
 """------------------------------------------------------------ BASE VIEWS------------------------------------------------------------"""
+# Views at the core of our applications, usually shared between multiple pages/templates
 class IndexView(View):
     def get(self, request):
         overrated_animals = Animal.objects.order_by('-votes')[:5]
@@ -180,6 +189,15 @@ class SearchView(View):
 
 
 class ThemeView(View):
+    """
+    set the cookie for theme which is then used
+    to assign the value for attrbute data-bs-theme in <html>
+    https://getbootstrap.com/docs/5.3/customize/color-modes/#adding-theme-colors
+
+    see:
+    templatetags/wildthoughts theme() for retrieving theme from cookie, used in base/base.html
+    static/js/theme for client side
+    """
     def get(self, request):
         theme = request.GET.get('theme')
         if theme in ['dark', 'light']:
@@ -191,6 +209,14 @@ class ThemeView(View):
         
 
 class VoteView(View):
+    """
+    retrieve the category and id form an ajax request
+    and update the vote
+
+    see:
+    templatetags/wildthoughts render_vote() for rendering vote in templates
+    static/js/vote for client side
+    """
     def update_upvote(self, profile, instance):
         if not instance.upvoted_by.filter(id=profile.id).exists():
             instance.upvoted_by.add(profile)
@@ -229,13 +255,16 @@ class VoteView(View):
 
     def update_vote(self, profile, instance, status):            
         if status == 'upvote':
-            return self.update_upvote(profile, instance)
+            self.update_upvote(profile, instance)
+
         elif status == 'downvote':
-            return self.update_downvote(profile, instance)
+            self.update_downvote(profile, instance)
+
         elif status == 'upvoted':
-            return self.update_upvoted(profile, instance)
+            self.update_upvoted(profile, instance)
+
         elif status == 'downvoted':
-            return self.update_downvoted(profile, instance)
+            self.update_downvoted(profile, instance)
 
     def get(self, request):
         category = request.GET.get('category')
@@ -321,7 +350,7 @@ class AddDiscussionView(View):
 class ListDiscussionView(View):
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort(sort_by, Discussion)
+        sort_by, results = Sorter.sort_model(sort_by, Discussion)
 
         # set up pagination
         p = Paginator(results, 20)
@@ -347,7 +376,7 @@ class UserListView(View):
 class ListUserListView(View):
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort(sort_by, UserList)
+        sort_by, results = Sorter.sort_model(sort_by, UserList)
 
         # set up pagination
         p = Paginator(results, 20)
@@ -380,6 +409,7 @@ class AddUserListView(View):
             print(form.errors)
 
         return render(request, 'wildthoughts/user_list/add_user_list.html', {'animals': animals, 'form': form})
+    
     
 """--------------------------------------------------------- PETITION VIEWS------------------------------------------------------------"""
 class PetitionView(View):
@@ -431,7 +461,7 @@ class SignPetitionView(View):
 class ListPetitionView(View):
     def get(self, request):
         sort_by = request.GET.get('sort_by')
-        sort_by, results = Sorter.sort(sort_by, Petition)
+        sort_by, results = Sorter.sort_model(sort_by, Petition)
 
         if sort_by in ['most_signed', 'least_signed']:
             sort_by = sort_by.replace('_', ' ')
@@ -491,7 +521,7 @@ class ProfileView(View):
             tab = 'animals'
         
         model = ProfileView.TAB_TO_MODEL[tab]
-        sort_by, results = Sorter.sort(sort_by, model, profile)
+        sort_by, results = Sorter.sort_model(sort_by, model, profile)
         
         if sort_by in ['most_signed', 'least_signed']:
             sort_by = sort_by.replace('_', ' ')
@@ -528,6 +558,7 @@ class ListProfileView(View):
         profiles = p.get_page(page)
 
         return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles, 'sort_by':sort_by})
+
 
 class EditProfileView(View):
     @method_decorator(login_required)
