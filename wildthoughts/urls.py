@@ -20,7 +20,7 @@ urlpatterns = [
     # discussion urls
     path('add_discussion/', views.AddDiscussionView.as_view(), name='add_discussion'),
     path('discussions/', views.ListDiscussionView.as_view(), name = "discussions"),
-    path('discussion/', views.DiscussionView.as_view(), name = "discussion"),
+    path('discussion/<slug:discussion_slug>', views.DiscussionView.as_view(), name = "discussion"),
 
     # petition urls
     path('petitions/', views.ListPetitionView.as_view(), name='petitions'),
@@ -31,7 +31,7 @@ urlpatterns = [
     # profile urls
     path('profiles/', views.ListProfileView.as_view(), name='profiles'),
     path('profiles/<slug:username>/', views.ProfileView.as_view(), name='profile'),
-    path('profiles/<slug:username>/update', views.UpdateProfileView.as_view(), name='update_profile'),
+    path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
 
 
     # userlist view

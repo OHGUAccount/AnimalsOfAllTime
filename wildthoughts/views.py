@@ -12,7 +12,7 @@ from django.views import View
 
 from registration.backends.simple.views import RegistrationView
 
-from wildthoughts.forms import AnimalForm, UserListForm, DiscussionForm, PetitionForm
+from wildthoughts.forms import AnimalForm, CommentForm, DiscussionForm, EditProfileForm, UserListForm, PetitionForm
 from wildthoughts.models import Animal, Comment, Discussion, Petition, UserList, UserProfile
 
 
@@ -85,6 +85,14 @@ class Sorter:
         choice = cls.validate(choice, Discussion)
         field = cls.OPTIONS_ORDER[choice]
         results = Discussion.objects.filter(animal=animal).order_by(field)
+
+        return choice, results    
+    
+    @classmethod
+    def sort_discussion_comments(cls, choice, discussion: Discussion) -> tuple[str, list[Model]]:
+        choice = cls.validate(choice, Comment)
+        field = cls.OPTIONS_ORDER[choice]
+        results = Comment.objects.filter(discussion=discussion).order_by(field)
 
         return choice, results    
 
@@ -250,10 +258,33 @@ class VoteView(View):
 
 """------------------------------------------------------- DISCUSSION VIEWS------------------------------------------------------------"""
 class DiscussionView(View):
-    def get(self, request, discussion_name_slug):
-        discussion = Discussion.objects.get(slug=discussion_name_slug)
-        comments = Comment.objects.filter(discussion=discussion)
-        return render(request, 'wildthoughts/discussion/discussion.html', context={'discussion': discussion, 'comments':comments })
+    def get(self, request, discussion_slug):
+        sort_by = request.GET.get('sort_by')
+        discussion = Discussion.objects.get(slug=discussion_slug)
+        sort_by, comments = Sorter.sort_discussion_comments(sort_by, discussion)
+        form = CommentForm()
+
+        context_dict = {
+            'discussion': discussion,
+            'comments':comments,
+            'sort_by': sort_by,
+            'form': form
+        }
+
+        return render(request, 'wildthoughts/discussion/discussion.html', context=context_dict)
+    
+    @method_decorator(login_required)
+    def post(self, request, discussion_slug):
+        form = CommentForm(request.POST)        
+        sort_by = request.GET.get('sort_by', 'newest')
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = UserProfile.objects.get(user=request.user)
+            comment.discussion = Discussion.objects.get(slug=discussion_slug)
+            comment.save()
+
+        return redirect(reverse('wildthoughts:discussion', kwargs={'discussion_slug': discussion_slug}) + '?sort_by=' + sort_by)
 
 
 class AddDiscussionView(View):
@@ -498,12 +529,25 @@ class ListProfileView(View):
 
         return render(request, 'wildthoughts/profile/list_profiles.html', {'profiles':profiles, 'sort_by':sort_by})
 
-class UpdateProfileView(View):
-    def get(self,request, username):
-        p = Paginator(UserProfile.objects.all(), 20)
-        page = request.GET.get('page')
-        profiles = p.get_page(page)
+class EditProfileView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        form = EditProfileForm(instance=profile)
+        return render(request, 'wildthoughts/profile/edit_profile.html', {'form': form})
+    
+    @method_decorator(login_required)
+    def post(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
 
-        return render(request, 'wildthoughts/profile/update_profile.html', {'profiles':profiles})
+        if form.is_valid():
+            profile = form.save()
+            return redirect(reverse('wildthoughts:profile', kwargs={'username': profile.user.username}))
+        else:
+            print(form.errors)
+
+        return render(request, 'wildthoughts/profile/edit_profile.html', {'form': form})
+
 
 

@@ -80,7 +80,7 @@
             <div class="btn-group me-4">
                 {% profile_picture as profile_pic %}
                 {% if profile_pic %}
-                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{{ MEDIA_URL }}{{ profile.pic }}" width="38" height="38">
+                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{{ MEDIA_URL }}{{ profile_pic }}" width="38" height="38">
                 {% else %}
                     <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{% static 'images/defaultprofile.jpg' %}" width="38" height="38">
                 {% endif %}

@@ -20,7 +20,7 @@
                 <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' discussion.author %}">• Posted by {{ discussion.author }}</a></h6>
                 </small>
             </h6>
-            <h5 class="card-title"><a href="{% url 'wildthoughts:animal' discussion.animal.slug %}">{{ discussion.title }}</a></h5>
+            <h5 class="card-title"><a href="{% url 'wildthoughts:discussion' discussion.slug %}">{{ discussion.title }}</a></h5>
             <p class="card-text text-end"><small class="text-muted">{{ discussion.date }}</small></p>
 
         </div>
