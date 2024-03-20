@@ -162,6 +162,7 @@ class IndexView(View):
     
 
 class SearchView(View):
+    # Codemy.com, Search: https://youtu.be/AGtae4L5BbI?si=KSDHD2XQh5S6YceP
     def get(self, request):
         searched = request.GET.get('searched')
         category = request.GET.get('category')
