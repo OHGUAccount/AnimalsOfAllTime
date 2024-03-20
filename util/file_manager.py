@@ -10,12 +10,14 @@ class FileManager:
     MODULES = [AnimalDownloader, Database, ProfileDownloader]
 
     @classmethod
-    def validate_working_directory(cls):
+    def validate_working_directory(cls) -> None:
+        # create folder if they don't exists
         for module in cls.MODULES:
             for folder in module.FOLDERS:
                 os.makedirs(folder, exist_ok=True) 
+                # create an __init__.py
                 init_path = os.path.join(folder, '__init__.py')
-                with open(init_path, 'a') as f:
+                with open(init_path, 'a') as f: 
                     pass
 
     @classmethod
@@ -24,6 +26,8 @@ class FileManager:
             if os.path.exists(file):
                 os.remove(file)
 
+        # remove all files and folders in a directory
+        # except __init__.py
         for folder in module.FOLDERS:
             init_path = os.path.join(folder, '__init__.py')
             for item in os.listdir(folder):
@@ -39,6 +43,6 @@ class FileManager:
             Database.migrate()
 
     @classmethod
-    def clear_all(cls):
+    def clear_all(cls) -> None:
         for module in cls.MODULES:
             cls.clear(module)

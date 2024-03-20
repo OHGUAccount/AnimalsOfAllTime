@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from wildthoughts.models import Animal, Comment, Discussion, Petition, UserList, UserProfile
+from wildthoughts.models import Animal, Discussion, Petition, UserList, UserProfile
 
 # Create your tests here.
 # Models
@@ -116,20 +116,12 @@ class ListAnimalsViewTests(TestCase):
         self.assertQuerysetEqual(response.context['animals'], [])
 
 
-class DiscussionViewTests(TestCase):
-    pass
-
-
 class ListDiscussionsViewTests(TestCase):
     def test_view_with_no_discussions(self):
         response = self.client.get(reverse('wildthoughts:discussions'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'There are no discussions yet...')
         self.assertQuerysetEqual(response.context['discussions'], [])
-
-
-class PetitionViewTests(TestCase):
-    pass
 
 
 class ListPetitionsViewTests(TestCase):

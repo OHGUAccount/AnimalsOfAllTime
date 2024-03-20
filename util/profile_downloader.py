@@ -5,6 +5,10 @@ import requests
 
 
 class ProfileDownloader:
+    """
+    class dedicated to call https://randomuser.me/ api and generate
+    random profiles. Work in a similiar way to AnimalDownloader
+    """
     FILES = ["profile.json"]
     FOLDERS = ["media\\profile_images"]
 
@@ -22,14 +26,14 @@ class ProfileDownloader:
     def __save_image(cls, entry) -> str:
         img_url = entry['picture']['large']
         with requests.get(img_url, stream=True) as response:
-            filename = os.path.join('media\\profile_images', os.path.basename(img_url))
-            with open(filename, 'wb') as out_file:
+            full_path = os.path.join('media\\profile_images', os.path.basename(img_url))
+            with open(full_path, 'wb') as out_file:
                 out_file.write(response.content)
             img_path = os.path.join('profile_images', os.path.basename(img_url))
             return img_path
         
     @classmethod
-    def __get_data(cls, entry) -> tuple[str, str, str]:
+    def __get_data(cls, entry) -> tuple[str, str, str, str]:
         try:
             username = entry['login']['username']
             email = entry['email']
@@ -37,7 +41,8 @@ class ProfileDownloader:
             if username and password:
                 image_path = cls.__save_image(entry)
                 if image_path:
-                    return username, email, password, image_path
+                    result = (username, email, password, image_path)
+                    return result
         except:
             pass
         
