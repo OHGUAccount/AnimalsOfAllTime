@@ -34,6 +34,14 @@ class AnimalForm(forms.ModelForm):
         self.fields['picture'].help_text = "Upload a picture of your added animal:"
         
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+
+    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), label='')
+
+
 class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Discussion
@@ -91,7 +99,7 @@ class UserListForm(forms.ModelForm):
         }
 
 
-class UserUpdateForm(forms.ModelForm):
+class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['picture', 'description']

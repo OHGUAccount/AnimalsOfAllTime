@@ -25,14 +25,14 @@
             <div>
                 <!-- BIO -->
                 {% if profile.description %}
-                <h3><strong>Bio</strong></h3>
+                <p>{{ profile.description }}</p>
                 {% endif %}
                 {% if profile.user == loguser %}
                 <p>
                     <form method="post" action="." enctype="multipart/form-data">
 
                         <div class="d-grid gap-2 col-6">
-                            <a href="{% url 'wildthoughts:update_profile' profile %}" class="btn btn-outline-secondary" role="button" >Update</a>
+                            <a href="{% url 'wildthoughts:edit_profile' %}" class="btn btn-outline-secondary" role="button" >Edit Profile</a>
                             <a href="{% url 'auth_password_change' %}" class="btn btn-outline-secondary" role="button" >Change Password</a>
                             <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
                         </div>
@@ -117,6 +117,7 @@
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->
+    {% include "wildthoughts/widget/comment_widget.html" with comments=results profile=user_profile %}
 
     {% elif tab == 'petitions' %}
     {% include "wildthoughts/widget/petition_widget.html" with petitions=results profile=user_profile %}

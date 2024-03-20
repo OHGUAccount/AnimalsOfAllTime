@@ -38,7 +38,7 @@ It will take some time, so please be patient.
 ### Forms
 - [x] Login/Registration
 - [x] Add Animal
-- [ ] Add Comment
+- [x] Add Comment
 - [x] Add Discussion
 - [x] Add Petition
 - [x] Add List
