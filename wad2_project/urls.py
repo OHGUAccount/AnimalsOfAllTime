@@ -26,5 +26,4 @@ urlpatterns = [
     path('wildthoughts/', include('wildthoughts.urls')),
     path('accounts/register/', views.NewRegistrationView.as_view(), name='registration_register'),
     path('accounts/', include('registration.backends.simple.urls')),
-    path('select2/', include('select2.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

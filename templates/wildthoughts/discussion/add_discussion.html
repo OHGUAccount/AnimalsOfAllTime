@@ -13,20 +13,18 @@
 <!-- FORM -->
 	<div class="d-grid gap-2 col-sm-6 mx-auto">
 		<form id="discussion_form" method="post" action="{% url 'wildthoughts:add_discussion' %}" enctype="multipart/form-data">
+		<center>
 			{% csrf_token %}
 			{% for hidden in form.hidden_fields %}
-			{{ hidden }}
-		{% endfor %}
-		{% for field in form.visible_fields %}
-		{{ field.errors }}
-		{{ field.help_text }}
-		{% if field.name == 'picture' %}
-			{{ field }}
-		{% else %}
-		<br>{{ field }}
-		{% endif %}
-		<br>
-		{% endfor %}
+				{{ hidden }}
+			{% endfor %}
+			{% for field in form.visible_fields %}
+			{{ field.errors }}
+			{{ field.help_text }}
+			<br>{{ field }}<br>
+			{% endfor %}
+		</center>
+	<br>
 	</div>
 	<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Discussion" />
 	</form>

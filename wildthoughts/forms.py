@@ -69,6 +69,7 @@ class DiscussionForm(forms.ModelForm):
         self.fields['title'].help_text = "Please enter the Discussion title you would like to create:"
         self.fields['animal'].help_text = "Please select Animal:"
         self.fields['description'].help_text = "Please give a brief description on the Discussion:"
+        self.fields['picture'].help_text = "Upload a picture for your discussion:"
 
 
 class PetitionForm(forms.ModelForm):
@@ -102,6 +103,7 @@ class PetitionForm(forms.ModelForm):
         self.fields['goal'].help_text = "Please enter the number of signatures to aim for"
         self.fields['animals'].help_text = "Please enters animals involved:"
         self.fields['description'].help_text = "Please give a brief description on the Petition:"
+        self.fields['picture'].help_text = "Upload a picture for your petition:"
 
 
 class UserListForm(forms.ModelForm):

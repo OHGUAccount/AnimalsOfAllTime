@@ -10,20 +10,18 @@
 
 <form id="animal_form" method="post" action="{% url 'wildthoughts:add_animal' %}" enctype="multipart/form-data">
 <div class="d-grid gap-2 col-sm-6 mx-auto">
-	{% csrf_token %}
-	{% for hidden in form.hidden_fields %}
-		{{ hidden }}
-	{% endfor %}
-	{% for field in form.visible_fields %}
-    {{ field.errors }}
-    {{ field.help_text }}
-    {% if field.name == 'picture' %}
-        {{ field }}
-    {% else %}
-    <br>{{ field }}
-    {% endif %}
-	<br>
-	{% endfor %}
+    <center>
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+        {{ field.errors }}
+        {{ field.help_text }}
+        <br>{{ field }}<br>
+        {% endfor %}
+    </center>
+    <br>
 	<input class="btn btn-primary btn-lg" type="submit" name="submit" value="Add Animal" />
 </div>
 </form>

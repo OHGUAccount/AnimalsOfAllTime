@@ -10,7 +10,7 @@
 
 {% profile as user_profile %}
 
-<div class="d-grid gap-2 col-sm-6 mx-auto">
+<div class="d-grid gap-2 col-sm-6 mx-auto p-2">
     <div class="d-flex">
     <div class="d-flex flex-column mx-3 align-items-center">
         {% render_vote 'discussions' discussion user_profile %}
@@ -33,11 +33,11 @@
             {% if discussion.picture %}
             <img src="{{ MEDIA_URL }}{{ discussion.picture }}" class="img-fluid rounded" width="615" height="410" alt="{{ discussion.title }}'s image" >
             {% endif %}
+            <p class="card-text text-end"><small class="text-muted">{{ discussion.date }}</small></p>
         </div>
-    
     </div>
 
-    <div class="p-4">
+    <div>
         <form method="POST" action="{% url 'wildthoughts:discussion' discussion.slug %}?sort_by={{ sort_by }}">
             {% csrf_token %}
             {{ form.as_p }}
