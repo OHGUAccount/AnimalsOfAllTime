@@ -39,9 +39,6 @@ class FileManager:
                 else:
                     shutil.rmtree(item_path)
 
-        if module is Database:
-            Database.migrate()
-
     @classmethod
     def clear_all(cls) -> None:
         for module in cls.MODULES:

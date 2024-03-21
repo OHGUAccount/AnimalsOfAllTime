@@ -12,10 +12,10 @@ conda activate wildthoughts
 pip install -r requirements.txt
 ```
 ``` shell
-script.py all
+python script.py database
 ```
 ``` shell
-manage.py runserver
+python manage.py runserver
 ```
 It will take some time, so please be patient.
 
