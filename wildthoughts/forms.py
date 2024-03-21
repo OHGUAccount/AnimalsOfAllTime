@@ -140,7 +140,12 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['picture', 'description']
-
         widgets = {
             'description': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+    # Add help text for name and description fields
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['picture'].help_text = "Please enter new profile picture:"
+        self.fields['description'].help_text = "Please enter new bio:"
