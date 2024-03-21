@@ -160,8 +160,6 @@ cython_debug/
 #.idea/
 
 # wildthoughts stuff:
-media/**/*
-!media/**/
 wildthoughts/migrations
 animal.json
 profile.json
