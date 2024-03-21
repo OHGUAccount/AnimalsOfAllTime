@@ -14,16 +14,22 @@
 <div class="d-grid gap-2 col-sm-6 mx-auto">
 <form method="POST">
     {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add List" />
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+	{% for field in form.visible_fields %}
+    {{ field.errors }}
+    {{ field.help_text }}
+    {% if field.name == 'picture' %}
+        {{ field }}
+    {% else %}
+    <br>{{ field }}
+    {% endif %}
+	<br>
+	{% endfor %}
 </div>
+<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add List" />
 </div>
 </form>
 
-{% endblock %}
-
-{% block script_block %}
-<script type="text/javascript">
-    $('#id_animals').select2();
-</script>
 {% endblock %}

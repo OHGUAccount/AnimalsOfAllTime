@@ -11,7 +11,6 @@
     <h3>Add a new discussion here!</h3>
 
 <!-- FORM -->
-<div class="container">
 	<div class="d-grid gap-2 col-sm-6 mx-auto">
 		<form id="discussion_form" method="post" action="{% url 'wildthoughts:add_discussion' %}" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -19,25 +18,27 @@
 			{{ hidden }}
 		{% endfor %}
 		{% for field in form.visible_fields %}
-			{{ form.errors }}
-			{{ field.help_text }}
-			<br>{{ field }}
+		{{ field.errors }}
+		{{ field.help_text }}
+		{% if field.name == 'picture' %}
+			{{ field }}
+		{% else %}
+		<br>{{ field }}
+		{% endif %}
 		<br>
 		{% endfor %}
-		<input class="btn btn-primary btn-lg" type="submit" name="submit" value="Add Discussion" />
 	</div>
+	<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Discussion" />
 	</form>
-</div>	
 </div>
 {% endblock %}
 
+{% if animal_id %}
 {% block script_block %}
 <script type="text/javascript">
-
 	$(document).ready(function() {
-		$('#id_animal').select2();
 		$('#id_animal').val({{ animal_id }}).trigger('change');
 	});
-
 </script>
 {% endblock %}
+{% endif %}

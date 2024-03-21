@@ -333,7 +333,7 @@ class AddDiscussionView(View):
         
     @method_decorator(login_required)
     def post(self, request):
-        form = DiscussionForm(request.POST)
+        form = DiscussionForm(request.POST, request.FILES)
 
         if form.is_valid():
             discussion = form.save(commit=False)

@@ -24,6 +24,9 @@
             {% endif %}
             <a href="{% url 'wildthoughts:profile' user_list.author %}">{{ user_list.author }}</a>
         </h3>
+        {% if user_list.description %}
+        <p>{{ user_list.description }}</p>
+        {% endif %}
     </div>
 </div>
 
