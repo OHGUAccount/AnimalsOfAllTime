@@ -137,6 +137,8 @@ class UserListForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
+    name = forms.CharField(max_length=255, help_text="Please enter new profile name:")
+
     class Meta:
         model = UserProfile
         fields = ['picture', 'description']
@@ -144,8 +146,15 @@ class EditProfileForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
-    # Add help text for name and description fields
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['picture'].help_text = "Please enter new profile picture:"
         self.fields['description'].help_text = "Please enter new bio:"
+
+    def save(self, commit=True):
+        user_profile = super().save(commit=False)
+        if commit:
+            user_profile.user.username = self.cleaned_data['name']
+            user_profile.user.save()
+            user_profile.save()
+        return user_profile

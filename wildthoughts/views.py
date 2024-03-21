@@ -575,6 +575,8 @@ class EditProfileView(View):
 
         if form.is_valid():
             profile = form.save()
+            
+            updated_username = form.cleaned_data['name']
             return redirect(reverse('wildthoughts:profile', kwargs={'username': profile.user.username}))
         else:
             print(form.errors)
