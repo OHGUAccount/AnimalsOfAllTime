@@ -30,7 +30,7 @@ with open(KEY_PATH) as f:
 SECRET_KEY = key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['wildthoughts.pythonanywhere.com', 'localhost', '127.0.0.1']
 
