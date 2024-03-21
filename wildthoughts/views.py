@@ -341,7 +341,7 @@ class AddDiscussionView(View):
             discussion.author = author
             discussion.slug = slugify(discussion.title)
             discussion.save()
-            return redirect(reverse('wildthoughts:animal', kwargs={'animal_name_slug': discussion.animal.slug}))
+            return redirect(reverse('wildthoughts:discussion', kwargs={'discussion_slug': discussion.slug}))
         else:
             print(form.errors)
 
@@ -405,7 +405,7 @@ class AddUserListView(View):
             user_list.author = author
             user_list.save()
             form.save_m2m() 
-            return redirect(reverse('wildthoughts:lists'))
+            return redirect(reverse('wildthoughts:list', kwargs={'user_list_slug': user_list.slug}))
         else:
             print(form.errors)
 
@@ -493,7 +493,7 @@ class AddPetitionForm(View):
             petition.author = author
             petition.save()
             form.save_m2m() 
-            return redirect(reverse('wildthoughts:petitions'))
+            return redirect(reverse('wildthoughts:petition', kwargs={'petition_slug': petition.slug}))
         else:
             print(form.errors)
 
