@@ -53,19 +53,21 @@ class Script:
 
         elif action == 'cleardatabase':
             FileManager.clear(Database)
+            Database.migrate()
 
         elif action == 'clear':
             FileManager.clear_all() 
-
-        elif action == 'populate':
-            Database.populate()
+            Database.migrate()
 
         elif action == 'migrate':
             Database.migrate()
 
-        elif action == 'database':
+        elif action == 'populate':
             Database.populate()
+
+        elif action == 'database':
             Database.migrate()
+            Database.populate()
         
         elif action == 'all':
             FileManager.clear_all()
@@ -75,8 +77,8 @@ class Script:
 
             Database.animal_dict = animal_dict
             Database.profile_dict = profile_dict
-            Database.populate()
             Database.migrate()
+            Database.populate()
 
     @classmethod
     def run(cls) -> None:
