@@ -161,6 +161,4 @@ cython_debug/
 
 # wildthoughts stuff:
 wildthoughts/migrations
-animal.json
-profile.json
 traceback.txt
