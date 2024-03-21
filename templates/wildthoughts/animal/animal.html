@@ -27,13 +27,14 @@
             <img src="{% static 'images/default_animal.png' %}" class="img-fluid rounded" width="615" height="410" alt="{{ animal.name }}'s image">
             {% endif %}
     </div>
-
+        {% if animal.description %}
         <div>
             <h3><strong>Description</strong></h3>
             <p>
                 {{ animal.description }}
             </p>
         </div>
+        {% endif %}
         <div class="text-center p-4">
             <h3><strong>Discussions</strong></h3>
         </div>     
