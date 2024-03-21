@@ -11,7 +11,7 @@
                     {% if petition.picture %}
                     <img src="{{ MEDIA_URL }}{{ petition.picture }}" class="col-md-4 rounded w-100" width="230" height="230" alt="{{ petition.title }}'s image">
                     {% else %}
-                    <img src="{% static 'images/defaultprofile.jpg' %}" class="col-md-4 rounded w-100" width="230" height="230"  alt="{{ petition.title }}'s image">
+                    <img src="{% static 'images/default_petition.png' %}" class="col-md-4 rounded w-100" width="230" height="230"  alt="{{ petition.title }}'s image">
                     {% endif %}
                 </div>
 

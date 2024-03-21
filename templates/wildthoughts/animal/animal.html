@@ -21,7 +21,11 @@
             <div class="d-flex flex-column align-items-center border">
                 {% render_vote 'animals' animal user_profile %}
             </div>
+            {% if animal.picture %}
             <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ animal.picture }}" width="615" height="410" alt="{{ animal.name }}'s image" />
+            {% else %}
+            <img src="{% static 'images/default_animal.png' %}" class="img-fluid rounded" width="615" height="410" alt="{{ animal.name }}'s image">
+            {% endif %}
     </div>
 
         <div>
