@@ -152,8 +152,8 @@ class ListAnimalsView(View):
 # Views at the core of our applications, usually shared between multiple pages/templates
 class IndexView(View):
     def get(self, request):
-        overrated_animals = Animal.objects.order_by('-votes')[:5]
-        underrated_animals = Animal.objects.order_by('votes')[:5]
+        overrated_animals = Animal.objects.order_by('votes')[:5]
+        underrated_animals = Animal.objects.order_by('-votes')[:5]
         context_dict = {
             'overrated_animals': overrated_animals,
             'underrated_animals': underrated_animals
