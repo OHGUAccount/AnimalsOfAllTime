@@ -13,9 +13,11 @@
         <div class="d-flex flex-column mx-3 align-items-center">
             {% render_vote 'animals' animal profile %}
         </div>
-
+        {% if animal.picture %}
             <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded m-3" width=150 height=90 alt="{{ animal.name }}'s image">
-
+        {% else %}
+            <img src="{% static 'images/default_animal.png' %}" class="rounded m-3" width=150 height=90 alt="{{ animal.name }}'s image">
+        {% endif %}
             <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">
