@@ -1,0 +1,59 @@
+{% load staticfiles %}
+
+<div class="col-12 mx-auto">
+
+    <div class="list-group">
+        {% for petition in petitions %}
+        <div class="card mb-3 w-100">
+            <div class="row g-0">
+
+                <div class="col-md-4">
+                    {% if petition.picture %}
+                    <img src="{{ MEDIA_URL }}{{ petition.picture }}" class="col-md-4 rounded w-100" width="230" height="230" alt="{{ petition.title }}'s image">
+                    {% else %}
+                    <img src="{% static 'images/defaultprofile.jpg' %}" class="col-md-4 rounded w-100" width="230" height="230"  alt="{{ petition.title }}'s image">
+                    {% endif %}
+                </div>
+
+                <div class="col-md-8 card">
+
+                    <h5 class="card-title m-3"><a href="{% url 'wildthoughts:petition' petition.slug %}">{{ petition.title }}</a></h5>
+
+                    <div class="card-text ms-3 mb-auto">
+                        <h6 class="card-subtitle mb-2 text-body-secondary">By 
+                            {% if petition.author.picture %}
+                            <img src="{{ MEDIA_URL }}{{ petition.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                            {% else %}
+                            <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                            {% endif %}
+                            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' petition.author.user.username %}">
+                                {{ petition.author.user.username }}
+                            </a>
+                        </h6>
+                        {% if petition.decision_maker %}
+                        <h6 class="card-subtitle mb-2 text-body-secondary">To {{ petition.decision_maker }}</h6>
+                        {% endif %}
+                        <p>{{ petition.description|truncatechars:300 }}</p>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between w-100">
+                        {% if petition.signatures == petition.goal %}
+                        <h6 class="card-subtitle text-body-secondary">Goal Reached!</h6>
+                        {% else %}
+                        <h6 class="card-subtitle text-body-secondary">{{ petition.signatures}} Signatures</h6>
+                        {% endif %}
+                        <h6 class="card-subtitle text-body-secondary">{{ petition.date }}</h6>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="container">
+            <div class="text-center p-4">
+            <strong>There are no petitions yet...</strong>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

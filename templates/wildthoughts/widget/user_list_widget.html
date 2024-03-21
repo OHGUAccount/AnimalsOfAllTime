@@ -1,0 +1,45 @@
+{% load staticfiles %}
+{% load wildthoughts_tags %}
+
+{% for user_list in user_lists %}
+{% with animals=user_list.animals.all %}
+<div class="col d-flex justify-content-start">
+    <div class="d-flex flex-column align-items-center border mb-4">
+        {% render_vote 'lists' user_list profile %}
+    </div>
+    <div class="card mb-4 flex-fill">
+        <div class="card-header">
+            <div>
+                <h5 class="card-title ms-2"><a href="{% url 'wildthoughts:list' user_list.slug %}">{{ user_list.title }}</a></h5>
+                <div class="d-flex justify-content-between card-subtitle mb-2 text-body-secondary ms-2">
+                    {% with count=animals.count %}
+                    <i class="bi bi-list-ol"> {{ count }} animal{{ count|pluralize }}</i>
+                    {% endwith %}
+                    <h6 class="card-subtitle mb-2 text-muted">
+                    {% if user_list.author.picture %}
+                    <img src="{{ MEDIA_URL }}{{ user_list.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                    {% else %}
+                    <img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                    {% endif %}
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' user_list.author %}">{{ user_list.author }} - {{ user_list.date }}</a>
+                    </h6>
+                </div>
+            </div>                 
+        </div>                
+        <ul class="list-group">
+            {% for animal in animals|slice:"3" %}
+            <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
+                <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                {{ animal.name }}</a>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endwith %}
+{% empty %}
+<div class="container">
+    <div class="text-center p-4">
+    <strong>There are no lists yet...</strong>
+    </div>
+</div>
+{% endfor %}

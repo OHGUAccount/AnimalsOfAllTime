@@ -1,56 +1,69 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block title_block %}
 {{profile.user.username}}
 {% endblock %}
 {% block body_block %}
+
+{% profile as user_profile %}
+
 <div class="container">
     <div class="row">
 
+        <!-- PROFILE PICTURE -->
         <div class="col-12 col-md-4">
+            <center>
             {% if profile.picture %}
-            <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
+            <img class="rounded-circle" src="{{ MEDIA_URL }}{{ profile.picture }}"  width="260px" height="260px" alt="{{ profile.user.username }}'s Profile Picture">
             {% else %}
-            <img class="img-fluid rounded-circle" src="{% static 'images/defaultprofile.jpg' %}" width="260px" height="260px" alt="No Profile Photo" />
+            <img class="rounded-circle" src="{% static 'images/defaultprofile.jpg' %}" width="260px" height="260px" alt="No Profile Photo" />
             {% endif %}
             <h2>{{ profile.user.username }}</h2>
             <br />
             <div>
-                <h3><strong>Bio</strong></h3>
+                <!-- BIO -->
+                {% if profile.description %}
+                <p>{{ profile.description }}</p>
+                {% endif %}
+                {% if profile.user == loguser %}
                 <p>
-                    {{ profile.user.description|default:"No bio provided" }}
-                    {{ profile.user.picture }}
-                    {% if profile.user == loguser %}
-                        <form method="post" action="." enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <div class="d-grid gap-2 col-6">
-                                <button type="button" class="btn btn-outline-secondary" type="submit" value="Update">Update</button>
-                                <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
-                            </div>
-                        </form>
-                    {% endif %}
+                    <form method="post" action="." enctype="multipart/form-data">
+
+                        <div class="d-grid gap-2 col-6">
+                            <a href="{% url 'wildthoughts:edit_profile' %}" class="btn btn-outline-secondary" role="button" >Edit Profile</a>
+                            <a href="{% url 'auth_password_change' %}" class="btn btn-outline-secondary" role="button" >Change Password</a>
+                            <a href="{% url 'auth_logout' %}" class="btn btn-outline-danger" role="button" aria-disabled="true">Logout</a>
+                        </div>
+                    </form>
                 </p>
+                {% endif %}
             </div>
+            </center>
         </div>
 
+    <!-- TAB NAVIGATION -->
     <div class="col-12 col-md-8">
         <ul class="nav nav-underline">
             <li class="nav-item">
                 <a class="nav-link" id="animals" aria-current="page" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=animals&sort_by=newest">Authored Animals</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" id="discussions" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=discussions&sort_by=newest">Discussions</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="comments" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=comments&sort_by=newest">Comments</a>
-                </li>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lists" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=lists&sort_by=newest">Lists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="petitions" href="{% url 'wildthoughts:profile' profile.user.username %}?tab=petitions&sort_by=newest">Petitions</a>
+            </li>
         </ul>
 
+        <!-- SORT BY -->
         <div class="d-flex flex-row justify-content-end mb-3">
             <h5 class="me-3">Sort by: </h5>
             <div class="dropdown">
@@ -69,71 +82,45 @@
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=newest">Newest</a></li>
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=oldest">Oldest</a></li>
                 <li><hr class="dropdown-divider"></li>
+                {% if tab == 'petitions'%}
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=most_signed">Most Signed</a></li>
+                <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=least_signed">Least Signed</a></li>                
+                {% else %}
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=overrated">Overrated</a></li>
                 <li><a class="dropdown-item" href="{% url 'wildthoughts:profile' profile.user.username %}?tab={{ tab }}&sort_by=underrated">Underrated</a></li>
+                {% endif %}
                 </ul>
             </div>
+
+            {% if profile.user == loguser %}
+            {% if tab == 'animals' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_animal' %}" role="button">Add Animal</a>
+            {% elif tab == 'discussions' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_discussion' %}" role="button">Add Discussion</a>
+            {% elif tab == 'lists' %}
+            <a class="btn btn-success ms-2" href="{% url 'wildthoughts:add_list' %}" role="button">Add List</a>
+            {% elif tab == 'petitions' %}
+            <a class="btn btn-success ms-3" href="{% url 'wildthoughts:add_petition' %}" role="button">Add Petition</a>
+            {% endif %}
+            {% endif %}
         </div>
 
+    <!-- RESULTS -->
     {% if tab == 'animals' %}
-    {% for animal in results %}
-    <div class="card">
-        <div class="row g-0">
-            <div class="col-2 text-center">
-                <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-                <h4>{{ animal.upvotes }}</h4>
-                <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
-            </div>
-            <div class="col-4">
-                <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
-            </div>
-            <div class="col-6">
-                <div class="card-body">
-                    <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
-                    </h6>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+    {% include "wildthoughts/widget/animal_widget.html" with animals=results profile=user_profile %}
 
     {% elif tab == 'lists' %}
-    {% for user_list in results %}
-    {% with animals=user_list.animals.all %}
-    <div class="col d-flex justify-content-start">
-        <div class="d-flex flex-column align-items-center border mb-4">
-            <button type="button" class="upvote" id="upvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-up"></i></button>
-            <h6>{{ user_list.upvotes }}</h6>
-            <button type="button" class="downvote" id="downvote_{{ user_list.id }}" data-animalid="{{ user_list.id }}"><i class="bi bi-chevron-down"></i></button>
-        </div>
-        <div class="card mb-4 flex-fill">
-            <div class="card-header">
-                <div>
-                    <h5 class="card-title ms-2">{{ user_list.title }}</h5>
-                    <div class="card-subtitle mb-2 text-body-secondary ms-2">
-                        <i class="bi bi-list-ol"></i> {{ animals.count }} animals
-                    </div>
-                </div>                 
-            </div>                
-            <ul class="list-group">
-                {% for animal in animals|slice:"3" %}
-                <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
-                    <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
-                    {{ animal.name }}</a>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    {% endwith %}
-    {% endfor %}
+    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results profile=user_profile %}
 
     {% elif tab == 'discussions' %}
-    <!-- Insert discussions widget here -->
+    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results profile=user_profile %}
 
     {% elif tab == 'comments' %}
     <!-- Insert comments widget here -->
+    {% include "wildthoughts/widget/comment_widget.html" with comments=results profile=user_profile show_discussion=True %}
+
+    {% elif tab == 'petitions' %}
+    {% include "wildthoughts/widget/petition_widget.html" with petitions=results profile=user_profile %}
 
     {% endif %}
     

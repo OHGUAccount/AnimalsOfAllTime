@@ -1,16 +1,21 @@
 #  WildThoughts
 
 ## Instructions
-1. Activate your virtual environment
-2. Run in your terminal:
+Run the following commands in your terminal:
+``` shell
+conda create --name wildthoughts python=3.9.18
+```
+``` shell
+conda activate wildthoughts
+```
 ``` shell
 pip install -r requirements.txt
 ```
 ``` shell
-script.py clear
+script.py all
 ```
 ``` shell
-script.py all
+manage.py runserver
 ```
 It will take some time, so please be patient.
 
@@ -19,38 +24,54 @@ It will take some time, so please be patient.
 - [x] Animal
 - [x] Discussion
 - [x] Comment
+- [x] Petitions
 - [x] Profile
 - [x] User List
 - [x] Population Script
 ### Pages
 - [x] Index
-- [ ] Animal
-- [x] Overrated Animals
-- [x] Underrated Animals
+- [x] Animal
+- [x] Discussion
+- [x] Petition
 - [x] Profile
-- [ ] List Profiles
-- [x] User lists
+- [x] UserList
+- [x] List Animals
+- [x] List Discussion
+- [x] List Petitions
+- [x] List Profiles
+- [x] List UserLists
 ### Forms
 - [x] Login/Registration
 - [x] Add Animal
+- [x] Add Comment
+- [x] Add Discussion
+- [x] Add Petition
 - [x] Add List
-- [ ] Add Discussion
-- [ ] Add Comment
 ### Features
 - [x] Dark Mode
 - [x] Search
 - [x] Sorting Animals, Lists
-- [ ] Upvote / Downvote
+- [x] Upvote / Downvote
 ### Testing
-- [ ] Models
-- [ ] Views
-
-## Styling guides
-It would be appropriate but not necessary to follow these style guides to make your code readable and development easier for others.
-- Git Commits: https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
-- Python:      https://peps.python.org/pep-0008/#descriptive-naming-styles
+- [x] Models
+- [x] Views
 
 ## Acknowledgements
-The project uses https://animalcorner.org/animals/ data for testing purposes only.
 
-Some code was taken from https://getbootstrap.com/docs/5.3/getting-started/introduction/ and modified to meet the needs of the project.
+This project has been made possible with the help of numerous resources:
+
+### Backend
+- Data for animals was obtained from [Animal Corner](https://animalcorner.org/animals/).
+- Profile data was obtained from [Random User Generator](https://randomuser.me/).
+- Codemy.com's [Search tutorial](https://youtu.be/AGtae4L5BbI?si=KSDHD2XQh5S6YceP).
+- Codemy.com's [Pagination tutorial](https://youtu.be/N-PB-HMFmdo?si=JFQX6OpyVV6fLJqR).
+- freeCodeCamp.org's [Web Scraping tutorial](https://youtu.be/XVv6mJpFOb0?si=cY__8rXOFzQ5jdzv).
+- John Watson Rooney's [Parallel Web Scraping tutorial](https://youtu.be/aA6-ezS5dyY?si=SB2rH5OACNMdiSlX).
+- StackOverFlow's [save images with requests](https://stackoverflow.com/questions/13137817/how-to-download-image-using-requests).
+
+### Frontend
+- The website's design drew inspiration from Change.org, Github, and Reddit.
+- StackOverFlow's [Bootstrap popover image as content](https://stackoverflow.com/questions/13604144/bootstrap-popover-image-as-content).
+- Bootstrap 5 [documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/).
+- mortezafs [select2-bootstrap5-theme](https://github.com/mortezafs/select2-bootstrap5-theme).
+- ByteGrad's [Bootstrap 5 footer tutorial](https://www.youtube.com/watch?v=4UT2r2MAJKY).

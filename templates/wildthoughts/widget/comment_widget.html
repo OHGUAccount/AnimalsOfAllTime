@@ -1,0 +1,43 @@
+{% load staticfiles %}
+{% load wildthoughts_tags %}
+
+{% for comment in comments %}
+<div class="card">
+    <div class="d-flex">
+    <div class="d-flex flex-column mx-3 align-items-center">
+        {% render_vote 'comments' comment profile %}
+    </div>
+
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">
+            {% if show_discussion %}
+                {% if comment.discussion.animal.picture %}
+                <img src="{{ MEDIA_URL }}{{ comment.discussion.animal.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                {% else %}
+                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                {% endif %}
+                <a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover" href="{% url 'wildthoughts:animal' comment.discussion.animal.slug %}">{{ comment.discussion.animal.name }}</a>
+                <small>
+                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:discussion' comment.discussion.slug %}">• {{ comment.discussion.title }}</a>
+                </small>
+            {% else %}
+                {% if comment.author.picture %}
+                <img src="{{ MEDIA_URL }}{{ comment.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
+                {% else %}
+                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                {% endif %}
+                <a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover" href="{% url 'wildthoughts:profile' comment.author.user.username %}">{{ comment.author.user.username }}</a>
+            {% endif %}
+            </h6>
+            <p class="card-text">{{ comment.content }}</p>
+            <p class="card-text text-end"><small class="text-muted">{{ comment.date }}</small></p>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="container">
+    <div class="text-center p-4">
+    <strong>There are no comments yet...</strong>
+    </div>
+    </div>
+{% endfor %} 

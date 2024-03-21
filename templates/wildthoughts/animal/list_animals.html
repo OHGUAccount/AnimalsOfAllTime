@@ -1,7 +1,10 @@
-{% extends 'wildthoughts/base/base.html' %}{% block title_block %}
+{% extends 'wildthoughts/base/base.html' %}
+{% block title_block %}
 Animals
 {% endblock %}
+
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
 {% block body_block %}
 <div class="text-center p-4">
@@ -21,11 +24,7 @@ Animals
         <h5 class="me-3">Sort by: </h5>
         <div class="dropdown">
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                {% if sort_by %}
                 {{ sort_by|title }} 
-            {% else %}
-                Name
-            {% endif %}
             </a>
             
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -44,62 +43,12 @@ Animals
         {% endif %}
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-5">
-
-    {% if animals %}
-        {% for animal in animals %}
-        <div class="col">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-2 text-center">
-                            <button type="button" class="upvote" id="upvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-up"></i></button>
-                            <h4>{{ animal.upvotes }}</h4>
-                            <button type="button" class="downvote" id="downvote_{{ animal.id }}" data-animalid="{{ animal.id }}"><i class="bi bi-chevron-down"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="img-fluid rounded m-3" width=150 height=100  alt="{{ animal.name }}'s image">
-                        </div>
-                        <div class="col-6">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{% url 'wildthoughts:animal' animal.slug %}">{{ animal.name }}</a></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    {% if animal.author.picture %}
-                                    <img src="{{ MEDIA_URL }}{{ animal.author.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% else %}
-                                    <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
-                                    {% endif %}
-                                    <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'wildthoughts:profile' animal.author %}">{{ animal.author }}</a></h6>
-                                    <p class="card-text text-end"><small class="text-muted">{{ animal.date }}</small></p>
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        {% endfor %} 
-
-    {% else %}
-    <strong>There are no animals present.</strong>
-    {% endif %}
-
+    <div class="row row-cols-1 row-cols-lg-2 g-5">
+        {% profile as user_profile %}
+        {% include "wildthoughts/widget/animal_widget.html" with animals=animals col='true' profile=user_profile %}
     </div>
 
-    <nav class="d-flex justify-content-end mt-4" aria-label="Page navigation animals">
-        <ul class="pagination">
-        {% if animals.has_previous %}
-            <li class=page-item><a class="page-link" href="?page=1&sort_by={{ sort_by }}">« First</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ animals.previous_page_number }}&sort_by={{ sort_by }}">«</a></li>
-        {% endif %}
-        
-        <li class="page-item disabled"><a class="page-link" href="#">Page {{ animals.number }} of {{ animals.paginator.num_pages }}</a></li>
-        
-        {% if animals.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ animals.next_page_number }}&sort_by={{ sort_by }}">»</a></li>
-        
-            <li class="page-item"><a class="page-link" href="?page={{ animals.paginator.num_pages }}&sort_by={{ sort_by }}">Last »</a></li>
-        {% endif %}
-        </ul>
-    </nav>
+    {% include "wildthoughts/widget/pagination_widget.html" with entity=animals %}
 
 </div>
 

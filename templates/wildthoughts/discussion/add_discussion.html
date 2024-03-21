@@ -1,27 +1,33 @@
-{% extends 'wildthoughts/base/base.html' %}{% block title_block %}
+{% extends 'wildthoughts/base/base.html' %}
+{% block title_block %}
     Add Discussion
 {% endblock %}
 {% load staticfiles %}
 
 {% block body_block %}
+<!-- HEADING -->
 <div class="text-center p-4">
     <h1>Add Discussion</h1>
     <h3>Add a new discussion here!</h3>
 
-<form id="discussion_form" method="post" action="{% url 'wildthoughts:add_discussion' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-	{% for hidden in form.hidden_fields %}
-		{{ hidden }}
-	{% endfor %}
-	{% for field in form.visible_fields %}
-		{{ form.errors }}
-		{{ field.help_text }}
-		<br>{{ field }}
+<!-- FORM -->
+	<div class="d-grid gap-2 col-sm-6 mx-auto">
+		<form id="discussion_form" method="post" action="{% url 'wildthoughts:add_discussion' %}" enctype="multipart/form-data">
+		<center>
+			{% csrf_token %}
+			{% for hidden in form.hidden_fields %}
+				{{ hidden }}
+			{% endfor %}
+			{% for field in form.visible_fields %}
+			{{ field.errors }}
+			{{ field.help_text }}
+			<br>{{ field }}<br>
+			{% endfor %}
+		</center>
 	<br>
-	{% endfor %}
-	<br>
-	<input type="submit" name="submit" value="Add Discussion Page" />
-</form>
+	</div>
+	<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Discussion" />
+	</form>
 </div>
 {% endblock %}
 
@@ -29,8 +35,8 @@
 {% block script_block %}
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#id_animal option[value={{ animal_id }}]').attr('selected','selected');
-	})
+		$('#id_animal').val({{ animal_id }}).trigger('change');
+	});
 </script>
 {% endblock %}
 {% endif %}

@@ -1,41 +1,98 @@
-$(function(){
-  // Just declare upvote, upvoted, downvote or downvoted 
-  // for the button's class and jquery will style them automatically!
-  $(".upvote, .downvote").addClass("btn btn-outline-secondary border-0");
-  $(".upvoted").addClass("btn btn-outline-danger border-0");
-  $(".downvoted").addClass("btn btn-outline-primary border-0");
+const UPVOTE_CLASS = "btn-outline-danger";
+const DOWNVOTE_CLASS = "btn-outline-primary";
+const NORMAL_CLASS = "btn-outline-secondary";
 
-  // From upvote to upvoted
-  $(document).on('click', '.upvote', function(){
-    var upvote_id = $(this).attr('id');
-    var downvote_id = upvote_id.replace('upvote', 'downvote');
-    var $downvote = $('#' + downvote_id);
-    $downvote.removeClass("downvoted btn-outline-primary");
-    $downvote.addClass('downvote btn-outline-secondary');
-    $(this).removeClass("upvote btn-outline-secondary");
-    $(this).addClass("upvoted btn-outline-danger");
-  });
 
-  // From downvote to downvoted
-  $(document).on('click', '.downvote', function(){
-    var downvote_id = $(this).attr('id');
-    var upvote_id = downvote_id.replace('downvote', 'upvote');
-    var $upvote = $('#' + upvote_id);
-    $upvote.removeClass("upvoted btn-outline-danger");
-    $upvote.addClass('upvote btn-outline-secondary');
-    $(this).removeClass("downvote btn-outline-secondary");
-    $(this).addClass("downvoted btn-outline-primary");
-  });
+function updateUpvote(upvote) {
+  var upvoteID = $(upvote).attr('id');
+  var downvoteID = upvoteID.replace('upvote', 'downvote');
+  var $downvote = $('#' + downvoteID);
+  $downvote.attr('data-status', 'downvote');
+  $downvote.removeClass(DOWNVOTE_CLASS);
+  $downvote.addClass(NORMAL_CLASS);
 
-  // From upvoted to upvote
-  $(document).on('click', '.upvoted', function(){
-    $(this).removeClass("upvoted btn-outline-danger");
-    $(this).addClass("upvote btn-outline-secondary");
-  });
+  $(upvote).attr('data-status', 'upvoted');
+  $(upvote).removeClass(NORMAL_CLASS);
+  $(upvote).addClass(UPVOTE_CLASS);
+}
 
-  // From downvoted to dowvote
-  $(document).on('click', '.downvoted', function(){
-    $(this).removeClass("downvoted btn-outline-primary");
-    $(this).addClass("downvote btn-outline-secondary");
-  });
+function updateDownvote(downvote) {
+  var downvoteID = $(downvote).attr('id');
+  var upvoteID = downvoteID.replace('downvote', 'upvote');
+  var $upvote = $('#' + upvoteID);
+  $upvote.attr('data-status', 'upvote');
+  $upvote.removeClass(UPVOTE_CLASS);
+  $upvote.addClass(NORMAL_CLASS);
+  
+  $(downvote).attr('data-status', 'downvoted');
+  $(downvote).removeClass(NORMAL_CLASS);
+  $(downvote).addClass(DOWNVOTE_CLASS);
+}
+
+function updateUpvoted(upvoted) {
+  $(upvoted).attr('data-status', 'upvote');
+  $(upvoted).removeClass(UPVOTE_CLASS);
+  $(upvoted).addClass(NORMAL_CLASS);
+}
+
+function updateDownvoted(downvoted) {
+  $(downvoted).attr('data-status', 'downvote');
+  $(downvoted).removeClass(DOWNVOTE_CLASS);
+  $(downvoted).addClass(NORMAL_CLASS);
+}
+
+function updateButton(voteButton) {
+  var dataStatus = $(voteButton).attr('data-status');
+  switch (dataStatus) {
+    case 'upvote':
+      updateUpvote(voteButton);
+      break;
+    case 'downvote':
+      updateDownvote(voteButton);
+      break;
+    case 'upvoted':
+      updateUpvoted(voteButton);
+      break; 
+    case 'downvoted':
+      updateDownvoted(voteButton);
+      break; 
+  }
+}
+
+function updateCount(voteButton, newCount){
+  var buttonID = $(voteButton).attr('id');
+  if (buttonID.includes('upvote')) {
+    var countID = buttonID.replace('upvote', 'count');
+  }
+  else {
+    var countID = buttonID.replace('downvote', 'count');
+  }
+  var $countElm = $('#' + countID);
+  $countElm.text(newCount);    
+}
+
+
+$(document).ready(function(){
+
+  $(document).on('click', '.vote', function(){
+    var voteButton = this;
+    $.ajax({
+      url: '/wildthoughts/vote/',
+      type: 'GET',
+      data: {
+          'category': $(this).attr('data-category'),
+          'id': $(this).attr('data-id'),
+          'status': $(this).attr('data-status')
+      },
+      success: function(response) {
+          if(response.status === 'success') {
+            updateButton(voteButton); 
+            updateCount(voteButton, response.count); 
+          }
+          else if (response.status === 'login') {
+            window.location.href = response.login_url;
+        }
+      },
+    })
+  });  
 });

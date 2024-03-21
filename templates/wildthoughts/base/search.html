@@ -1,52 +1,59 @@
 {% extends 'wildthoughts/base/base.html' %}
 {% load staticfiles %}
+{% load wildthoughts_tags %}
 
+<!-- HEADING -->
 {% block title_block %}
     Search
 {% endblock %}
 
 {% block body_block %}
 {% if searched %}
-<div class="text-center p-4">
-        <h1>Results for '{{ searched }}' in {{ category }}</h1>
-        <br/>
-        <div class="container-fluid">
-            <div class="row">
+    <div class="text-center p-4">
+            <h1>Results for '{{ searched }}' in {{ category }}</h1>
+    </div>
+            <br/>
+            <div class="container">
                 {% if results %}
-                    <div class="list-group">
-                        {% for result in results %}
-                        <div class="list-group">
-                            {% if category == "Animals" %}
-                                <a href="{% url 'wildthoughts:animal' result.slug %}" class="list-group-item">{{ result.name }}</a>
-                            {% elif category == "Discussions" %}
-                                <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                            {% elif category == "Lists" %}
-                            <a href="#" class="list-group-item list-group-item-action">{{ result.title }}</a>
-                            {% elif category == "Profiles" %}
-                                <a href="#" class="list-group-item list-group-item-action">{{ result.user.username }}</a>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
+                <!-- display results -->
+                    {% profile as user_profile %}
+                    {% if category == 'Animals' %}
+                    {% include "wildthoughts/widget/animal_widget.html" with animals=results profile=user_profile %}
+                
+                    {% elif category == 'Lists' %}
+                    {% include "wildthoughts/widget/user_list_widget.html" with user_lists=results profile=user_profile %}
+                
+                    {% elif category == 'Discussions' %}
+                    {% include "wildthoughts/widget/discussion_widget.html" with discussions=results profile=user_profile %}
+                
+                    {% elif category == 'Petitions' %}
+                    {% include "wildthoughts/widget/petition_widget.html" with petitions=results %}
+
+                    {% elif category == 'Profiles' %}
+                    {% include "wildthoughts/widget/profile_widget.html" with profiles=results %}
+    
+                    {% endif %}
+                    
                 {% else %}
-                <div class="text-center my-5">
-                <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
-                <h4>No results were found.</h4>
-                </div>
+                    <!-- display this message if results are None -->
+                    <div class="text-center my-5">
+                        <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+                        <h4>No results were found.</h4>
+                    </div>
                 {% endif %}
             </div>
-        </div>
-    {% else %}
-    <div class="text-center my-5">
-        <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
-        <h4>No text was entered in the search bar</h4>
-    </div>
-    {% endif %}
+{% else %}
+<!-- display this message if text empty -->
+<div class="text-center my-5">
+    <p class="display-1 text-muted">¯\_(ツ)_/¯</p>
+    <h4>No text was entered in the search bar</h4>
 </div>
-
+{% endif %}
 {% endblock %}
 
 {% block script_block %}
+<!-- fill the search bar with the previous search  -->
+<!-- otherwise it would be blank -->
 <script type="text/javascript"> 
     $(document).ready(()=>{ 
         $("[name=category]").val('{{ category }}'); 

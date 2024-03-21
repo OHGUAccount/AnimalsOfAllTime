@@ -9,7 +9,11 @@
     <title>{% block title_block %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/CSS/WildThoughts.css" />
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/select2-bootstrap5-theme/select2-bootstrap5.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/select2-bootstrap5-theme/select2-bootstrap5-dark.min.css' %}">
     {% block head_block %}{% endblock %}
 </head>
 <body>
@@ -31,19 +35,26 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=overrated">Most Overrated</a></li>
                         <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=underrated">Most Underrated</a></li>
-                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=name">Browse</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wildthoughts:animals' %}?sort_by=newest">Browse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:lists' %}">Lists</a></li>
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:discussions' %}">Discussions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:lists' %}">Lists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:petitions' %}">Petitions</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="{% url 'wildthoughts:profiles' %}">Profiles</a>
                 </li>
             </ul>
 
+            <!-- SEARCH BAR -->
             <div class="mx-5 order-0">
-                <form role="search" method=POST action="{% url 'wildthoughts:search' %}">
-                    {% csrf_token %}
+                <form role="search" method="GET" action="{% url 'wildthoughts:search' %}">
                     <div class="container">
                        <div class="row g-0">
                             <div class="col-4">
@@ -51,6 +62,7 @@
                                     <option value="Animals" selected>Animals</option>
                                     <option value="Discussions">Discussions</option>
                                     <option value="Lists">Lists</option>
+                                    <option value="Petitions">Petitions</option>
                                     <option value="Profiles">Profiles</option>
                                 </select>
                             </div>
@@ -65,11 +77,12 @@
                 </form>
             </div>
 
+            <!-- PROFILE DROPDOWN -->
             {% if user.is_authenticated %}
             <div class="btn-group me-4">
                 {% profile_picture as profile_pic %}
                 {% if profile_pic %}
-                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{{ MEDIA_URL }}{{ profile.pic }}" width="38" height="38">
+                    <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{{ MEDIA_URL }}{{ profile_pic }}" width="38" height="38">
                 {% else %}
                     <img class="rounded-circle dropdown-toggle" data-bs-toggle="dropdown" src="{% static 'images/defaultprofile.jpg' %}" width="38" height="38">
                 {% endif %}
@@ -84,6 +97,7 @@
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_animal' %}">Add Animal</a></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_discussion' %}">Add Discussion</a></li>
                     <li><a class="dropdown-item" href="{% url 'wildthoughts:add_list' %}">Add List</a></li>
+                    <li><a class="dropdown-item" href="{% url 'wildthoughts:add_petition' %}">Add Petition</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'auth_logout' %}">Logout</a></li>
                 </ul>
@@ -106,6 +120,7 @@
 </main>
     <!-- FOOTER -->
     {% block footer_block %}
+    <!-- https://www.youtube.com/watch?v=4UT2r2MAJKY -->
     <footer class="py-2 mt-5">
         <div class="container text-center">
             <p class="display-6 mb-2">WildThoughts</p>
@@ -117,7 +132,12 @@
 <script src="{% static "js/jquery-3.6.0.min.js" %}" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="{% static "js/vote.js" %}" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static "js/theme.js" %}" crossorigin="anonymous"></script>
 {% block script_block %}{% endblock %}
+<script type="text/javascript">
+$('#id_animal, #id_animals').select2({
+theme: "bootstrap5{% select2_theme %}"});
+</script>
 </body>
 </html>

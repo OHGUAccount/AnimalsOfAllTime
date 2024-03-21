@@ -8,11 +8,11 @@
 <!-- HEADING -->
 {% block body_block %}
 <div class="p-4 text-center">
-    <h1>Add List</h1>
+    <h1>Add Petition</h1>
 
 <!-- FORM -->
 <div class="d-grid gap-2 col-sm-6 mx-auto">
-<form method="POST">
+<form method="POST" action="{% url 'wildthoughts:add_petition' %}" enctype="multipart/form-data">
     <center>
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
@@ -25,7 +25,9 @@
         {% endfor %}
     </center>
 </div>
-<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add List" />
+<br>
+<input class="btn btn-primary btn-lg w-50" type="submit" name="submit" value="Add Petition" />
+
 </div>
 </form>
 

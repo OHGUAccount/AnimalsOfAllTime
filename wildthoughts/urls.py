@@ -13,15 +13,26 @@ urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
     path('search/', views.SearchView.as_view(), name='search'),
     path('theme/', views.ThemeView.as_view(), name='theme'),
-
+    path('vote/', views.VoteView.as_view(), name='vote'),
+    
     # comments urls
 
     # discussion urls
     path('add_discussion/', views.AddDiscussionView.as_view(), name='add_discussion'),
+    path('discussions/', views.ListDiscussionView.as_view(), name = "discussions"),
+    path('discussion/<slug:discussion_slug>', views.DiscussionView.as_view(), name = "discussion"),
+
+    # petition urls
+    path('petitions/', views.ListPetitionView.as_view(), name='petitions'),
+    path('sign_petition/', views.SignPetitionView.as_view(), name='sign_petition'),
+    path('petitions/<slug:petition_slug>/', views.PetitionView.as_view(), name='petition'),
+    path('add_petition/', views.AddPetitionForm.as_view(), name='add_petition'),
 
     # profile urls
     path('profiles/', views.ListProfileView.as_view(), name='profiles'),
     path('profiles/<slug:username>/', views.ProfileView.as_view(), name='profile'),
+    path('edit_profile/', views.EditProfileView.as_view(), name='edit_profile'),
+
 
     # userlist view
     path('lists/', views.ListUserListView.as_view(), name='lists'),
