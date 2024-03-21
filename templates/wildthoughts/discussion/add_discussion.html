@@ -18,9 +18,13 @@
 			{{ hidden }}
 		{% endfor %}
 		{% for field in form.visible_fields %}
-			{{ form.errors }}
-			{{ field.help_text }}
-			<br>{{ field }}
+		{{ field.errors }}
+		{{ field.help_text }}
+		{% if field.name == 'picture' %}
+			{{ field }}
+		{% else %}
+		<br>{{ field }}
+		{% endif %}
 		<br>
 		{% endfor %}
 	</div>

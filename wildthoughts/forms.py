@@ -52,7 +52,7 @@ class DiscussionForm(forms.ModelForm):
         }
 
     # form validation here
-    def clean_name(self):
+    def clean_title(self):
         title = self.cleaned_data.get('title')
         if Discussion.objects.filter(title=title).exists():
             raise forms.ValidationError("A discussion with this title already exists.")
@@ -83,7 +83,7 @@ class PetitionForm(forms.ModelForm):
             'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
             # form validation here
-    def clean_name(self):
+    def clean_title(self):
         title = self.cleaned_data.get('title')
         if Petition.objects.filter(title=title).exists():
             raise forms.ValidationError("A petition with this title already exists.")
@@ -113,9 +113,9 @@ class UserListForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'animals': forms.SelectMultiple(attrs={'class': 'form-control'})
         }
-        
+
     # form validation here
-    def clean_name(self):
+    def clean_title(self):
         title = self.cleaned_data.get('title')
         if UserList.objects.filter(title=title).exists():
             raise forms.ValidationError("A list with this title already exists.")
