@@ -21,7 +21,7 @@
                 {% if discussion.animal.picture %}
                 <img src="{{ MEDIA_URL }}{{ discussion.animal.picture }}" class="rounded-circle avatar-sm" width="24" height="24">
                 {% else %}
-                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/defaultprofile.jpg' %}" class="rounded-circle avatar-sm" width="24" height="24">
+                <h6 class="card-subtitle mb-2 text-muted"><img src="{% static 'images/default_animal.png' %}" class="rounded-circle avatar-sm" width="24" height="24">
                 {% endif %}
                 <a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover" href="{% url 'wildthoughts:animal' discussion.animal.slug %}">{{ discussion.animal.name }}</a>
                 <small>
