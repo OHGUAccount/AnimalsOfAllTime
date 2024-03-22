@@ -29,7 +29,11 @@
         <ul class="list-group">
             {% for animal in animals|slice:"3" %}
             <a class="list-group-item list-group-item-action" href="{% url 'wildthoughts:animal' animal.slug %}">
+                {% if animal.picture %}
                 <img src="{{ MEDIA_URL }}{{ animal.picture }}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{{ MEDIA_URL }}{{ animal.picture }}">
+                {% else %}
+                <img src="{% static 'images/default_animal.png' %}" class="rounded-circle" alt="Picture of {{ animal.name }}" width="38" height="38" data-toggle="popover-hover" data-img="{% static 'images/default_animal.png' %}">
+                {% endif %}
                 {{ animal.name }}</a>
             {% endfor %}
         </ul>
